@@ -73,11 +73,11 @@ namespace RentApp.Migrations
             );
 
 
+            // -------------------------------------
             Service ser = new Service();
             VehicleType vt = new VehicleType();
             Branch br = new Branch();
             Vehicle v = new Vehicle();
-    //      Rent ren = new Rent();
 
             vt.Name = "Hatchback";
 
@@ -105,6 +105,70 @@ namespace RentApp.Migrations
             context.Branches.AddOrUpdate(br);
             context.Vehicles.AddOrUpdate(v);
             context.VehicleTypes.AddOrUpdate(vt);
+            // -------------------------------------
+
+            // -------------------------------------
+            Service ser1 = new Service();
+            VehicleType vt1 = new VehicleType();
+            Branch br1 = new Branch();
+            Vehicle v1 = new Vehicle();
+
+            vt1.Name = "Limousine";
+
+            v1.Manufactor = "Mercedes";
+            v1.Model = "Benz C-Class";
+            v1.PricePerHour = (decimal)32.49;
+            v1.Type = vt1;
+            v1.Unavailable = false;
+            v1.Year = 2014;
+
+            vt1.Vehicles = new System.Collections.Generic.List<Vehicle>();
+            vt1.Vehicles.Add(v1);
+
+            br1.Address = "New Address";
+            br1.Latitude = 45.257059;
+            br1.Longitude = 19.840957;
+
+            ser1.Name = "Service 2";
+            ser1.Email = "ser_2@gmail.com";
+            ser1.Description = "ser_2_desc";
+            ser1.Branches = new System.Collections.Generic.List<Branch>();
+            ser1.Branches.Add(br1);
+
+            context.Services.AddOrUpdate(ser1);
+            context.Branches.AddOrUpdate(br1);
+            context.Vehicles.AddOrUpdate(v1);
+            context.VehicleTypes.AddOrUpdate(vt1);
+            // -------------------------------------
+
+            // -------------------------------------
+            VehicleType vt2 = new VehicleType();
+            Branch br2 = new Branch();
+            Vehicle v2 = new Vehicle();
+
+            vt2.Name = "Caravan";
+
+            v2.Manufactor = "Renault";
+            v2.Model = "Laguna";
+            v2.PricePerHour = (decimal)14;
+            v2.Type = vt1;
+            v2.Unavailable = false;
+            v2.Year = 2010;
+
+            vt2.Vehicles = new System.Collections.Generic.List<Vehicle>();
+            vt2.Vehicles.Add(v2);
+
+            br2.Address = "Bulevar Kralja Petra 38";
+            br2.Latitude = 45.259687;
+            br2.Longitude = 19.828179;
+
+            ser1.Branches.Add(br1);
+
+            context.Services.AddOrUpdate(ser1);
+            context.Branches.AddOrUpdate(br2);
+            context.Vehicles.AddOrUpdate(v2);
+            context.VehicleTypes.AddOrUpdate(vt2);
+            // -------------------------------------
 
             context.SaveChanges();
 
