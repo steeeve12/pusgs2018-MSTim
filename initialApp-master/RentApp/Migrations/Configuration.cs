@@ -72,6 +72,40 @@ namespace RentApp.Migrations
 
             );
 
+
+            Service ser = new Service();
+            VehicleType vt = new VehicleType();
+            Branch br = new Branch();
+            Vehicle v = new Vehicle();
+    //      Rent ren = new Rent();
+
+            vt.Name = "Hatchback";
+
+            v.Manufactor = "Peugeot";
+            v.Model = "307";
+            v.PricePerHour = (decimal) 9.99;
+            v.Type = vt;
+            v.Unavailable = false;
+            v.Year = 2005;
+
+            vt.Vehicles = new System.Collections.Generic.List<Vehicle>();
+            vt.Vehicles.Add(v);
+
+            br.Address = "br_1_addr";
+            br.Latitude = 555555;
+            br.Longitude = 666666;
+
+            ser.Name = "Service 1";
+            ser.Email = "ser_1@gmail.com";
+            ser.Description = "ser_1_decs";
+            ser.Branches = new System.Collections.Generic.List<Branch>();
+            ser.Branches.Add(br);
+
+            context.Services.AddOrUpdate(ser);
+            context.Branches.AddOrUpdate(br);
+            context.Vehicles.AddOrUpdate(v);
+            context.VehicleTypes.AddOrUpdate(vt);
+
             context.SaveChanges();
 
             var userStore = new UserStore<RAIdentityUser>(context);
