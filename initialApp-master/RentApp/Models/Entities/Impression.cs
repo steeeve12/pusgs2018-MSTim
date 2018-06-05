@@ -6,16 +6,18 @@ using System.Web;
 
 namespace RentApp.Models.Entities
 {
-    public class Branch
+    public class Impression
     {
         public int Id { get; set; }
-        public string Picture { get; set; }
-        public string Address { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public string Comment { get; set; }
+        public int Grade { get; set; }
+
+        [ForeignKey("AppUser")]
+        public int AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
 
         [ForeignKey("Service")]
-        public int? ServiceId { get; set; }
+        public int ServiceId { get; set; }
         public virtual Service Service { get; set; }
     }
 }

@@ -296,10 +296,35 @@
     <Compile Include="Migrations\201806050652275_virtual na kompleksnim tipovima.Designer.cs">
       <DependentUpon>201806050652275_virtual na kompleksnim tipovima.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806051028395_Impression i flag u Service.cs" />
+    <Compile Include="Migrations\201806051028395_Impression i flag u Service.Designer.cs">
+      <DependentUpon>201806051028395_Impression i flag u Service.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806051035378_Izbrisane liste iz modela.cs" />
+    <Compile Include="Migrations\201806051035378_Izbrisane liste iz modela.Designer.cs">
+      <DependentUpon>201806051035378_Izbrisane liste iz modela.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806051045337_reorganizacija modela.cs" />
+    <Compile Include="Migrations\201806051045337_reorganizacija modela.Designer.cs">
+      <DependentUpon>201806051045337_reorganizacija modela.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806051057393_dodate jos neke veze koje su falile.cs" />
+    <Compile Include="Migrations\201806051057393_dodate jos neke veze koje su falile.Designer.cs">
+      <DependentUpon>201806051057393_dodate jos neke veze koje su falile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806051103497_proba za branch servis.cs" />
+    <Compile Include="Migrations\201806051103497_proba za branch servis.Designer.cs">
+      <DependentUpon>201806051103497_proba za branch servis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806051108592_proba sa upitnikom.cs" />
+    <Compile Include="Migrations\201806051108592_proba sa upitnikom.Designer.cs">
+      <DependentUpon>201806051108592_proba sa upitnikom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Entities\Branch.cs" />
+    <Compile Include="Models\Entities\Impression.cs" />
     <Compile Include="Models\Entities\RAIdentityUser.cs" />
     <Compile Include="Models\Entities\AppUser.cs" />
     <Compile Include="Models\Entities\Rent.cs" />
@@ -423,6 +448,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806050652275_virtual na kompleksnim tipovima.resx">
       <DependentUpon>201806050652275_virtual na kompleksnim tipovima.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806051028395_Impression i flag u Service.resx">
+      <DependentUpon>201806051028395_Impression i flag u Service.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806051035378_Izbrisane liste iz modela.resx">
+      <DependentUpon>201806051035378_Izbrisane liste iz modela.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806051045337_reorganizacija modela.resx">
+      <DependentUpon>201806051045337_reorganizacija modela.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806051057393_dodate jos neke veze koje su falile.resx">
+      <DependentUpon>201806051057393_dodate jos neke veze koje su falile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806051103497_proba za branch servis.resx">
+      <DependentUpon>201806051103497_proba za branch servis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806051108592_proba sa upitnikom.resx">
+      <DependentUpon>201806051108592_proba sa upitnikom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
