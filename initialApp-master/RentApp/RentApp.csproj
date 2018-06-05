@@ -308,7 +308,9 @@
     <Compile Include="Models\Entities\Vehicle.cs" />
     <Compile Include="Persistance\RADBContext.cs" />
     <Compile Include="Persistance\Repository\AppUserRepository.cs" />
+    <Compile Include="Persistance\Repository\RentRepository.cs" />
     <Compile Include="Persistance\Repository\IAppUserRepository.cs" />
+    <Compile Include="Persistance\Repository\IRentRepository.cs" />
     <Compile Include="Persistance\Repository\VehicleTypeRepository.cs" />
     <Compile Include="Persistance\Repository\IVehicleTypeRepository.cs" />
     <Compile Include="Persistance\Repository\IRepository.cs" />
