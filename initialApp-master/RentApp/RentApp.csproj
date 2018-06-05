@@ -307,6 +307,8 @@
     <Compile Include="Models\Entities\VehicleType.cs" />
     <Compile Include="Models\Entities\Vehicle.cs" />
     <Compile Include="Persistance\RADBContext.cs" />
+    <Compile Include="Persistance\UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="Persistance\UnitOfWork\UnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\CustomJwtFormat.cs" />

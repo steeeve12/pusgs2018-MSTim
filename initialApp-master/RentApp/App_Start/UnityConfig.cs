@@ -6,6 +6,7 @@ using RentApp.Persistance;
 using RentApp.Providers;
 using System;
 using System.Data.Entity;
+using System.Web.Http;
 using Unity;
 using Unity.AspNet.Mvc;
 using Unity.Injection;

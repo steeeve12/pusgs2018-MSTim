@@ -10,29 +10,30 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
+using RentApp.Persistance.UnitOfWork;
 
 namespace RentApp.Controllers
 {
     public class ServicesController : ApiController
     {
-        private RADBContext db;
+        private readonly IUnitOfWork unitOfWork;
 
-        public ServicesController(DbContext context)
+        public ServicesController(IUnitOfWork unitOfWork)
         {
-            db = context as RADBContext;
+            this.unitOfWork = unitOfWork;
         }
 
         // GET: api/Services
         public IQueryable<Service> GetServices()
         {
-            return db.Services;
+            return unitOfWork.Services.GetAll();
         }
 
         // GET: api/Services/5
         [ResponseType(typeof(Service))]
         public IHttpActionResult GetService(int id)
         {
-            Service service = db.Services.Find(id);
+            Service service = unitOfWork.Services.Get(id);
             if (service == null)
             {
                 return NotFound();
@@ -55,11 +56,10 @@ namespace RentApp.Controllers
                 return BadRequest();
             }
 
-            db.Entry(service).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
+                unitOfWork.Services.Update(service);
+                unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -85,8 +85,8 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Services.Add(service);
-            db.SaveChanges();
+            unitOfWork.Services.Add(service);
+            unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
@@ -95,14 +95,14 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Service))]
         public IHttpActionResult DeleteService(int id)
         {
-            Service service = db.Services.Find(id);
+            Service service = unitOfWork.Services.Get(id);
             if (service == null)
             {
                 return NotFound();
             }
 
-            db.Services.Remove(service);
-            db.SaveChanges();
+            unitOfWork.Services.Remove(service);
+            unitOfWork.Complete();
 
             return Ok(service);
         }
@@ -111,14 +111,14 @@ namespace RentApp.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool ServiceExists(int id)
         {
-            return db.Services.Count(e => e.Id == id) > 0;
+            return unitOfWork.Services.Get(id) != null;
         }
     }
 }
