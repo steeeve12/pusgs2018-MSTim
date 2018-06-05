@@ -65,4 +65,4 @@ namespace RentApp
             new InjectionConstructor(typeof(DbContext)));
         }
     }
-}
+} 
