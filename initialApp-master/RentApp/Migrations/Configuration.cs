@@ -86,22 +86,18 @@ namespace RentApp.Migrations
             v.Manufactor = "Peugeot";
             v.Model = "307";
             v.PricePerHour = (decimal)9.99;
-            v.Type = vt;
+            v.VehicleType = vt;
             v.Unavailable = false;
             v.Year = 2005;
-
-            vt.Vehicles = new System.Collections.Generic.List<Vehicle>();
-            vt.Vehicles.Add(v);
 
             br.Address = "br_1_addr";
             br.Latitude = 555555;
             br.Longitude = 666666;
+            br.Service = ser;
 
             ser.Name = "Service 1";
             ser.Email = "ser_1@gmail.com";
             ser.Description = "ser_1_decs";
-            ser.Branches = new System.Collections.Generic.List<Branch>();
-            ser.Branches.Add(br);
             // -------------------------------------
 
             // -------------------------------------
@@ -115,22 +111,18 @@ namespace RentApp.Migrations
             v1.Manufactor = "Mercedes";
             v1.Model = "Benz C-Class";
             v1.PricePerHour = (decimal)32.49;
-            v1.Type = vt1;
+            v1.VehicleType = vt1;
             v1.Unavailable = false;
             v1.Year = 2014;
-
-            vt1.Vehicles = new System.Collections.Generic.List<Vehicle>();
-            vt1.Vehicles.Add(v1);
 
             br1.Address = "New Address";
             br1.Latitude = 45.257059;
             br1.Longitude = 19.840957;
+            br1.Service = ser1;
 
             ser1.Name = "Service 2";
             ser1.Email = "ser_2@gmail.com";
             ser1.Description = "ser_2_desc";
-            ser1.Branches = new System.Collections.Generic.List<Branch>();
-            ser1.Branches.Add(br1);
             // -------------------------------------
 
             // -------------------------------------
@@ -143,18 +135,14 @@ namespace RentApp.Migrations
             v2.Manufactor = "Renault";
             v2.Model = "Laguna";
             v2.PricePerHour = (decimal)14;
-            v2.Type = vt1;
+            v2.VehicleType = vt1;
             v2.Unavailable = false;
             v2.Year = 2010;
-
-            vt2.Vehicles = new System.Collections.Generic.List<Vehicle>();
-            vt2.Vehicles.Add(v2);
 
             br2.Address = "Bulevar Kralja Petra 38";
             br2.Latitude = 45.259687;
             br2.Longitude = 19.828179;
-
-            ser1.Branches.Add(br1);
+            br2.Service = ser1;
             // -------------------------------------
 
             Service[] services = { ser, ser1 };
