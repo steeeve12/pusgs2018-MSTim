@@ -10,24 +10,30 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
+using RentApp.Persistance.UnitOfWork;
 
 namespace RentApp.Controllers
 {
     public class RentsController : ApiController
     {
-        private RADBContext db = new RADBContext();
+        private readonly IUnitOfWork unitOfWork;
+
+        public RentsController(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
 
         // GET: api/Rents
-        public IQueryable<Rent> GetRents()
+        public IEnumerable<Rent> GetRents()
         {
-            return db.Rents;
+            return unitOfWork.Rents.GetAll();
         }
 
         // GET: api/Rents/5
         [ResponseType(typeof(Rent))]
         public IHttpActionResult GetRent(int id)
         {
-            Rent rent = db.Rents.Find(id);
+            Rent rent = unitOfWork.Rents.Get(id);
             if (rent == null)
             {
                 return NotFound();
@@ -50,11 +56,12 @@ namespace RentApp.Controllers
                 return BadRequest();
             }
 
-            db.Entry(rent).State = EntityState.Modified;
+           
 
             try
             {
-                db.SaveChanges();
+                unitOfWork.Rents.Update(rent);
+                unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,8 +87,8 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Rents.Add(rent);
-            db.SaveChanges();
+            unitOfWork.Rents.Add(rent);
+            unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = rent.Id }, rent);
         }
@@ -90,14 +97,14 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Rent))]
         public IHttpActionResult DeleteRent(int id)
         {
-            Rent rent = db.Rents.Find(id);
+            Rent rent = unitOfWork.Rents.Get(id);
             if (rent == null)
             {
                 return NotFound();
             }
 
-            db.Rents.Remove(rent);
-            db.SaveChanges();
+            unitOfWork.Rents.Remove(rent);
+            unitOfWork.Complete();
 
             return Ok(rent);
         }
@@ -106,14 +113,14 @@ namespace RentApp.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool RentExists(int id)
         {
-            return db.Rents.Count(e => e.Id == id) > 0;
+            return unitOfWork.Rents.Get(id) != null;
         }
     }
 }
