@@ -292,6 +292,10 @@
     <Compile Include="Migrations\201806041042080_Rent menjan u listu Rentova.Designer.cs">
       <DependentUpon>201806041042080_Rent menjan u listu Rentova.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806050652275_virtual na kompleksnim tipovima.cs" />
+    <Compile Include="Migrations\201806050652275_virtual na kompleksnim tipovima.Designer.cs">
+      <DependentUpon>201806050652275_virtual na kompleksnim tipovima.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -398,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806041042080_Rent menjan u listu Rentova.resx">
       <DependentUpon>201806041042080_Rent menjan u listu Rentova.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806050652275_virtual na kompleksnim tipovima.resx">
+      <DependentUpon>201806050652275_virtual na kompleksnim tipovima.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
