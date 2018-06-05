@@ -24,7 +24,7 @@ namespace RentApp.Controllers
         }
 
         // GET: api/Services
-        public IQueryable<Service> GetServices()
+        public IEnumerable<Service> GetServices()
         {
             return unitOfWork.Services.GetAll();
         }
