@@ -11,6 +11,8 @@ namespace RentApp.Models.Entities
         public int Id { get; set; }
         public string Comment { get; set; }
         public int Grade { get; set; }
+        public DateTime? Time { get; set; }
+
 
         [ForeignKey("AppUser")]
         public int AppUserId { get; set; }

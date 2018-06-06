@@ -7,13 +7,13 @@ namespace RentApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class virtualnakompleksnimtipovima : IMigrationMetadata
+    public sealed partial class addDateTimecoment : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(virtualnakompleksnimtipovima));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addDateTimecoment));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806050652275_virtual na kompleksnim tipovima"; }
+            get { return "201806060649168_add DateTime coment"; }
         }
         
         string IMigrationMetadata.Source

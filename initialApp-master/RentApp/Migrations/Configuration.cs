@@ -74,6 +74,8 @@ namespace RentApp.Migrations
 
             );
 
+            SaveChanges(context);
+
 
             // -------------------------------------
             Service ser = new Service();
@@ -155,6 +157,9 @@ namespace RentApp.Migrations
 
             );
 
+            SaveChanges(context);
+
+
             Branch[] branches = { br, br1, br2 };
 
             context.Branches.AddOrUpdate(
@@ -165,15 +170,7 @@ namespace RentApp.Migrations
 
             );
 
-            Vehicle[] vehicles = { v, v1, v2 };
-
-            context.Vehicles.AddOrUpdate(
-
-                veh => veh.Model,
-
-                vehicles
-
-            );
+            SaveChanges(context);
 
             VehicleType[] types = { vt, vt1, vt2 };
 
@@ -182,6 +179,20 @@ namespace RentApp.Migrations
                 veht => veht.Name,
 
                 types
+
+            );
+
+
+            SaveChanges(context);
+
+            
+            Vehicle[] vehicles = { v, v1, v2 };
+
+            context.Vehicles.AddOrUpdate(
+
+                veh => veh.Model,
+
+                vehicles
 
             );
 
