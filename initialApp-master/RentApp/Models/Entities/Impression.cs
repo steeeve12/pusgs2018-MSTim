@@ -12,14 +12,6 @@ namespace RentApp.Models.Entities
         public string Comment { get; set; }
         public int Grade { get; set; }
         public DateTime? Time { get; set; }
-
-
-        [ForeignKey("AppUser")]
-        public int AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
-
-        [ForeignKey("Service")]
-        public int ServiceId { get; set; }
-        public virtual Service Service { get; set; }
     }
 }
