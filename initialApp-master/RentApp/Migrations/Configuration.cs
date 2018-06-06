@@ -76,6 +76,28 @@ namespace RentApp.Migrations
 
             SaveChanges(context);
 
+            var userStore = new UserStore<RAIdentityUser>(context);
+            var userManager = new UserManager<RAIdentityUser>(userStore);
+
+            if (!context.Users.Any(u => u.UserName == "admin"))
+            {
+                var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "Admin Adminovic");
+                var user = new RAIdentityUser() { Id = "admin", UserName = "admin", Email = "admin@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("admin"), AppUserId = _appUser.Id };
+                userManager.Create(user);
+                userManager.AddToRole(user.Id, "Admin");
+            }
+
+            if (!context.Users.Any(u => u.UserName == "appu"))
+
+            {
+
+                var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "AppUser AppUserovic");
+                var user = new RAIdentityUser() { Id = "appu", UserName = "appu", Email = "appu@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("appu"), AppUserId = _appUser.Id };
+                userManager.Create(user);
+                userManager.AddToRole(user.Id, "AppUser");
+
+            }
+
 
             // -------------------------------------
             Service ser = new Service();
@@ -95,11 +117,15 @@ namespace RentApp.Migrations
             br.Address = "br_1_addr";
             br.Latitude = 555555;
             br.Longitude = 666666;
-            br.Service = ser;
 
             ser.Name = "Service 1";
             ser.Email = "ser_1@gmail.com";
             ser.Description = "ser_1_decs";
+            ser.Branches = new System.Collections.Generic.List<Branch>();
+            ser.Branches.Add(br);
+            ser.Impressions = new System.Collections.Generic.List<Impression>();
+            ser.Vehicles = new System.Collections.Generic.List<Vehicle>();
+            ser.Vehicles.Add(v);
             // -------------------------------------
 
             // -------------------------------------
@@ -120,11 +146,15 @@ namespace RentApp.Migrations
             br1.Address = "New Address";
             br1.Latitude = 45.257059;
             br1.Longitude = 19.840957;
-            br1.Service = ser1;
 
             ser1.Name = "Service 2";
             ser1.Email = "ser_2@gmail.com";
             ser1.Description = "ser_2_desc";
+            ser1.Branches = new System.Collections.Generic.List<Branch>();
+            ser1.Branches.Add(br1);
+            ser1.Impressions = new System.Collections.Generic.List<Impression>();
+            ser1.Vehicles = new System.Collections.Generic.List<Vehicle>();
+            ser1.Vehicles.Add(v1);
             // -------------------------------------
 
             // -------------------------------------
@@ -144,7 +174,9 @@ namespace RentApp.Migrations
             br2.Address = "Bulevar Kralja Petra 38";
             br2.Latitude = 45.259687;
             br2.Longitude = 19.828179;
-            br2.Service = ser1;
+
+            ser1.Branches.Add(br2);
+            ser1.Vehicles.Add(v2);
             // -------------------------------------
 
             Service[] services = { ser, ser1 };
@@ -176,7 +208,7 @@ namespace RentApp.Migrations
 
             context.VehicleTypes.AddOrUpdate(
 
-                veht => veht.Name,    // Name
+                veht => veht.Name,
 
                 types
 
@@ -190,35 +222,13 @@ namespace RentApp.Migrations
 
             context.Vehicles.AddOrUpdate(
 
-                veh => veh.Model,  // Model
+                veh => veh.Model,
 
                 vehicles
 
             );
 
             SaveChanges(context);
-
-            var userStore = new UserStore<RAIdentityUser>(context);
-            var userManager = new UserManager<RAIdentityUser>(userStore);
-
-            if (!context.Users.Any(u => u.UserName == "admin"))
-            {
-                var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "Admin Adminovic");
-                var user = new RAIdentityUser() { Id = "admin", UserName = "admin", Email = "admin@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("admin"), AppUserId = _appUser.Id };
-                userManager.Create(user);
-                userManager.AddToRole(user.Id, "Admin");
-            }
-
-            if (!context.Users.Any(u => u.UserName == "appu"))
-
-            {
-
-                var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "AppUser AppUserovic");
-                var user = new RAIdentityUser() { Id = "appu", UserName = "appu", Email = "appu@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("appu"), AppUserId = _appUser.Id };
-                userManager.Create(user);
-                userManager.AddToRole(user.Id, "AppUser");
-
-            }
         }
 
         private static void SaveChanges(DbContext context)

@@ -16,9 +16,6 @@ namespace RentApp.Models.Entities
         public decimal PricePerHour { get; set; }
         public bool Unavailable { get; set; }
         public List<string> Images { get; set; }
-
-        [ForeignKey("VehicleType")]
-        public int VehicleTypeId { get; set; }
         public virtual VehicleType VehicleType { get; set; }
     }
 }

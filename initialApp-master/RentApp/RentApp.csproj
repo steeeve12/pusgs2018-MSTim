@@ -316,6 +316,10 @@
     <Compile Include="Migrations\201806060649168_add DateTime coment.Designer.cs">
       <DependentUpon>201806060649168_add DateTime coment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806060806332_stari model.cs" />
+    <Compile Include="Migrations\201806060806332_stari model.Designer.cs">
+      <DependentUpon>201806060806332_stari model.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -459,6 +463,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806060649168_add DateTime coment.resx">
       <DependentUpon>201806060649168_add DateTime coment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806060806332_stari model.resx">
+      <DependentUpon>201806060806332_stari model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
