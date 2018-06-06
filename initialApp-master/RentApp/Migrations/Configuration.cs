@@ -176,7 +176,7 @@ namespace RentApp.Migrations
 
             context.VehicleTypes.AddOrUpdate(
 
-                veht => veht.Id,    // Name
+                veht => veht.Name,    // Name
 
                 types
 
@@ -190,7 +190,7 @@ namespace RentApp.Migrations
 
             context.Vehicles.AddOrUpdate(
 
-                veh => veh.Id,  // Model
+                veh => veh.Model,  // Model
 
                 vehicles
 
