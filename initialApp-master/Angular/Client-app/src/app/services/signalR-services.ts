@@ -14,26 +14,28 @@ declare var $: any;
 export class SignalRService {  
     // Declare the variables  
     private proxy: any;  
-    private proxyName: string = 'clock';  
+    private proxyName: string = 'notifications';  // naziv hub-a u Visual Studio
     private connection: any;  
     // create the Event Emitter  
     public messageReceived: EventEmitter < GetClockTime > ;  
     public connectionEstablished: EventEmitter < Boolean > ;  
     public connectionExists: Boolean;  
     constructor() {  
-        debugger;  
         // Constructor initialization  
         this.connectionEstablished = new EventEmitter < Boolean > ();  
         this.messageReceived = new EventEmitter < GetClockTime > ();  
         this.connectionExists = false;  
         // create hub connection  
-        this.connection = $.hubConnection("http://localhost:51680/");  
+        this.connection = $.hubConnection("http://localhost:51680");  // adresa servera
         // create new proxy as name already given in top  
         this.proxy = this.connection.createHubProxy(this.proxyName);  
-        // register on server events  
+        // register on server events
+        if(!this.connectionExists)   {
+            this.startConnection();            
+        }
         this.registerOnServerEvents();  
         // call the connecion start method to start the connection to send and receive events.  
-        this.startConnection();  
+  
     }  
     // method to hit from client  
     public sendTime() {  
@@ -41,13 +43,16 @@ export class SignalRService {
         this.proxy.invoke('GetRealTime');  
     }  
     // check in the browser console for either signalr connected or not  
-    private startConnection(): void {  
+    private startConnection(): void {
+        debugger
         this.connection.start().done((data: any) => {  
             console.log('Now connected ' + data.transport.name + ', connection ID= ' + data.id);  
             this.connectionEstablished.emit(true);  
             this.connectionExists = true;  
         }).fail((error: any) => {  
-            console.log('Could not connect ' + error);  
+            debugger
+            console.log('Could not connect ' + error);
+            console.log('Stack trace: ' + error.stack);  
             this.connectionEstablished.emit(false);  
         });  
     }  
