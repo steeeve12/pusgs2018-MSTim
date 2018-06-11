@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MainComponent } from './main/main.component';
+import { ClockComponent } from './clock/clock.component';
 
 const Routes = [
 {
@@ -37,7 +38,8 @@ const Routes = [
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    MainComponent
+    MainComponent,
+    ClockComponent
   ],
   imports: [
     BrowserModule,
