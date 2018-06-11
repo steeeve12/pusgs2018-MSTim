@@ -1,12 +1,6 @@
-﻿using Microsoft.IdentityModel;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace RentApp.Models.Entities
 {
@@ -22,7 +16,7 @@ namespace RentApp.Models.Entities
 
 
         [DisplayName("Grade")]
- //       [Range(1, 10)]
+        [Range(1, 10)]
         public int Grade { get; set; }
 
 
