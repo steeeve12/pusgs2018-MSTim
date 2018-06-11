@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,6 +10,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { ServiceComponent } from './service/service.component';
 import { MainComponent } from './main/main.component';
 import { ClockComponent } from './clock/clock.component';
 import { SignalRService } from 'src/app/services/signalR-services';
@@ -30,6 +32,10 @@ const Routes = [
 {
   path: "register",
   component: RegisterComponent
+},
+{
+  path: "service/:Id",
+  component: ServiceComponent
 }
 ]
 
@@ -40,14 +46,17 @@ const Routes = [
     LoginComponent,
     RegisterComponent,
     MainComponent,
-    ClockComponent
+    ClockComponent,
+    ServiceComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(Routes),
     HttpModule,
     HttpClientModule,
-    HttpClientXsrfModule
+    HttpClientXsrfModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]

@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+.star-rating{
+    .to-rate{
+        cursor: pointer;
+        padding: 0 3px;
+    }
+    .fa-star-o{
+        color: orange;
+    }
+    .fa-star{
+        color: orange;
+    }
+    .fa-star-half-o{
+        color: orange;
+    }
+    .to-display{
+        padding: 0 2px;
+    }
+}

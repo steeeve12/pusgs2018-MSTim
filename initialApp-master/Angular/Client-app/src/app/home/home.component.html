@@ -1,26 +1,27 @@
 <!-- Page Content -->
 <div class="container">
-  <div style="height:50px;"></div>
 
   <h1 class="my-4">Services</h1>
 
-  <div class="row">
-    <li *ngFor="let service of services">
-    <div class="col-lg-4 col-sm-6 portfolio-item">
-      <div class="card h-100">
-        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="#">{service.Name}</a>
-          </h4>
-          <h5 class="card-title">
-            <p class="card-text">{service.Email}</p>
-          </h5>
-          <p class="card-text">{service.Description}</p>
-        </div>
+
+
+  <div class="app flex-row align-items-center">   
+      <div class="container"> 
+          <div class="card-deck row">
+              <div class="card col-md-4" *ngFor="let service of services">
+                  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                  <div class="card-body">
+                    <h4 class="card-title">
+                      <a [routerLink]="['/service', service.Id]" href="#">{{service.Name}}</a>
+                    </h4>
+                    <h5 class="card-title">
+                      <p class="card-text">{{service.Email}}</p>
+                    </h5>
+                    <p class="card-text">{{service.Description}}</p>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
-    </li>
   </div>
 
   <hr>
