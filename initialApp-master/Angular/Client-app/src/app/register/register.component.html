@@ -1,4 +1,5 @@
-<div class="container-fluid bg-light py-3">
+<div style="height:60px;"></div>
+<div class="container py-5">
     <div class="row">
         <div class="col-md-6 mx-auto">
                 <div class="card card-body">
@@ -6,23 +7,22 @@
                     <div hidden="true" class="alert alert-danger">
                         <a class="close font-weight-light" data-dismiss="alert" href="#">×</a>Password is too short.
                     </div>
-                    <fieldset>
+                    <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)">
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Full Name" name="fullname" type="text">
+                            <input class="form-control input-lg" placeholder="Full Name" name="fullname" type="text" ngModel>
                         </div>
                         <div class="form-group has-error">
-                            <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="text">
+                            <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="text" ngModel>
                         </div>
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Password" name="password" value="" type="password">
+                            <input class="form-control input-lg" placeholder="Password" name="password" value="" type="password" ngModel>
                         </div>
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Birthday" name="birthday" type="text">
+                            <input class="form-control input-lg" placeholder="Birthday" name="birthday" type="text" ngModel>
                         </div>
-                        
-                        
+                                          
                         <input class="btn btn-lg btn-primary btn-block" value="Sign Me Up" type="submit">
-                    </fieldset>
+                    </form>
                 </div>
         </div>
     </div>
