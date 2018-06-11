@@ -35,6 +35,10 @@ namespace RentApp.Models
     public class RegisterBindingModel
     {
         [Required]
+        [Display(Name = "Full name")]
+        public string FullName { get; set; }
+
+        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
@@ -43,6 +47,10 @@ namespace RentApp.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+
+        [Required]
+        [Display(Name = "Birthday")]
+        public string Birthday { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
