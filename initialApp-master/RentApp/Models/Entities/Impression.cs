@@ -22,7 +22,7 @@ namespace RentApp.Models.Entities
 
 
         [DisplayName("Grade")]
-        [Range(1, 10)]
+ //       [Range(1, 10)]
         public int Grade { get; set; }
 
 
