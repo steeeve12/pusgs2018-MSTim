@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams  } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { RegisterUser, LoginUser } from '../models/user.model';
+import { Vehicle } from '../models/vehicle.model';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class VehiclesService {
 
-  constructor(private http: Http, private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
   private parseData(res: Response) {
     return res.json() || [];
@@ -26,12 +26,12 @@ export class UserService {
     return Observable.throw(errorMessage);
   }
 
-   getMethod(): Observable<RegisterUser[]> {
-    return this.httpClient.get<RegisterUser[]>('http://localhost:51680/api/Services')
+   getMethod(Id: string): Observable<Vehicle[]> {
+    return this.httpClient.get<Vehicle[]>(`http://localhost:51680/api/Vehicles/GetAll/${Id}`);
   }
 
   postMethod(newMember): Observable<any> {
-    return this.httpClient.post("http://localhost:51680/api/Account/Register", newMember)
+    return this.httpClient.post("https://jsonplaceholder.typicode.com/posts", newMember)
   }
 
 }

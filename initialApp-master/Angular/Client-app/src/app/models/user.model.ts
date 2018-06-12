@@ -10,14 +10,16 @@ export class LoginUser {
 
 export class RegisterUser {
     FullName: string;
-    Email: string;
-    Password: string;
+    Email: string;   
     Birthday: Date;
+    Password: string;
+    ConfirmPassword: string;
 
-    constructor(fullname: string, email: string, password: string, birthday: Date) {
+    constructor(fullname: string, email: string, birthday: Date, password: string, confirmPassword: string) {
         this.FullName = fullname;
-        this.Email = email;
-        this.Password = password;
+        this.Email = email;       
         this.Birthday = birthday;
+        this.Password = password;
+        this.ConfirmPassword = confirmPassword;
     }
 }

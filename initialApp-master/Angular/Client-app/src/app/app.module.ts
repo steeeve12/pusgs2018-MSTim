@@ -14,6 +14,7 @@ import { ServiceComponent } from './service/service.component';
 import { MainComponent } from './main/main.component';
 import { ClockComponent } from './clock/clock.component';
 import { SignalRService } from 'src/app/services/signalR-services';
+import { VehicleComponent } from './vehicle/vehicle.component';
 
 const Routes = [
 {
@@ -36,6 +37,10 @@ const Routes = [
 {
   path: "service/:Id",
   component: ServiceComponent
+},
+{
+  path: "vehicle/:Id",
+  component: VehicleComponent
 }
 ]
 
@@ -47,7 +52,8 @@ const Routes = [
     RegisterComponent,
     MainComponent,
     ClockComponent,
-    ServiceComponent
+    ServiceComponent,
+    VehicleComponent
   ],
   imports: [
     BrowserModule,

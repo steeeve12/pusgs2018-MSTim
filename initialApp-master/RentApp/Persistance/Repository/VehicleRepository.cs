@@ -13,9 +13,11 @@ namespace RentApp.Persistance.Repository
         {
         }
 
-        public IEnumerable<Vehicle> GetAll(int pageIndex, int pageSize)
+        public IEnumerable<Vehicle> GetAll(int id, int pageIndex, int pageSize)
         {
-            return RADBContext.Vehicles.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            Service s = RADBContext.Services.First(s1 => s1.Id == id);
+            return s.Vehicles.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            //return RADBContext.Vehicles.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
         protected RADBContext RADBContext { get { return context as RADBContext; } }

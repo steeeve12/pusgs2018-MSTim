@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from '@angular/forms';
 
-import {LoginUser} from '../models/user.model'
+import { LoginUser } from '../models/user.model'
+import { AuthService } from '../services/auth-service'
 
 @Component({
   selector: 'app-login',
@@ -10,13 +11,23 @@ import {LoginUser} from '../models/user.model'
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  private loginUser: LoginUser; 
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
 
   onSubmit(user: LoginUser, form: NgForm) {
-    
+    if(user.Username != "" && user.Password != ""){
+      this.authService.getTheToken(user);
+      return true;
+    }
+    else{
+      alert("dsfsdf");
+      form.reset();
+      return false;
+    }
   }
 
 }

@@ -23,17 +23,19 @@ namespace RentApp.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        // GET: api/Vehicles
-        public IEnumerable<Vehicle> GetVehicles()
+        // GET: api/Vehicles/GetAll/idService
+        [Route("GetAll/{idService}")]
+        public IEnumerable<Vehicle> GetVehicles(int idService)
         {
-            return unitOfWork.Vehicles.GetAll();
+            return unitOfWork.Vehicles.GetAll(idService, 1, 10);
         }
 
-        // GET: api/Vehicles/5
+        // GET: api/Vehicles/GetVehicle/idVehicle
         [ResponseType(typeof(Vehicle))]
-        public IHttpActionResult GetVehicle(int id)
+        [Route("GetVehicle")]
+        public IHttpActionResult GetVehicle(int idVehicle)
         {
-            Vehicle vehicle = unitOfWork.Vehicles.Get(id);
+            Vehicle vehicle = unitOfWork.Vehicles.Get(idVehicle);
             if (vehicle == null)
             {
                 return NotFound();

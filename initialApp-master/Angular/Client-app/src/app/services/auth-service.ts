@@ -5,21 +5,23 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
+import { LoginUser } from '../models/user.model'
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
  constructor(private httpClient: HttpClient) { }
 
-getTheToken(){
+getTheToken(user: LoginUser){
 
     let headers = new HttpHeaders();
     headers = headers.append('Content-type', 'application/x-www-form-urlencoded');
     
     if(!localStorage.jwt)
     {
-       let x = this.httpClient.post('http://localhost:51680/oauth/token',`username=admin&password=admin&grant_type=password`, {"headers": headers}) as Observable<any>
-
+       let x = this.httpClient.post('http://localhost:51680/oauth/token',`username=${user.Username}&password=${user.Password}&grant_type=password`, {"headers": headers}) as Observable<any>
+       alert(x.map);
       x.subscribe(
         res => {
           console.log(res.access_token);
