@@ -29,7 +29,7 @@ namespace RentApp.Controllers
             return unitOfWork.Vehicles.GetAll(idService, pageIndex, 9);
         }
 
-        // GET: api/Vehicles/GetVehicle/idVehicle
+        // GET: api/Vehicles/idVehicle
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult GetVehicle(int idVehicle)
         {

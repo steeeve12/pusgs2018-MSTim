@@ -52,7 +52,7 @@ namespace RentApp.Models
 
         [Required]
         [Display(Name = "Birthday")]
-        public string Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]

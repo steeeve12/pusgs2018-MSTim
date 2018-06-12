@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
       return true;
     }
     else{
-      alert("dsfsdf");
+      alert("You have to enter username and password!");
       form.reset();
       return false;
     }

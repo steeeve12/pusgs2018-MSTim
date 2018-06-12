@@ -17,11 +17,11 @@ getTheToken(user: LoginUser){
 
     let headers = new HttpHeaders();
     headers = headers.append('Content-type', 'application/x-www-form-urlencoded');
-    
+
     if(!localStorage.jwt)
     {
        let x = this.httpClient.post('http://localhost:51680/oauth/token',`username=${user.Username}&password=${user.Password}&grant_type=password`, {"headers": headers}) as Observable<any>
-       alert(x.map);
+
       x.subscribe(
         res => {
           console.log(res.access_token);
@@ -37,13 +37,14 @@ getTheToken(user: LoginUser){
           console.log('jwtData: ' + jwtData)
           console.log('decodedJwtJsonData: ' + decodedJwtJsonData)
           console.log('decodedJwtData: ' + decodedJwtData)
-          console.log('Role ' + role)
+          console.log('Role ' + role) 
 
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
         },
         err => {
           console.log("Error occured");
+          alert("You are not authenticated!");
         }
       );
     }
