@@ -5,8 +5,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { RegisterUser } from '../models/user.model'
+import { RegisterUser, LoginUser } from '../models/user.model'
 import { UserService } from '../services/user-service'
+import { AuthService } from '../services/auth-service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,8 +18,9 @@ import { UserService } from '../services/user-service'
 export class RegisterComponent implements OnInit {
   
   private registerUser: RegisterUser; 
+  private loginUser: LoginUser = new LoginUser("", ""); 
 
-  constructor(private usersService: UserService) { }
+  constructor(private authService: AuthService, private usersService: UserService, private router: Router) { }
 
   ngOnInit() {
     
@@ -29,11 +32,15 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         data => {
           this.registerUser = data;
+          this.loginUser.Username = user.Email;
+          this.loginUser.Password = user.Password;
+          this.authService.getTheToken(this.loginUser);
+          this.router.navigateByUrl('/home');
         },
         error => {
           console.log(error);
-          return;
         })
+       
     }
 
     
