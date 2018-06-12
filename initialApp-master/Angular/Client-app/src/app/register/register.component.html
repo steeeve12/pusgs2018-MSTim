@@ -10,19 +10,19 @@
                     </div>
                     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)">
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Full Name" name="Fullname" type="text" ngModel>
+                            <input class="form-control input-lg" placeholder="Full Name" name="FullName" type="text" ngModel required>
                         </div>
                         <div class="form-group has-error">
-                            <input class="form-control input-lg" placeholder="E-mail Address" name="Email" type="text" ngModel>
+                            <input class="form-control input-lg" placeholder="E-mail Address" name="Email" type="text" ngModel required>
                         </div>                       
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Birthday" name="Birthday" type="date" ngModel>
+                            <input class="form-control input-lg" placeholder="Birthday" name="Birthday" type="date" ngModel required>
                         </div>
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Password" name="Password" value="" type="password" ngModel>
+                            <input class="form-control input-lg" placeholder="Password" name="Password" value="" type="password" ngModel required>
                         </div>
                         <div class="form-group has-success">
-                            <input class="form-control input-lg" placeholder="Confirm password" name="ConfirmPassword" value="" type="Password" ngModel>
+                            <input class="form-control input-lg" placeholder="Confirm password" name="ConfirmPassword" value="" type="Password" ngModel required>
                         </div>
                                           
                         <input class="btn btn-lg btn-primary btn-block" value="Sign Me Up" type="submit">

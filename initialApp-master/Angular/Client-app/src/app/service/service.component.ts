@@ -13,6 +13,9 @@ export class ServiceComponent implements OnInit {
   private Id: string = "-1";
   private vehicles: Vehicle[];
   private Ind: string = "1";
+  private pages: number;
+  private numbers: number[];
+  private pageNum: number;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService) {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}) 
@@ -20,6 +23,7 @@ export class ServiceComponent implements OnInit {
 
   ngOnInit() {
     this.callGet();
+    this.pageNum = 1;
   }
 
   callGet(){
@@ -27,10 +31,30 @@ export class ServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.vehicles = data;
+          this.pages = Math.ceil((this.vehicles.length)/9);
+          this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
         },
         error => {
           console.log(error);
         })
   }
 
+  page(page: string){
+    if(page == "prev"){
+      if(this.pageNum > 1){
+        this.Ind = (this.pageNum - 1).toString();
+        this.callGet();
+      }
+    }
+    else if(page == "next"){
+      if(this.pageNum < this.pages){
+        this.Ind = (this.pageNum + 1).toString();
+        this.callGet();
+      }
+    }
+    else{
+      this.Ind = (this.pageNum).toString();
+      this.callGet();
+    }
+  }
 }

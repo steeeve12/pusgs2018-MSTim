@@ -27,6 +27,10 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(user: RegisterUser) {
+    if(user.FullName == "" || user.Email == "" || user.Password == "" || (!user.Birthday) || user.ConfirmPassword == ""){
+      alert("You must fill all the fields provided!");
+      return;
+    }
     if(user.Password == user.ConfirmPassword){
       this.usersService.postMethod(user)
       .subscribe(

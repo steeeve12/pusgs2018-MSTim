@@ -2,11 +2,7 @@
   <div class="container">
 
     <!-- Page Heading/Breadcrumbs -->
-    <h1 class="mt-4 mb-3">Post Title
-      <small>by
-        <a href="#">Start Bootstrap</a>
-      </small>
-    </h1>
+    <h1 class="mt-4 mb-3">Service {{Id}}</h1>
 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
@@ -18,11 +14,6 @@
     <div>
         <!-- Preview Image -->
         <img class="img-fluid rounded center" src="http://placehold.it/900x300" alt="">
-
-        <hr>
-
-        <!-- Date/Time -->
-        <p>Posted on January 1, 2017 at 12:00 PM</p>
 
         <hr>
 
@@ -44,6 +35,27 @@
               </div>
           </div>
       </div>
+
+      <hr>
+
+      <!-- Pagination -->
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" [routerLink]="" (click)="page('prev')" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let number of numbers">
+          <a class="page-link" [routerLink]="" (click)="page(number)">{{number}}</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" [routerLink]="" (click)="page('next')" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
 
         <hr>
 
