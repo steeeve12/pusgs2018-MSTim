@@ -11,16 +11,9 @@ namespace RentApp.Models.Entities
     {
         public int Id { get; set; }
 
-
-        [Display(Name = "Start")]
-        [DataType(DataType.Date)]
         public DateTime? Start { get; set; }
 
-
-        [Display(Name = "End")]
-        [DataType(DataType.Date)]
         public DateTime? End { get; set; }
-
 
         public virtual Branch Branch { get; set; }
         public virtual Vehicle Vehicle { get; set; }

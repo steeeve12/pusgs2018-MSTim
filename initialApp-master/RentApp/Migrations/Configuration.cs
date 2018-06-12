@@ -62,15 +62,17 @@ namespace RentApp.Migrations
 
                   u => u.FullName,
 
-                  new AppUser() { FullName = "Admin Adminovic" }
+                  new AppUser() { FullName = "Admin Adminovic", Email = "admin@yahoo.com" }
 
             );
+
+            SaveChanges(context);
 
             context.AppUsers.AddOrUpdate(
 
                 p => p.FullName,
 
-                new AppUser() { FullName = "AppUser AppUserovic" }
+                new AppUser() { FullName = "AppUser AppUserovic", Email = "appu@yahoo.com" }
 
             );
 
@@ -113,6 +115,7 @@ namespace RentApp.Migrations
             v.VehicleType = vt;
             v.Unavailable = false;
             v.Year = 2005;
+            v.Description = "";
 
             br.Address = "br_1_addr";
             br.Latitude = 555555;
@@ -127,6 +130,7 @@ namespace RentApp.Migrations
             ser.Impressions = new System.Collections.Generic.List<Impression>();
             ser.Vehicles = new System.Collections.Generic.List<Vehicle>();
             ser.Vehicles.Add(v);
+            ser.Logo = "";
             // -------------------------------------
 
             // -------------------------------------
@@ -143,12 +147,12 @@ namespace RentApp.Migrations
             v1.VehicleType = vt1;
             v1.Unavailable = false;
             v1.Year = 2014;
+            v1.Description = "";
 
             br1.Address = "New Address";
             br1.Latitude = 45.257059;
             br1.Longitude = 19.840957;
             br1.Picture = "";
-
 
             ser1.Name = "Service 2";
             ser1.Email = "ser_2@gmail.com";
@@ -158,6 +162,7 @@ namespace RentApp.Migrations
             ser1.Impressions = new System.Collections.Generic.List<Impression>();
             ser1.Vehicles = new System.Collections.Generic.List<Vehicle>();
             ser1.Vehicles.Add(v1);
+            ser1.Logo = "";
             // -------------------------------------
 
             // -------------------------------------
@@ -173,12 +178,12 @@ namespace RentApp.Migrations
             v2.VehicleType = vt1;
             v2.Unavailable = false;
             v2.Year = 2010;
+            v2.Description = "";
 
             br2.Address = "Bulevar Kralja Petra 38";
             br2.Latitude = 45.259687;
             br2.Longitude = 19.828179;
             br2.Picture = "";
-
 
             ser1.Branches.Add(br2);
             ser1.Vehicles.Add(v2);

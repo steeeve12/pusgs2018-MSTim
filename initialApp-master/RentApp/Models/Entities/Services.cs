@@ -13,24 +13,21 @@ namespace RentApp.Models.Entities
 
 
         [Required]
-        [DisplayName("Name")]
         public string Name { get; set; }
 
 
-        [Required]
-        [DisplayName("Logo")]
+        [Required(AllowEmptyStrings = true)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Logo { get; set; }
 
 
         [Required]
         [EmailAddress]
         [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email")]
         public string Email { get; set; }
 
 
         [Required]
-        [DisplayName("Description")]
         public string Description { get; set; }
 
 

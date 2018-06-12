@@ -14,26 +14,22 @@ namespace RentApp.Models.Entities
 
 
         [Required]
-        [DisplayName("Model")]
         public string Model { get; set; }
 
 
         [Required]
-        [DisplayName("Manufactor")]
         public string Manufactor { get; set; }
 
-
-        [DisplayName("Year")]
+        [Required]
         [Range((int)1900, (int)2020)]
         public int Year { get; set; }
 
 
-        [Required]
-        [DisplayName("Description")]
+        [Required(AllowEmptyStrings = true)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Description { get; set; }
 
-
-        [DisplayName("PricePerHour")]
+        [Required]
         [Range(0.0, 100.0)]
         public decimal PricePerHour { get; set; }
 

@@ -13,21 +13,17 @@ namespace RentApp.Models.Entities
     {
         public int Id { get; set; }
 
-        [DisplayName("Picture")]
         [Required(AllowEmptyStrings = true)]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Picture { get; set; }
 
         [Required]
-        [Display(Name = "Address")]
         public string Address { get; set; }
 
         [Required]
-        [Display(Name = "Latitude")]
         public double Latitude { get; set; }
 
         [Required]
-        [Display(Name = "Longitude")]
         public double Longitude { get; set; }
     }
 }
