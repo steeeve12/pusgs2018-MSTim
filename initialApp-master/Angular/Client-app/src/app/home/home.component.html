@@ -18,6 +18,13 @@
                       <p class="card-text">{{service.Email}}</p>
                     </h5>
                     <p class="card-text">{{service.Description}}</p>
+                    <rating [(ngModel)]="service.Grade"
+                      [max]="5"
+                      [readonly]="true"
+                      [disabled]="false"
+                      [required]="false"
+                      [float]="true">
+                    </rating>
                   </div>
               </div>
           </div>

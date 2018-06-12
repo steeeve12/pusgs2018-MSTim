@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VehiclesService } from '../services/vehicle-service';
+import { ServicesService } from '../services/services-service';
 import { Vehicle } from '../models/vehicle.model'
+import { Service } from '../models/service.model';
 
 @Component({
   selector: 'app-service',
@@ -17,16 +19,21 @@ export class ServiceComponent implements OnInit {
   private numbers: number[];
   private pageNum: number;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService) {
+  private service: Service;
+  private grade: number = 0;
+  private cnt: number = 0;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private servicesService: ServicesService) {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}) 
   }
 
   ngOnInit() {
-    this.callGet();
+    this.callGetVehicles();
+    this.callGetServices();
     this.pageNum = 1;
   }
 
-  callGet(){
+  callGetVehicles(){
     this.vehiclesService.getMethod(this.Id, this.Ind)
       .subscribe(
         data => {
@@ -39,22 +46,42 @@ export class ServiceComponent implements OnInit {
         })
   }
 
+  callGetServices(){
+    this.servicesService.getService(this.Id)
+      .subscribe(
+        data => {
+          this.service = data;
+          this.extractGrade();
+          this.grade /= this.cnt;
+        },
+        error => {
+          console.log(error);
+        })
+  }
+
   page(page: string){
     if(page == "prev"){
       if(this.pageNum > 1){
         this.Ind = (this.pageNum - 1).toString();
-        this.callGet();
+        this.callGetVehicles();
       }
     }
     else if(page == "next"){
       if(this.pageNum < this.pages){
         this.Ind = (this.pageNum + 1).toString();
-        this.callGet();
+        this.callGetVehicles();
       }
     }
     else{
       this.Ind = (this.pageNum).toString();
-      this.callGet();
+      this.callGetVehicles();
     }
+  }
+
+  extractGrade(){
+    let arr = this.service.Impressions.forEach(obj => {
+      this.grade += obj.Grade;
+      this.cnt += 1;
+    })
   }
 }

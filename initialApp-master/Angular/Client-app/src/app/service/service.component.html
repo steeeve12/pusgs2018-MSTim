@@ -67,6 +67,14 @@
               <div class="form-group">
                 <textarea class="form-control" rows="3"></textarea>
               </div>
+              <rating [(ngModel)]="grade"
+                [max]="5"
+                [readonly]="false"
+                [disabled]="false"
+                [required]="false"
+                [float]="true"
+                name="Grade">
+              </rating>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>

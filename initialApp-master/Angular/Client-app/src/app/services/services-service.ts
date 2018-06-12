@@ -26,8 +26,12 @@ export class ServicesService {
     return Observable.throw(errorMessage);
   }
 
-   getMethod(): Observable<Service[]> {
+  getAllServices(): Observable<Service[]> {
     return this.httpClient.get<Service[]>('http://localhost:51680/api/Services')
+  }
+
+  getService(id: string): Observable<Service> {
+    return this.httpClient.get<Service>(`http://localhost:51680/api/Services?id=${id}`)
   }
 
   postMethod(newMember): Observable<any> {

@@ -106,6 +106,7 @@ namespace RentApp.Migrations
             VehicleType vt = new VehicleType();
             Branch br = new Branch();
             Vehicle v = new Vehicle();
+            Impression i = new Impression();
 
             vt.Name = "Hatchback";
 
@@ -121,6 +122,10 @@ namespace RentApp.Migrations
             br.Latitude = 555555;
             br.Longitude = 666666;
             br.Picture = "";
+
+            i.Comment = "Top servis";
+            i.Grade = 4;
+            i.Time = DateTime.Now;
 
             ser.Name = "Service 1";
             ser.Email = "ser_1@gmail.com";
@@ -160,6 +165,7 @@ namespace RentApp.Migrations
             ser1.Branches = new System.Collections.Generic.List<Branch>();
             ser1.Branches.Add(br1);
             ser1.Impressions = new System.Collections.Generic.List<Impression>();
+            ser1.Impressions.Add(i);
             ser1.Vehicles = new System.Collections.Generic.List<Vehicle>();
             ser1.Vehicles.Add(v1);
             ser1.Logo = "";
@@ -235,6 +241,18 @@ namespace RentApp.Migrations
                 veh => veh.Model,
 
                 vehicles
+
+            );
+
+            SaveChanges(context);
+
+            Impression[] impressions = { i };
+
+            context.Impressions.AddOrUpdate(
+
+                imp => new { imp.Comment, imp.Id },
+
+                impressions
 
             );
 

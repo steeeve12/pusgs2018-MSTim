@@ -16,6 +16,8 @@ import { ClockComponent } from './clock/clock.component';
 import { SignalRService } from 'src/app/services/signalR-services';
 import { VehicleComponent } from './vehicle/vehicle.component';
 
+import { RatingModule } from "ngx-rating";
+
 const Routes = [
 {
   path: '',
@@ -62,7 +64,8 @@ const Routes = [
     HttpClientModule,
     HttpClientXsrfModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RatingModule
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]
