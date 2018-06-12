@@ -17,6 +17,7 @@ using RentApp.Models;
 using RentApp.Models.Entities;
 using RentApp.Providers;
 using RentApp.Results;
+using RentApp.Persistance.UnitOfWork;
 
 namespace RentApp.Controllers
 {
@@ -26,15 +27,18 @@ namespace RentApp.Controllers
     {
         private const string LocalLoginProvider = "Local";
 
+        private readonly IUnitOfWork unitOfWork;
+
         public AccountController()
         {
         }
 
         public AccountController(ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat, IUnitOfWork unitOfWork)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+            this.unitOfWork = unitOfWork;
         }
 
         public ApplicationUserManager UserManager { get; private set; }
@@ -115,7 +119,7 @@ namespace RentApp.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -248,9 +252,9 @@ namespace RentApp.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
+
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
@@ -318,9 +322,17 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email,  AppUser = new AppUser { Birthday = model.Birthday, Email = model.Email, FullName = model.FullName } };
+            foreach (AppUser u in unitOfWork.Users.GetAll())
+            {
+                if (u.Email == model.Email)
+                {
+                    return Unauthorized();
+                }
+            }
+
+            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, Id = model.Email, AppUser = new AppUser { Birthday = model.Birthday, Email = model.Email, FullName = model.FullName } };
             
-            user.PasswordHash =  RAIdentityUser.HashPassword(model.Password);
+            user.PasswordHash = RAIdentityUser.HashPassword(model.Password);
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -329,8 +341,11 @@ namespace RentApp.Controllers
                 return GetErrorResult(result);
             }
 
+            UserManager.AddToRole(user.Id, "AppUser");
+
             return Ok();
         }
+
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
@@ -360,7 +375,7 @@ namespace RentApp.Controllers
             result = await UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result); 
+                return GetErrorResult(result);
             }
             return Ok();
         }

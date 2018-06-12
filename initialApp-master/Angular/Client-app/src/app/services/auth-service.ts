@@ -34,10 +34,10 @@ getTheToken(user: LoginUser){
 
           let role = decodedJwtData.role
 
-          console.log('jwtData: ' + jwtData)
-          console.log('decodedJwtJsonData: ' + decodedJwtJsonData)
-          console.log('decodedJwtData: ' + decodedJwtData)
-          console.log('Role ' + role) 
+          // console.log('jwtData: ' + jwtData)
+          // console.log('decodedJwtJsonData: ' + decodedJwtJsonData)
+          // console.log('decodedJwtData: ' + decodedJwtData)
+          // console.log('Role ' + role) 
 
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);

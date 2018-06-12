@@ -12,4 +12,11 @@ export class MainComponent implements OnInit {
   ngOnInit() {
   }
 
+  logged() {
+    return localStorage.jwt;
+  }
+
+  logout() {
+    localStorage.clear();
+  }
 }

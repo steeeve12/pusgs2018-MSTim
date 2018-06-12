@@ -26,9 +26,9 @@ export class UserService {
     return Observable.throw(errorMessage);
   }
 
-   getMethod(): Observable<RegisterUser[]> {
-    return this.httpClient.get<RegisterUser[]>('http://localhost:51680/api/Services')
-  }
+  // getMethod(): Observable<RegisterUser[]> {
+  //  return this.httpClient.get<RegisterUser[]>('http://localhost:51680/api/Services')
+  //}
 
   postMethod(newMember): Observable<any> {
     return this.httpClient.post("http://localhost:51680/api/Account/Register", newMember)
