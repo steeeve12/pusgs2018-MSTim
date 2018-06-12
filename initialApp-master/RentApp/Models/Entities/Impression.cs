@@ -8,20 +8,14 @@ namespace RentApp.Models.Entities
     {
         public int Id { get; set; }
 
-
-        [DisplayName("Comment")]
         [Required(AllowEmptyStrings = true)]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Comment { get; set; }
 
 
-        [DisplayName("Grade")]
         [Range(1, 10)]
         public int Grade { get; set; }
 
-
-        [Display(Name = "Time")]
-        [DataType(DataType.Date)]
         public DateTime? Time { get; set; }
 
 

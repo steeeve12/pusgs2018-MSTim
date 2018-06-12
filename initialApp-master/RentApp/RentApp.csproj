@@ -340,6 +340,10 @@
     <Compile Include="Migrations\201806060806332_stari model.Designer.cs">
       <DependentUpon>201806060806332_stari model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806120624554_dataAnnotations.cs" />
+    <Compile Include="Migrations\201806120624554_dataAnnotations.Designer.cs">
+      <DependentUpon>201806120624554_dataAnnotations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -488,6 +492,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806060806332_stari model.resx">
       <DependentUpon>201806060806332_stari model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806120624554_dataAnnotations.resx">
+      <DependentUpon>201806120624554_dataAnnotations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

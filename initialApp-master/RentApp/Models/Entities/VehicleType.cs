@@ -13,7 +13,6 @@ namespace RentApp.Models.Entities
 
 
         [Required]
-        [DisplayName("Name")]
         public string Name { get; set; }
         //public virtual List<Vehicle> Vehicles { get; set; }
     }
