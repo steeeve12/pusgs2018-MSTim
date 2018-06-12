@@ -117,6 +117,7 @@ namespace RentApp.Migrations
             br.Address = "br_1_addr";
             br.Latitude = 555555;
             br.Longitude = 666666;
+            br.Picture = "";
 
             ser.Name = "Service 1";
             ser.Email = "ser_1@gmail.com";
@@ -146,6 +147,8 @@ namespace RentApp.Migrations
             br1.Address = "New Address";
             br1.Latitude = 45.257059;
             br1.Longitude = 19.840957;
+            br1.Picture = "";
+
 
             ser1.Name = "Service 2";
             ser1.Email = "ser_2@gmail.com";
@@ -174,6 +177,8 @@ namespace RentApp.Migrations
             br2.Address = "Bulevar Kralja Petra 38";
             br2.Latitude = 45.259687;
             br2.Longitude = 19.828179;
+            br2.Picture = "";
+
 
             ser1.Branches.Add(br2);
             ser1.Vehicles.Add(v2);
