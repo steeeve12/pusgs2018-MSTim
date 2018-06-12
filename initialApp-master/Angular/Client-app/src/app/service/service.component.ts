@@ -12,6 +12,7 @@ export class ServiceComponent implements OnInit {
 
   private Id: string = "-1";
   private vehicles: Vehicle[];
+  private Ind: string = "1";
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService) {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}) 
@@ -22,7 +23,7 @@ export class ServiceComponent implements OnInit {
   }
 
   callGet(){
-    this.vehiclesService.getMethod(this.Id)
+    this.vehiclesService.getMethod(this.Id, this.Ind)
       .subscribe(
         data => {
           this.vehicles = data;

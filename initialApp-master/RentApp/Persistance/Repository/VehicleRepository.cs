@@ -17,7 +17,6 @@ namespace RentApp.Persistance.Repository
         {
             Service s = RADBContext.Services.First(s1 => s1.Id == id);
             return s.Vehicles.Skip((pageIndex - 1) * pageSize).Take(pageSize);
-            //return RADBContext.Vehicles.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
         protected RADBContext RADBContext { get { return context as RADBContext; } }
