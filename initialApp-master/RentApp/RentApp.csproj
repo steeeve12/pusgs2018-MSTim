@@ -283,6 +283,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImpressionsController.cs" />
     <Compile Include="Controllers\RentsController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -357,6 +358,8 @@
     <Compile Include="Models\Entities\Vehicle.cs" />
     <Compile Include="Persistance\RADBContext.cs" />
     <Compile Include="Persistance\Repository\AppUserRepository.cs" />
+    <Compile Include="Persistance\Repository\ImpressionRepository.cs" />
+    <Compile Include="Persistance\Repository\IImpressionRepository.cs" />
     <Compile Include="Persistance\Repository\RentRepository.cs" />
     <Compile Include="Persistance\Repository\IAppUserRepository.cs" />
     <Compile Include="Persistance\Repository\IRentRepository.cs" />

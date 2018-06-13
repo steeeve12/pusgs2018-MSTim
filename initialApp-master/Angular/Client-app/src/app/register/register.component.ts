@@ -27,6 +27,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(user: RegisterUser) {
+    user.FullName = user.FullName.trim();
+    user.Email = user.Email.trim();
+
     if(user.FullName == "" || user.Email == "" || user.Password == "" || (!user.Birthday) || user.ConfirmPassword == ""){
       alert("You must fill all the fields provided!");
       return;
@@ -43,8 +46,12 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           console.log(error);
+          alert(error.error.ModelState["model.Email"] + "\n" + error.error.ModelState["model.Password"]);
         })
        
+    }else{
+      alert("Password does not match the confirm password!");
+      return;
     }
 
     

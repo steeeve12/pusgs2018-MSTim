@@ -13,7 +13,7 @@ namespace RentApp.Models.Entities
         public string Comment { get; set; }
 
 
-        [Range(1, 10)]
+        [Range(1, 5)]
         public int Grade { get; set; }
 
         public DateTime? Time { get; set; }
