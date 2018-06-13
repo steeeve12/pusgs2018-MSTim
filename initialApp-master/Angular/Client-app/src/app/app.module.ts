@@ -17,6 +17,7 @@ import { SignalRService } from 'src/app/services/signalR-services';
 import { VehicleComponent } from './vehicle/vehicle.component';
 
 import { RatingModule } from "ngx-rating";
+import { Ng2CarouselamosModule } from 'ng2-carouselamos';
 
 const Routes = [
 {
@@ -65,7 +66,8 @@ const Routes = [
     HttpClientXsrfModule,
     FormsModule,
     ReactiveFormsModule,
-    RatingModule
+    RatingModule,
+    Ng2CarouselamosModule
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]

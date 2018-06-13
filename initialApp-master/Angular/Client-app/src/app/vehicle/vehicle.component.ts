@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { VehiclesService } from '../services/vehicle-service';
+import { Vehicle } from '../models/vehicle.model';
 
 @Component({
   selector: 'app-vehicle',
@@ -7,7 +11,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VehicleComponent implements OnInit {
 
-  constructor() { }
+  private Id: string;
+  items: Array<any> = [];
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+    activatedRoute.params.subscribe(params => {this.Id = params["Id"]})
+   }
 
   ngOnInit() {
   }

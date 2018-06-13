@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VehiclesService } from '../services/vehicle-service';
 import { ServicesService } from '../services/services-service';
-import { Vehicle } from '../models/vehicle.model'
+import { Vehicle } from '../models/vehicle.model';
 import { Service } from '../models/service.model';
 
 @Component({
@@ -83,5 +83,12 @@ export class ServiceComponent implements OnInit {
       this.grade += obj.Grade;
       this.cnt += 1;
     })
+  }
+
+  loggedAndReserved(){
+    if(!localStorage.jwt)
+      return true;
+    //if(ako nije rezervisao)
+      //return true;
   }
 }
