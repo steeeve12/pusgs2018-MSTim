@@ -7,8 +7,9 @@ export class Vehicle {
     PricePerHour: number;
     Unavailable: boolean;
     Images: string[];
+    VehicleTypeId: string;
 
-    constructor(id: number, model: string, manufactor: string, year: Date, description: string, pricePerHour: number, unavailable: boolean, images: string[]) {
+    constructor(id: number, model: string, manufactor: string, year: Date, description: string, pricePerHour: number, unavailable: boolean, images: string[], vehicleTypeId: string) {
         this.Id = id;
         this.Model = model;
         this.Manufactor = manufactor;
@@ -17,5 +18,6 @@ export class Vehicle {
         this.PricePerHour = pricePerHour;
         this.Unavailable = unavailable;
         this.Images = images;
+        this.VehicleTypeId = vehicleTypeId;
     }
 }

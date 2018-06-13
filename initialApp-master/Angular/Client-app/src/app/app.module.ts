@@ -18,6 +18,7 @@ import { VehicleComponent } from './vehicle/vehicle.component';
 
 import { RatingModule } from "ngx-rating";
 import { Ng2CarouselamosModule } from 'ng2-carouselamos';
+import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload';
 
 const Routes = [
 {
@@ -56,7 +57,9 @@ const Routes = [
     MainComponent,
     ClockComponent,
     ServiceComponent,
-    VehicleComponent
+    VehicleComponent,
+    FileSelectDirective,
+    FileDropDirective 
   ],
   imports: [
     BrowserModule,

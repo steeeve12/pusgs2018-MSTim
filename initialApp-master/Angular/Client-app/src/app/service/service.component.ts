@@ -34,7 +34,7 @@ export class ServiceComponent implements OnInit {
   }
 
   callGetVehicles(){
-    this.vehiclesService.getMethod(this.Id, this.Ind)
+    this.vehiclesService.getVehicles(this.Id, this.Ind)
       .subscribe(
         data => {
           this.vehicles = data;

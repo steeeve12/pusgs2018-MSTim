@@ -5,14 +5,14 @@ import { Headers, RequestOptions } from '@angular/http';
 import { HttpClient, HttpParams  } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { Vehicle } from '../models/vehicle.model';
+import { VehicleType } from '../models/vehicle-type.model';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VehiclesService {
+export class VehicleTypesService {
 
   constructor(private httpClient: HttpClient) { }
 
@@ -26,14 +26,9 @@ export class VehiclesService {
     return Observable.throw(errorMessage);
   }
 
-  getVehicles(Id: string, Ind: string): Observable<Vehicle[]> {
-    return this.httpClient.get<Vehicle[]>(`http://localhost:51680/api/Vehicles?idService=${Id}&pageIndex=${Ind}`);
+  getVehicleType(Id: string): Observable<VehicleType> {
+    return this.httpClient.get<VehicleType>(`http://localhost:51680/api/VehicleTypes?id=${Id}`);
   }
-
-  getVehicle(Id: string): Observable<Vehicle> {
-    return this.httpClient.get<Vehicle>(`http://localhost:51680/api/Vehicles?idVehicle=${Id}`);
-  }
-
 
   postMethod(newMember): Observable<any> {
     return this.httpClient.post("https://jsonplaceholder.typicode.com/posts", newMember)
