@@ -60,6 +60,7 @@ namespace RentApp
             container.RegisterType<IVehicleRepository, VehicleRepository>();
             container.RegisterType<IVehicleTypeRepository, VehicleTypeRepository>();
             container.RegisterType<IRentRepository, RentRepository>();
+            container.RegisterType<IImpressionRepository, ImpressionRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:51680"));
