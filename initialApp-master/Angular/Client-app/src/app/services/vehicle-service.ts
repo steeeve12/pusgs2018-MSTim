@@ -35,8 +35,8 @@ export class VehiclesService {
   }
 
 
-  postMethod(newMember): Observable<any> {
-    return this.httpClient.post("https://jsonplaceholder.typicode.com/posts", newMember)
+  postVehicle(vehicle: Vehicle): Observable<Vehicle> {
+    return this.httpClient.post<Vehicle>("http://localhost:51680/api/Vehicles", vehicle)
   }
 
 }

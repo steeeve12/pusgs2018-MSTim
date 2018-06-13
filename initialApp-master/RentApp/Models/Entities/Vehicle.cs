@@ -21,7 +21,7 @@ namespace RentApp.Models.Entities
         public string Manufactor { get; set; }
 
         [Required]
-        [Range((int)1900, (int)2020)]
+        [Range((int)1970, (int)2018)]
         public int Year { get; set; }
 
 
@@ -36,6 +36,9 @@ namespace RentApp.Models.Entities
 
         public bool Unavailable { get; set; }
         public List<string> Images { get; set; }
+
+        [ForeignKey("VehicleType")]
+        public int VehicleTypeId { get; set; }
         public virtual VehicleType VehicleType { get; set; }
     }
 }

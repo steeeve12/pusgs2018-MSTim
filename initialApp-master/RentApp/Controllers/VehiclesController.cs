@@ -86,6 +86,18 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            string[] fullDescription = vehicle.Description.Split('#');
+
+            int serId = int.Parse(fullDescription[0]);
+
+            if (fullDescription[1] == "__empty__")
+                vehicle.Description = "";
+            else
+                vehicle.Description = fullDescription[1];
+
+            Service ser = unitOfWork.Services.Get(serId);
+            ser.Vehicles.Add(vehicle);
+
             unitOfWork.Vehicles.Add(vehicle);
             unitOfWork.Complete();
 

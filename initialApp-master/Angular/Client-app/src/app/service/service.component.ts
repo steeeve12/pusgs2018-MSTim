@@ -5,7 +5,14 @@ import { ServicesService } from '../services/services-service';
 import { Vehicle } from '../models/vehicle.model';
 import { Service } from '../models/service.model';
 import { Impression } from '../models/impression.model';
-import { ImpressoinService } from 'src/app/services/impressoin-service';
+import { ImpressionService } from '../services/impression-service';
+import { VehicleTypesService } from '../services/vehicle-type-service';
+
+import { FileUploader } from 'ng2-file-upload';
+import { VehicleType } from '../models/vehicle-type.model';
+
+import { TruncateModule } from 'ng2-truncate';
+import { Dictionary } from 'lodash';
 
 @Component({
   selector: 'app-service',
@@ -15,23 +22,38 @@ import { ImpressoinService } from 'src/app/services/impressoin-service';
 export class ServiceComponent implements OnInit {
 
   private Id: string = "-1";
+  private retVehicle: Vehicle;
   private vehicles: Vehicle[];
+  private vehicleTypes: VehicleType[];
   private impressions: Impression[];
   private Ind: string = "1";
   private pages: number;
   private numbers: number[];
   private pageNum: number;
+  private resp: string[] = [];
+  private temp: string;
+  private description: string = "";
 
   private service: Service;
   private grade: number = 0;
   private cnt: number = 0;
 
-  constructor(private impressionService: ImpressoinService, private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private servicesService: ServicesService) {
-    activatedRoute.params.subscribe(params => {this.Id = params["Id"]}) 
+  public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
+  public hasBaseDropZoneOver:boolean = false;
+  public hasAnotherDropZoneOver:boolean = false;
+
+  constructor(private impressionService: ImpressionService, private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private vehicleTypesService: VehicleTypesService, private servicesService: ServicesService) {
+    activatedRoute.params.subscribe(params => {this.Id = params["Id"]}); 
+    this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
+      console.log("ImageUpload:uploaded:", item, status);
+      this.temp = response.replace('"', "");
+      this.temp = this.temp.replace('"', "");
+      this.resp.push(this.temp)};
   }
 
   ngOnInit() {
     this.callGetVehicles();
+    this.callGetVehicleTypes();
     this.callGetServices();
     this.callGetImpressions();
     this.pageNum = 1;
@@ -48,6 +70,17 @@ export class ServiceComponent implements OnInit {
         error => {
           console.log(error);
         })
+  }
+
+  callGetVehicleTypes(){
+    this.vehicleTypesService.getVehicleTypes()
+    .subscribe(
+      data => {
+        this.vehicleTypes = data;
+      },
+      error => {
+        console.log(error);
+      })
   }
 
   callGetImpressions(){
@@ -139,5 +172,47 @@ export class ServiceComponent implements OnInit {
         console.log(error);
         alert(error.error.Message);
       })
+  }
+
+  onSubmitVehicle(fvehicle: Vehicle){
+    fvehicle.Manufactor = fvehicle.Manufactor.trim();
+    fvehicle.Model = fvehicle.Model.trim();
+    fvehicle.Description = this.description;
+    fvehicle.Images = this.resp;
+ 
+    fvehicle.VehicleTypeId = this.vehicleTypes.find(veh => veh.Name == fvehicle.Type).Id;
+
+    if(fvehicle.Manufactor == "" || fvehicle.Model == "" || (!fvehicle.Year) || fvehicle.Images.length == 0 || fvehicle.PricePerHour == undefined || fvehicle.Type == ""){
+      alert("You must fill all the fields provided and select at least one image!");
+      return;
+    }
+
+    if(fvehicle.Description == ""){
+      fvehicle.Description = "__empty__";
+    }
+
+    fvehicle.Description =  this.Id.toString() + "#" + fvehicle.Description;
+
+    if(fvehicle.Year < 1970 || fvehicle.Year > 2018){
+      alert("Year must be between 1970. and 2018.");
+      return;
+    }
+      this.vehiclesService.postVehicle(fvehicle)
+      .subscribe(
+        data => {
+          this.retVehicle = data;
+          this.callGetVehicles();
+        },
+        error => {
+          console.log(error);
+        })
+  }
+
+  public fileOverBase(e:any):void {
+    this.hasBaseDropZoneOver = e;
+  }
+ 
+  public fileOverAnother(e:any):void {
+    this.hasAnotherDropZoneOver = e;
   }
 }

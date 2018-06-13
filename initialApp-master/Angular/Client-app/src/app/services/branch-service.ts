@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
-import { HttpClient, HttpParams  } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { VehicleType } from '../models/vehicle-type.model';
+import { Branch } from '../models/branch.model';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VehicleTypesService {
+export class BranchService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private http: Http, private httpClient: HttpClient) { }
 
   private parseData(res: Response) {
     return res.json() || [];
@@ -26,12 +26,12 @@ export class VehicleTypesService {
     return Observable.throw(errorMessage);
   }
 
-  getVehicleTypes(): Observable<VehicleType[]> {
-    return this.httpClient.get<VehicleType[]>(`http://localhost:51680/api/VehicleTypes`);
+  getBranches(idService: string): Observable<Branch[]> {
+    return this.httpClient.get<Branch[]>(`http://localhost:51680/api/Branches?idService=${idService}`);
   }
 
   postMethod(newMember): Observable<any> {
-    return this.httpClient.post("https://jsonplaceholder.typicode.com/posts", newMember)
+    return this.httpClient.post("http://localhost:51680/api/Impressions/PostImpression", newMember)
   }
 
 }

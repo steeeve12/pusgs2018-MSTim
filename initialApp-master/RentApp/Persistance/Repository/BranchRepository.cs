@@ -18,6 +18,12 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Branches.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+        public IEnumerable<Branch> GetAll(int id)
+        {
+            Service s = RADBContext.Services.First(s1 => s1.Id == id);
+            return s.Branches;
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

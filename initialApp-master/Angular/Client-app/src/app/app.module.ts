@@ -20,6 +20,8 @@ import { RatingModule } from "ngx-rating";
 import { Ng2CarouselamosModule } from 'ng2-carouselamos';
 import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload';
 
+import { TruncateModule } from 'ng2-truncate';
+
 const Routes = [
 {
   path: '',
@@ -70,7 +72,8 @@ const Routes = [
     FormsModule,
     ReactiveFormsModule,
     RatingModule,
-    Ng2CarouselamosModule
+    Ng2CarouselamosModule,
+    TruncateModule 
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]

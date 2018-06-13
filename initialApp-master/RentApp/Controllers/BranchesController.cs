@@ -24,9 +24,9 @@ namespace RentApp.Controllers
         }
 
         // GET: api/Branches
-        public IEnumerable<Branch> GetBranches()
+        public IEnumerable<Branch> GetBranches(int idService)
         {
-            return unitOfWork.Branches.GetAll();
+            return unitOfWork.Branches.GetAll(idService);
         }
 
         // GET: api/Branches/5
