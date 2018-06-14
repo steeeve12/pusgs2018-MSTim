@@ -19,6 +19,7 @@ import { VehicleComponent } from './vehicle/vehicle.component';
 import { RatingModule } from "ngx-rating";
 import { Ng2CarouselamosModule } from 'ng2-carouselamos';
 import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload';
+import { AgmCoreModule } from '@agm/core';
 
 import { TruncateModule } from 'ng2-truncate';
 
@@ -73,7 +74,8 @@ const Routes = [
     ReactiveFormsModule,
     RatingModule,
     Ng2CarouselamosModule,
-    TruncateModule 
+    TruncateModule,
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'})
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]

@@ -1,37 +1,29 @@
-<div id="container">
-  <div
-    ng2-carouselamos
-    class="slides-wrapper"
-    [items]="items"
-    [width]="900"
-    [$prev]="prev"
-    [$next]="next"
-    [$item]="item"
-  >
-  </div>
+      <div class="col-lg-6" align="center">
+        <h1 class="mt-4 mb-3">{{vehicle.Manufactor}} {{vehicle.Model}}</h1>
+      </div>
+        <div>
+    
+            <hr>
+            <div class="app flex-row align-items-center">   
+              <div class="container"> 
+                  <div class="card-deck row">
+                      <div class="card col-md-8" *ngFor="let image of listImages">
+                        <img class="card-img-top" width="400px" height="400px" src="http://localhost:51680{{image}}" alt="">                              
+                      </div>
+                  </div>
+              </div>
+            </div>
+    
+          <hr>
+        </div>
 
-
-<ng-template #prev>
-  <img src="/assets/images/if_nav-arrow-left_383101.png" height="50px" id="left" />
-</ng-template>
-<ng-template #next>
-  <img src="/assets/images/if_nav-arrow-right_383100.png" height="50px" id="right" />
-</ng-template>
-<ng-template #item let-item let-i="index">
-
-    <div class="items">
-      <img src="{{ item.name }}">
-    </div>
-
-</ng-template>
 
 <!-- Page Content -->
-<br><br><br>
+<br>
 <div class="container">
   <!-- Features Section -->
   <div class="row">
     <div class="col-lg-6">
-      <h2>{{vehicle.Manufactor}} {{vehicle.Model}}, {{vehicle.Year}}</h2>
       <p>Basic information about the vehicle:</p>
       <ul>
         <li>
@@ -47,7 +39,7 @@
   <hr>
 
   <!-- Call to Action Section -->
-  <div class="row mb-4">
+  <div class="row mb-4"> <!-- *ngIf="logged()" -->
     <div class="col-md-5">
       <p height="10px"></p>
       <p>If you want to make a reservation for this vehicle click here:</p>
@@ -66,29 +58,67 @@
             <div class="col-md-6 mx-auto">
                     <div class="card card-body">
                         <h3 class="text-center mb-4">Reservation</h3>
-                        <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)">
-                            <div class="form-group has-success">
-                                <input class="form-control input-lg" placeholder="Full Name" name="FullName" type="text" ngModel required>
-                            </div>
-                            <div class="form-group has-error">
-                                <input class="form-control input-lg" placeholder="E-mail Address" name="Email" type="text" ngModel required>
-                            </div>                       
-                            <div class="form-group has-success">
-                                <input class="form-control input-lg" placeholder="Birthday" name="Birthday" type="date" ngModel required>
-                            </div>
-                            <div class="form-group has-success">
-                                <input class="form-control input-lg" placeholder="Password" name="Password" value="" type="password" ngModel required>
-                            </div>
-                            <div class="form-group has-success">
-                                <input class="form-control input-lg" placeholder="Confirm password" name="ConfirmPassword" value="" type="Password" ngModel required>
-                            </div>
-                                              
-                            <input class="btn btn-lg btn-primary btn-block" value="Reserve" type="submit">
-                        </form>
+                        <br>
+                        <p>Select date when you want to pick up your vehicle:</p>
+                        <div class="form-group has-success">
+                            <input class="form-control input-lg" name="Start" type="date" [(ngModel)]="start" required>
+                        </div>    
+                        <p>Select date when you want to return your vehicle:</p>
+                        <div class="form-group has-success">
+                            <input class="form-control input-lg" name="End" type="date" [(ngModel)]="end" required>
+                        </div>                                                               
                     </div>
             </div>
         </div>
     </div>
+
+    <div class="row mb-4">
+        <div class="col-md-5">
+    <div style="width:50%; margin: 0 auto">
+        <p>
+            <!-- Kreiramo mapu -->
+            <agm-map [latitude]="mapInfo1.centerLat" [longitude]="mapInfo1.centerLong" [zoom]="18" (mapClick)="placeMarker1($event)">
+             
+              <!-- Postavljamo markere -->
+              <agm-marker [latitude]="mapInfo1.centerLat" [longitude]="mapInfo1.centerLong" [title]="mapInfo1.title"
+              [label]="mapInfo1.label">
+          
+                <!-- Svakom markeru dodajemo info-window (Nije obavezno!)-->
+                <!--<agm-info-window [latitude]="mapInfo.centerLat" [longitude]="mapInfo.centerLong" >-->
+          
+                  <!-- U info-window stavljamo html -->
+                  <!--<span style="font-size: 16px;font-family:'Times New Roman'">Fakultet tehničkih nauka</span>
+                  <br/>
+                  <span style="font-family:'Times New Roman'; color:gray;"><strong>Jugodrvo</strong></span>
+                  <span style="font-family:'Times New Roman'; color:gray;">Bulevar oslobođenja 131</span>
+                  <a [href]="mapInfo.link">See the site.</a>
+                </agm-info-window>-->
+          
+              </agm-marker>
+            </agm-map>
+          </p>
+          </div>
+        </div>
+          <div class="col-md-5">
+            <div style="width:50%; margin: 0 auto">
+                <p>
+                    <!-- Kreiramo mapu -->
+                    <agm-map [latitude]="mapInfo2.centerLat" [longitude]="mapInfo2.centerLong" [zoom]="18" (mapClick)="placeMarker2($event)">
+                    
+                      <!-- Postavljamo markere -->
+                      <agm-marker [latitude]="mapInfo2.centerLat" [longitude]="mapInfo2.centerLong" [title]="mapInfo2.title" [label]="mapInfo2.label">
+                  
+                      </agm-marker>
+                    </agm-map>
+                </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button class="btn btn-lg btn-primary btn-block" (click)="reserveV()">Rent</button>
+      </div>
+      <br>
 </div>
 
 <!-- Footer -->

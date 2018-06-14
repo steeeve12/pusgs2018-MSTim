@@ -47,7 +47,7 @@ export class ServiceComponent implements OnInit {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}); 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
-      if(response == "Please Upload image of type .jpg,.gif,.png,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
+      if(response == "Please Upload image of type .jpg,.gif,.png,.img,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
         
       }
       else if(response == ""){

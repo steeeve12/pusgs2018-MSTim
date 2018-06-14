@@ -39,7 +39,7 @@ namespace RentApp.Controllers
                         if (!AllowedFileExtensions.Contains(extension))
                         {
 
-                            var message = string.Format("Please Upload image of type .jpg,.gif,.png,.jpeg.");
+                            var message = string.Format("Please Upload image of type .jpg,.gif,.png,.img,.jpeg.");
 
                             return Request.CreateResponse(HttpStatusCode.BadRequest, message);
                         }
