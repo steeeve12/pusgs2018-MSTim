@@ -42,6 +42,8 @@ export class ServiceComponent implements OnInit {
   private cnt: number = 0;
   private comment: string = "";
 
+  private added: boolean = false;
+
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
@@ -69,6 +71,11 @@ export class ServiceComponent implements OnInit {
     this.callGetServices();
     this.callGetImpressions();
     this.pageNum = 1;
+  }
+
+  addAndUpload(){
+    this.added = false;
+    this.uploader.uploadAll();
   }
 
   castAndClear(){
@@ -241,6 +248,8 @@ export class ServiceComponent implements OnInit {
           this.retVehicle = data;
           this.listImages = [];
           this.callGetVehicles();
+          this.added = true;
+          this.resp = [];
         },
         error => {
           console.log(error);

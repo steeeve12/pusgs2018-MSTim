@@ -106,7 +106,7 @@
                              </div>
                          </div>
                          <button type="button" class="btn btn-success btn-s"
-                                 (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                                 (click)="addAndUpload()" [disabled]="!uploader.getNotUploadedItems().length">
                              <span class="glyphicon glyphicon-upload"></span> Upload all
                          </button>
                          <button type="button" class="btn btn-warning btn-s"
@@ -118,7 +118,8 @@
                              <span class="glyphicon glyphicon-trash"></span> Remove all
                          </button>
                      </div>
- 
+                     <br>
+                     <h2 *ngIf="added == true">Vehicle has succesefully been added!</h2>
               </div>
        
           </div>
@@ -152,7 +153,7 @@
                              <textarea name="comment" [(ngModel)]="description" name="Description" value={{description}} placeholder="Description">Enter text here...</textarea>
                          </div>
                  </div>
-             </div>
+             </div>             
          </div>
      </div>
 
