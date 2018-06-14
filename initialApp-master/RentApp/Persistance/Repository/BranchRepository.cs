@@ -24,6 +24,12 @@ namespace RentApp.Persistance.Repository
             return s.Branches;
         }
 
+        public Branch Get(int id, double lat, double lgt)
+        {
+            Service s = RADBContext.Services.First(s1 => s1.Id == id);
+            return s.Branches.First(b => b.Latitude == lat && b.Longitude == lgt);
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

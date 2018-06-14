@@ -89,6 +89,9 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (rent.End < rent.Start)
+                return BadRequest("Start date must be earlier then return date!");
+
             unitOfWork.Rents.Add(rent);
             unitOfWork.Complete();
 

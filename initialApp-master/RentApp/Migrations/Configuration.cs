@@ -68,11 +68,13 @@ namespace RentApp.Migrations
 
             SaveChanges(context);
 
+            AppUser app = new AppUser() { FullName = "AppUser AppUserovic", Email = "appu@yahoo.com" };
+
             context.AppUsers.AddOrUpdate(
 
                 p => p.FullName,
 
-                new AppUser() { FullName = "AppUser AppUserovic", Email = "appu@yahoo.com" }
+                app
 
             );
 
@@ -126,6 +128,7 @@ namespace RentApp.Migrations
             i.Comment = "Top servis";
             i.Grade = 4;
             i.Time = DateTime.Now;
+            i.AppUser = app;
 
             ser.Name = "Service 1";
             ser.Email = "ser_1@gmail.com";

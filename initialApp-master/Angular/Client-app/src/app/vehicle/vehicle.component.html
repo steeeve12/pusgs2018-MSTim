@@ -43,6 +43,11 @@
     <div class="col-md-5">
       <a class="btn btn-lg btn-secondary btn-block btn-success" href="#" [routerLink]="" (click)="reserveVehicle()">Make a reservation</a>
     </div>
+    <br>
+    <br>
+    <div class="col-md-10">
+    <h3 *ngIf="reserved == true">You have rented vehicle {{vehicle.Manufactor}} {{vehicle.Model}}!</h3>
+    </div>
   </div>
 
 </div>
@@ -55,11 +60,11 @@
                     <div class="card card-body">
                         <h3 class="text-center mb-4">Reservation</h3>
                         <br>
-                        <p>Select date when you want to pick up your vehicle:</p>
+                        <p>Select date when you want to pick up the vehicle:</p>
                         <div class="form-group has-success">
                             <input class="form-control input-lg" name="Start" type="date" [(ngModel)]="start" required>
                         </div>    
-                        <p>Select date when you want to return your vehicle:</p>
+                        <p>Select date when you want to return the vehicle:</p>
                         <div class="form-group has-success">
                             <input class="form-control input-lg" name="End" type="date" [(ngModel)]="end" required>
                         </div>                                                               
@@ -69,29 +74,33 @@
     </div>
 
     <div class="row mb-4">
-        <div class="col-md-5">
-    <div style="width:50%; margin: 0 auto">
-        <p>
+      <div class="col-md-5">
+        <div style="width:50%; margin: 0 auto">
+          <p>Select branch where you want to pick up the vehicle:</p>
+          <p>
             <!-- Kreiramo mapu -->
-            <agm-map [latitude]="mapInfo1.centerLat" [longitude]="mapInfo1.centerLong" [zoom]="18" (mapClick)="placeMarker1($event)">
+            <agm-map [latitude]="mapInfo1.centerLat" [longitude]="mapInfo1.centerLong" [zoom]="13" (mapClick)="placeMarker1($event)">
              
               <!-- Postavljamo markere -->
-              <agm-marker  *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt" (click)="marker1(data.Lat, data.Lgt)"></agm-marker>
+              <agm-marker  *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt" (markerClick)="markerClick1(data.Lat, data.Lgt)"></agm-marker>
             </agm-map>
           </p>
-          </div>
+          <p *ngIf="selectedBr1 == true">Branch on address {{branch1.Address}} selected</p>
+        </div>
         </div>
           <div class="col-md-5">
             <div style="width:50%; margin: 0 auto">
+                <p>Select branch where you want to return the vehicle:</p>
                 <p>
                     <!-- Kreiramo mapu -->
-                    <agm-map [latitude]="mapInfo2.centerLat" [longitude]="mapInfo2.centerLong" [zoom]="18" (mapClick)="placeMarker2($event)">
+                    <agm-map [latitude]="mapInfo2.centerLat" [longitude]="mapInfo2.centerLong" [zoom]="13" (mapClick)="placeMarker2($event)">
                     
                       <!-- Postavljamo markere -->
-                      <agm-marker  *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt" (click)="marker2(data.Lat, data.Lgt)"></agm-marker>
+                      <agm-marker  *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt" (markerClick)="markerClick2(data.Lat, data.Lgt)"></agm-marker>
 
                     </agm-map>
                 </p>
+                <p *ngIf="selectedBr2 == true">Branch on address {{branch2.Address}} selected</p>
           </div>
         </div>
       </div>

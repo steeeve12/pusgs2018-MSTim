@@ -30,6 +30,10 @@ export class BranchService {
     return this.httpClient.get<Branch[]>(`http://localhost:51680/api/Branches?idService=${idService}`);
   }
 
+  getBranch(idService: string, lat: string, lgt: string): Observable<Branch> {
+    return this.httpClient.get<Branch>(`http://localhost:51680/api/Branches?idService=${idService}&lat=${lat}&lgt=${lgt}`);
+  }
+
   postMethod(newMember): Observable<any> {
     return this.httpClient.post("http://localhost:51680/api/Branches/PostBranches", newMember)
   }

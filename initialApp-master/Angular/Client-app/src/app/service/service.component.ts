@@ -250,6 +250,7 @@ export class ServiceComponent implements OnInit {
           this.callGetVehicles();
           this.added = true;
           this.resp = [];
+          this.castAndClear();
         },
         error => {
           console.log(error);

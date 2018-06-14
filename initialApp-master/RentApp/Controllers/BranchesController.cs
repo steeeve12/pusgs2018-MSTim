@@ -42,8 +42,20 @@ namespace RentApp.Controllers
             return Ok(branch);
         }
 
+        [ResponseType(typeof(Branch))]
+        public IHttpActionResult GetBranch(int idService, double lat, double lgt)
+        {
+            Branch branch = unitOfWork.Branches.Get(idService, lat, lgt);
+            if (branch == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(branch);
+        }
+
         // PUT: api/Branches/5
- //       [Authorize(Roles = "Admin, Manager")]
+        //       [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutBranch(int id, Branch branch)
         {
