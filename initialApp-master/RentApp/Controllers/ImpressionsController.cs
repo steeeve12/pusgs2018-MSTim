@@ -51,6 +51,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Impressions/5
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutImpression(int id, Impression impression)
         {
@@ -85,6 +86,7 @@ namespace RentApp.Controllers
         }
 
         // POST: api/Impressions/Post
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("PostImpression")]
         [ResponseType(typeof(Impression))]
         public IHttpActionResult PostImpression(Impression impression)
@@ -93,7 +95,7 @@ namespace RentApp.Controllers
 
             AppUser currentUser = null;
 
-            foreach (var item in unitOfWork.Users.GetAll())
+            foreach (var item in unitOfWork.AppUsers.GetAll())
             {
                 if (item.Email == impression.AppUser.Email)
                 {
@@ -134,6 +136,7 @@ namespace RentApp.Controllers
         }
 
         // DELETE: api/Impressions/5
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [ResponseType(typeof(Impression))]
         public IHttpActionResult DeleteImpression(int id)
         {

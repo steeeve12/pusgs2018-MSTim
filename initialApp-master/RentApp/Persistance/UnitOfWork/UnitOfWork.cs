@@ -17,7 +17,7 @@ namespace RentApp.Persistance.UnitOfWork
         [Dependency]
         public IVehicleRepository Vehicles { get; set; }
         [Dependency]
-        public IAppUserRepository Users { get; set; }
+        public IAppUserRepository AppUsers { get; set; }
         [Dependency]
         public IBranchRepository Branches { get; set; }
         [Dependency]
