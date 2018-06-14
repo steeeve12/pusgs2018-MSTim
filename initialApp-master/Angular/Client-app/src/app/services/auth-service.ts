@@ -41,12 +41,18 @@ getTheToken(user: LoginUser){
 
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
+          localStorage.setItem('currentUser', JSON.stringify({
+            token: jwt,
+            fullName: name
+          }));
         },
         err => {
           console.log("Error occured");
           alert("You are not authenticated!");
         }
       );
+
+      let temp = localStorage.getItem('currentUser');
     }
     
   }
