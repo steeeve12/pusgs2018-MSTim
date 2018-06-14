@@ -20,8 +20,8 @@
         <div class="app flex-row align-items-center">   
           <div class="container"> 
               <div class="card-deck row">
-                  <div class="card col-md-4" *ngFor="let vehicle of vehicles">              
-                    <a href="#" [routerLink]=""><img class="card-img-top" src="http://localhost:51680//Content//Images//{{image}}" alt=""></a>                                      
+                  <div class="card col-md-4" *ngFor="let vehicle of vehicles; let i = index">
+                    <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{listImages[i]}}" alt=""></a>                                  
                       <div class="card-body">
                         <h4 class="card-title">
                           <a [routerLink]="['/vehicle', vehicle.Id]" href="#">{{vehicle.Manufactor}} {{vehicle.Model}}, {{vehicle.Year}}</a>
@@ -114,7 +114,7 @@
                              <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
                          </button>
                          <button type="button" class="btn btn-danger btn-s"
-                                 (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                                 (click)="castAndClear()" [disabled]="!uploader.queue.length">
                              <span class="glyphicon glyphicon-trash"></span> Remove all
                          </button>
                      </div>
