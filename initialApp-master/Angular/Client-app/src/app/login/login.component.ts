@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   onSubmit(user: LoginUser, form: NgForm) {
     if(user.Username != "" && user.Password != ""){
       this.authService.getTheToken(user);
+      this.callGetCurrentUser(user.Username);
       this.router.navigateByUrl('/home');
       return true;
     }
@@ -31,6 +32,19 @@ export class LoginComponent implements OnInit {
       form.reset();
       return false;
     }
+  }
+
+
+  callGetCurrentUser(email: string){
+    this.authService.getCurrentUser(email)
+    .subscribe(
+      data => {
+        localStorage.setItem('currentUserEmail', data.Email);
+        localStorage.setItem('currentUserFullName', data.FullName);
+      },
+      error => {
+        console.log(error);
+      })
   }
 
 }

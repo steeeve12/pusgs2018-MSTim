@@ -5,13 +5,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { LoginUser } from '../models/user.model'
+import { LoginUser, RegisterUser } from '../models/user.model'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
  constructor(private httpClient: HttpClient) { }
+
+ getCurrentUser(Email: string): Observable<RegisterUser> {
+  return this.httpClient.get<RegisterUser>(`http://localhost:51680/api/Account/GetCurrent?email=${Email}`);
+}
 
 getTheToken(user: LoginUser){
 

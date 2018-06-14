@@ -31,7 +31,7 @@ export class BranchService {
   }
 
   postMethod(newMember): Observable<any> {
-    return this.httpClient.post("http://localhost:51680/api/Impressions/PostImpression", newMember)
+    return this.httpClient.post("http://localhost:51680/api/Branches/PostBranches", newMember)
   }
 
 }

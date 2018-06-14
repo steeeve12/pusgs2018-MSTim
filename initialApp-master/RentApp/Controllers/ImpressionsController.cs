@@ -31,6 +31,12 @@ namespace RentApp.Controllers
             return unitOfWork.Impressions.GetAll();
         }
 
+        // GET: api/Vehicles/idService
+        public IEnumerable<Impression> GetImpressions(int idService)
+        {
+            return unitOfWork.Impressions.GetAll(idService);
+        }
+
         // GET: api/Impressions/5
         [ResponseType(typeof(Impression))]
         public IHttpActionResult GetImpression(int id)
@@ -85,7 +91,20 @@ namespace RentApp.Controllers
         {
             impression.Time = DateTime.Now;
 
-            if (!ModelState.IsValid)
+            AppUser currentUser = null;
+
+            foreach (var item in unitOfWork.Users.GetAll())
+            {
+                if (item.Email == impression.AppUser.Email)
+                {
+                    currentUser = item;
+                    break;
+                }
+            }
+
+            impression.AppUser = currentUser;
+
+            if (!ModelState.IsValid || currentUser == null)
             {
                 return BadRequest(ModelState);
             }

@@ -18,6 +18,14 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Impressions.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+        public IEnumerable<Impression> GetAll(int id)
+        {
+            Service s = RADBContext.Services.First(s1 => s1.Id == id);
+            return s.Impressions;
+        }
+
+
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

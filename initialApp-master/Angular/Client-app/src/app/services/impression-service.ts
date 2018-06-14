@@ -26,8 +26,8 @@ export class ImpressionService {
     return Observable.throw(errorMessage);
   }
 
-  getMethod(Id: string, Ind: string): Observable<Impression[]> {
-    return this.httpClient.get<Impression[]>(`http://localhost:51680/api/Impressions?idService=${Id}&pageIndex=${Ind}`);
+  getMethod(Id: string): Observable<Impression[]> {
+    return this.httpClient.get<Impression[]>(`http://localhost:51680/api/Impressions?idService=${Id}`);
   }
 
   postMethod(newMember): Observable<any> {
