@@ -20,11 +20,8 @@
         <div class="app flex-row align-items-center">   
           <div class="container"> 
               <div class="card-deck row">
-                  <div class="card col-md-4" *ngFor="let vehicle of vehicles">
-                      <div *ngFor="let image of vehicle | keys"|truncate:1>      
-                        <p>{{image}}</p>                
-                        <a href="#" [routerLink]=""><img class="card-img-top" src="http://localhost:51680//Content//Images//{{image}}" alt=""></a>                       
-                      </div>                
+                  <div class="card col-md-4" *ngFor="let vehicle of vehicles">              
+                    <a href="#" [routerLink]=""><img class="card-img-top" src="http://localhost:51680//Content//Images//{{image}}" alt=""></a>                                      
                       <div class="card-body">
                         <h4 class="card-title">
                           <a [routerLink]="['/vehicle', vehicle.Id]" href="#">{{vehicle.Manufactor}} {{vehicle.Model}}, {{vehicle.Year}}</a>

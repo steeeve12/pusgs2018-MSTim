@@ -350,6 +350,10 @@
     <Compile Include="Migrations\201806140616097_vehicleTypeId za Vehicle zbog uvezivanja.Designer.cs">
       <DependentUpon>201806140616097_vehicleTypeId za Vehicle zbog uvezivanja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806140644148_Images da bude string u Vehicle.cs" />
+    <Compile Include="Migrations\201806140644148_Images da bude string u Vehicle.Designer.cs">
+      <DependentUpon>201806140644148_Images da bude string u Vehicle.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -507,6 +511,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806140616097_vehicleTypeId za Vehicle zbog uvezivanja.resx">
       <DependentUpon>201806140616097_vehicleTypeId za Vehicle zbog uvezivanja.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806140644148_Images da bude string u Vehicle.resx">
+      <DependentUpon>201806140644148_Images da bude string u Vehicle.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
