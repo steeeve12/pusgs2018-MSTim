@@ -35,7 +35,7 @@ namespace RentApp.Models.Entities
 
 
         public bool Unavailable { get; set; }
-        public List<string> Images { get; set; }
+        public string Images { get; set; }
 
         [ForeignKey("VehicleType")]
         public int VehicleTypeId { get; set; }

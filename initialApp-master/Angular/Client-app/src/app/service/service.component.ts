@@ -33,6 +33,7 @@ export class ServiceComponent implements OnInit {
   private resp: string[] = [];
   private temp: string;
   private description: string = "";
+  private listImages: string[] = [];
 
   private service: Service;
   private grade: number = 0;
@@ -46,9 +47,17 @@ export class ServiceComponent implements OnInit {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}); 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
-      this.temp = response.replace('"', "");
-      this.temp = this.temp.replace('"', "");
-      this.resp.push(this.temp)};
+      if(response == "Please Upload image of type .jpg,.gif,.png,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
+        
+      }
+      else if(response == ""){
+        this.resp = [];
+      }
+      else{
+        this.temp = response.replace('"', "");
+        this.temp = this.temp.replace('"', "");
+        this.resp.push(this.temp)};
+      }
   }
 
   ngOnInit() {
@@ -59,6 +68,11 @@ export class ServiceComponent implements OnInit {
     this.pageNum = 1;
   }
 
+  castAndClear(){
+    this.resp = [];
+    this.uploader.clearQueue();
+  }  
+
   callGetVehicles(){
     this.vehiclesService.getVehicles(this.Id, this.Ind)
       .subscribe(
@@ -66,6 +80,10 @@ export class ServiceComponent implements OnInit {
           this.vehicles = data;
           this.pages = Math.ceil((this.vehicles.length)/9);
           this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
+
+          this.vehicles.forEach(obj => {
+            this.listImages.push(obj.Images.split(";")[0]);
+          })
         },
         error => {
           console.log(error);
@@ -178,7 +196,11 @@ export class ServiceComponent implements OnInit {
     fvehicle.Manufactor = fvehicle.Manufactor.trim();
     fvehicle.Model = fvehicle.Model.trim();
     fvehicle.Description = this.description;
-    fvehicle.Images = this.resp;
+    fvehicle.Images = "";
+    this.resp.forEach(obj => {
+      fvehicle.Images += obj;
+      fvehicle.Images += ";";
+    })
  
     fvehicle.VehicleTypeId = this.vehicleTypes.find(veh => veh.Name == fvehicle.Type).Id;
 
@@ -201,6 +223,7 @@ export class ServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.retVehicle = data;
+          this.listImages = [];
           this.callGetVehicles();
         },
         error => {
