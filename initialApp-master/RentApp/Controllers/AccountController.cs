@@ -380,6 +380,37 @@ namespace RentApp.Controllers
             return Ok();
         }
 
+
+
+
+        [AllowAnonymous]
+        [Route("GetCurrent")]
+        public AppUser GetCurrent(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return null;
+            }
+
+            AppUser currentUser = null;
+
+            foreach (var item in unitOfWork.Users.GetAll())
+            {
+                if (item.Email == email)
+                {
+                    currentUser = item;
+                    break;
+                }
+            }
+
+            return new AppUser() { FullName = currentUser.FullName, Email = currentUser.Email};
+        }
+
+
+
+
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && UserManager != null)

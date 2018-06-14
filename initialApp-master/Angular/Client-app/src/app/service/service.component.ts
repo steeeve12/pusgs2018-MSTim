@@ -12,7 +12,8 @@ import { FileUploader } from 'ng2-file-upload';
 import { VehicleType } from '../models/vehicle-type.model';
 
 import { TruncateModule } from 'ng2-truncate';
-import { Dictionary } from 'lodash';
+import { Dictionary, ImplicitPartial } from 'lodash';
+import { RegisterUser } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-service',
@@ -34,10 +35,12 @@ export class ServiceComponent implements OnInit {
   private temp: string;
   private description: string = "";
   private listImages: string[] = [];
+  private postImpression: Impression = new Impression("", 0, new RegisterUser("", "", null, "", ""));
 
   private service: Service;
   private grade: number = 0;
   private cnt: number = 0;
+  private comment: string = "";
 
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
@@ -102,12 +105,16 @@ export class ServiceComponent implements OnInit {
   }
 
   callGetImpressions(){
-    this.impressionService.getMethod(this.Id, this.Ind)
+    this.impressionService.getMethod(this.Id)
       .subscribe(
         data => {
           this.impressions = data;
           this.pages = Math.ceil((this.impressions.length)/9);
           this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
+
+          this.comment = "";
+          this.extractGrade();
+          this.grade /= this.cnt;
         },
         error => {
           console.log(error);
@@ -119,8 +126,9 @@ export class ServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.service = data;
-          this.extractGrade();
-          this.grade /= this.cnt;
+          // ovo radim u onSubmit(imp: Impression) 
+      //    this.extractGrade();
+      //    this.grade /= this.cnt;
         },
         error => {
           console.log(error);
@@ -147,7 +155,10 @@ export class ServiceComponent implements OnInit {
   }
 
   extractGrade(){
-    let arr = this.service.Impressions.forEach(obj => {
+    this.cnt = 0;
+    this.grade = 0;
+
+    let arr = this.impressions.forEach(obj => {
       this.grade += obj.Grade;
       this.cnt += 1;
     })
@@ -175,13 +186,18 @@ export class ServiceComponent implements OnInit {
     imp.Comment = imp.Comment.trim();
 
     imp.Comment = this.Id.toString() + "#" + imp.Comment;
+
+    this.postImpression.Grade = imp.Grade;
+    this.postImpression.Comment = imp.Comment;
+    this.postImpression.AppUser.Email = localStorage.getItem('currentUserEmail');
+    this.postImpression.AppUser.FullName = "__empty__";
     
-    if(imp.Grade < 1 || imp.Grade > 5){
+    if(this.postImpression.Grade < 1 || this.postImpression.Grade > 5){
       alert("Impression grade is out of range!");
       return;
     }
 
-    this.impressionService.postMethod(imp)
+    this.impressionService.postMethod(this.postImpression)
     .subscribe(
       data => {
         this.callGetImpressions();

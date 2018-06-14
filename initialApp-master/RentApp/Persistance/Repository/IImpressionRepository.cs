@@ -10,5 +10,6 @@ namespace RentApp.Persistance.Repository
     public interface IImpressionRepository : IRepository<Impression, int>
     {
         IEnumerable<Impression> GetAll(int pageIndex, int pageSize);
+        IEnumerable<Impression> GetAll(int id);
     }
 }

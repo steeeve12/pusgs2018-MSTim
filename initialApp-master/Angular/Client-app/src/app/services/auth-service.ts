@@ -5,13 +5,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { LoginUser } from '../models/user.model'
+import { LoginUser, RegisterUser } from '../models/user.model'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
  constructor(private httpClient: HttpClient) { }
+
+ getCurrentUser(Email: string): Observable<RegisterUser> {
+  return this.httpClient.get<RegisterUser>(`http://localhost:51680/api/Account/GetCurrent?email=${Email}`);
+}
 
 getTheToken(user: LoginUser){
 
@@ -41,18 +45,12 @@ getTheToken(user: LoginUser){
 
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
-          localStorage.setItem('currentUser', JSON.stringify({
-            token: jwt,
-            fullName: name
-          }));
         },
         err => {
           console.log("Error occured");
           alert("You are not authenticated!");
         }
       );
-
-      let temp = localStorage.getItem('currentUser');
     }
     
   }
