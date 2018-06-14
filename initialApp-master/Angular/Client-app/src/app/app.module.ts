@@ -46,7 +46,7 @@ const Routes = [
   component: ServiceComponent
 },
 {
-  path: "vehicle/:Id",
+  path: "vehicle/:vehicleId/:serviceId",
   component: VehicleComponent
 }
 ]

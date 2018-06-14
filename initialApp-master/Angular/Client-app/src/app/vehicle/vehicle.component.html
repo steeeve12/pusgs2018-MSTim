@@ -80,21 +80,7 @@
             <agm-map [latitude]="mapInfo1.centerLat" [longitude]="mapInfo1.centerLong" [zoom]="18" (mapClick)="placeMarker1($event)">
              
               <!-- Postavljamo markere -->
-              <agm-marker [latitude]="mapInfo1.centerLat" [longitude]="mapInfo1.centerLong" [title]="mapInfo1.title"
-              [label]="mapInfo1.label">
-          
-                <!-- Svakom markeru dodajemo info-window (Nije obavezno!)-->
-                <!--<agm-info-window [latitude]="mapInfo.centerLat" [longitude]="mapInfo.centerLong" >-->
-          
-                  <!-- U info-window stavljamo html -->
-                  <!--<span style="font-size: 16px;font-family:'Times New Roman'">Fakultet tehničkih nauka</span>
-                  <br/>
-                  <span style="font-family:'Times New Roman'; color:gray;"><strong>Jugodrvo</strong></span>
-                  <span style="font-family:'Times New Roman'; color:gray;">Bulevar oslobođenja 131</span>
-                  <a [href]="mapInfo.link">See the site.</a>
-                </agm-info-window>-->
-          
-              </agm-marker>
+              <agm-marker  *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt" (click)="marker1(data.Lat, data.Lgt)"></agm-marker>
             </agm-map>
           </p>
           </div>
@@ -106,9 +92,8 @@
                     <agm-map [latitude]="mapInfo2.centerLat" [longitude]="mapInfo2.centerLong" [zoom]="18" (mapClick)="placeMarker2($event)">
                     
                       <!-- Postavljamo markere -->
-                      <agm-marker [latitude]="mapInfo2.centerLat" [longitude]="mapInfo2.centerLong" [title]="mapInfo2.title" [label]="mapInfo2.label">
-                  
-                      </agm-marker>
+                      <agm-marker  *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt" (click)="marker2(data.Lat, data.Lgt)"></agm-marker>
+
                     </agm-map>
                 </p>
           </div>
