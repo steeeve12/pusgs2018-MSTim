@@ -11,7 +11,7 @@ namespace RentApp.Persistance.UnitOfWork
     {
         IServiceRepository Services { get; set; }
         IVehicleRepository Vehicles { get; set; }
-        IAppUserRepository Users { get; set; }
+        IAppUserRepository AppUsers { get; set; }
         IBranchRepository Branches { get; set; }
         IRentRepository Rents { get; set; }
         IVehicleTypeRepository VehicleTypes { get; set; }

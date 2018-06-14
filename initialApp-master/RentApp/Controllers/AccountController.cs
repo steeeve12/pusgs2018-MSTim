@@ -322,7 +322,7 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            foreach (AppUser u in unitOfWork.Users.GetAll())
+            foreach (AppUser u in unitOfWork.AppUsers.GetAll())
             {
                 if (u.Email == model.Email)
                 {
@@ -394,7 +394,7 @@ namespace RentApp.Controllers
 
             AppUser currentUser = null;
 
-            foreach (var item in unitOfWork.Users.GetAll())
+            foreach (var item in unitOfWork.AppUsers.GetAll())
             {
                 if (item.Email == email)
                 {
@@ -405,9 +405,6 @@ namespace RentApp.Controllers
 
             return new AppUser() { FullName = currentUser.FullName, Email = currentUser.Email};
         }
-
-
-
 
 
 
