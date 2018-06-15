@@ -21,3 +21,10 @@ body {
   .portfolio-item {
     margin-bottom: 30px;
   }
+
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
