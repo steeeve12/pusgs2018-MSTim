@@ -12,6 +12,7 @@ using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace RentApp.Controllers
 {
@@ -46,17 +47,12 @@ namespace RentApp.Controllers
         // PUT: api/Vehicles/5
 //      [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutVehicle(int id, Vehicle vehicle)
+        public IHttpActionResult PutVehicle(Vehicle vehicle)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-
-            if (id != vehicle.Id)
-            {
-                return BadRequest();
-            }            
+            }         
 
             try
             {
@@ -65,7 +61,7 @@ namespace RentApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!VehicleExists(id))
+                if (!VehicleExists(vehicle.Id))
                 {
                     return NotFound();
                 }
@@ -78,8 +74,14 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        public class PutVehicleBindingModel
+        {
+            [Required]
+            public string Email { get; set; }
+        }
+
         // POST: api/Vehicles
-//        [Authorize(Roles = "Admin, Manager")]
+        //        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult PostVehicle(Vehicle vehicle)
         {

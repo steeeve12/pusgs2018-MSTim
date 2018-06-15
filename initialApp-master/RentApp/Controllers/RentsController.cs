@@ -14,6 +14,8 @@ using RentApp.Persistance.UnitOfWork;
 
 namespace RentApp.Controllers
 {
+
+//    [RoutePrefix("api/Rents")]
     public class RentsController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
@@ -28,6 +30,13 @@ namespace RentApp.Controllers
         {
             return unitOfWork.Rents.GetAll();
         }
+
+  //      [Route("TryReserve")]
+        public bool GetReserve(DateTime start, DateTime end, int idVehicle)
+        {           
+            return unitOfWork.Rents.TryReserve(start, end, idVehicle);
+        }
+
 
         // GET: api/Rents/5
         [ResponseType(typeof(Rent))]

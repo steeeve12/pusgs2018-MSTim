@@ -30,12 +30,16 @@ export class RentsService {
 //     return this.httpClient.get<Service[]>('http://localhost:51680/api/Services')
 //   }
 
-//   getService(id: string): Observable<Service> {
-//     return this.httpClient.get<Service>(`http://localhost:51680/api/Services?id=${id}`)
-//   }
+  getRents(id: string): Observable<Rent[]> {
+    return this.httpClient.get<Rent[]>(`http://localhost:51680/api/Rents?idVehicle=${id}`)
+  }
+
+  getTryReserve(model: Rent): Observable<boolean> {
+    return this.httpClient.get<boolean>(`http://localhost:51680/api/Rents?start=${model.Start}&end=${model.End}&idVehicle=${model.VehicleId}`)
+  }
 
   postMethod(newMember): Observable<Rent> {
     return this.httpClient.post<Rent>("http://localhost:51680/api/Rents", newMember)
   }
-
+   
 }

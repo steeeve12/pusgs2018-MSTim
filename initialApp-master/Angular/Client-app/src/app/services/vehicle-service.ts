@@ -39,4 +39,8 @@ export class VehiclesService {
     return this.httpClient.post<Vehicle>("http://localhost:51680/api/Vehicles", vehicle)
   }
 
+  putVehicleUnavailable(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Vehicles/PutVehicle", newMember)
+  }
+
 }

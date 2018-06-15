@@ -10,5 +10,6 @@ namespace RentApp.Persistance.Repository
     public interface IRentRepository : IRepository<Rent, int>
     {
         IEnumerable<Rent> GetAll(int pageIndex, int pageSize);
+        bool TryReserve(DateTime start, DateTime end, int idVehicle);
     }
 }

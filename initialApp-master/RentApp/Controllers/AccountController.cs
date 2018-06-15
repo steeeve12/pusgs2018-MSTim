@@ -442,6 +442,52 @@ namespace RentApp.Controllers
             return new AppUser() { FullName = currentUser.FullName, Email = currentUser.Email};
         }
 
+        [AllowAnonymous]
+        [Route("GetPersonalDocument")]
+        public string GetPersonalDocument(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return null;
+            }
+
+            AppUser currentUser = null;
+
+            foreach (var item in unitOfWork.AppUsers.GetAll())
+            {
+                if (item.Email == email)
+                {
+                    currentUser = item;
+                    break;
+                }
+            }
+
+            return currentUser.PersonalDocument;
+        }
+
+        [AllowAnonymous]
+        [Route("GetRentAccountId")]
+        public int? GetRentAccountId(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return -1;
+            }
+
+            AppUser currentUser = null;
+
+            foreach (var item in unitOfWork.AppUsers.GetAll())
+            {
+                if (item.Email == email)
+                {
+                    currentUser = item;
+                    break;
+                }
+            }
+
+            return currentUser.RentAccountId;
+        }
+
 
 
         protected override void Dispose(bool disposing)

@@ -18,6 +18,58 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Rents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+        public bool TryReserve(DateTime start, DateTime end, int idVehicle)
+        {
+            var temp = RADBContext.Rents.Where(r => r.VehicleId == idVehicle);
+
+            List<Rent> listOfRents = temp.OrderBy(r => r.Start).ToList();
+
+            int cnt = listOfRents.Count();
+
+            if (cnt == 0)
+            {
+                return true;
+            }
+            else if (cnt == 1)
+            {
+                if (end < listOfRents.First().Start || start > listOfRents.First().End)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                
+                if(start > listOfRents.Last().End)
+                {
+                    return true;
+                }
+
+                Rent tempItem = listOfRents.First();
+                bool isFirst = true;
+
+                foreach (Rent r in listOfRents)
+                {
+                    if (start < r.Start && end < r.Start)
+                    {
+                        if (isFirst)
+                        {
+                            return true;
+                        }
+                        else if(start > tempItem.End)
+                        {
+                            return true;
+                        }
+                    }
+
+                    tempItem = r;
+                    isFirst = false;
+                }
+            }
+
+            return false;
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

@@ -37,9 +37,12 @@ export class VehicleComponent implements OnInit {
   private start: Date;
   private end: Date;
   private rent: Rent;
+  private rents: Rent[] = [];
+  private userDocument: string;
+  private userRentAccountId: number;
   private branches: Branch[];
-  private branch1: Branch;
-  private branch2: Branch;
+  private branch1: Branch = null;
+  private branch2: Branch = null;
   private rentBranches: Branch[] = [];
   private markers: Marker[] = [];
   private marker: Marker;
@@ -124,7 +127,7 @@ export class VehicleComponent implements OnInit {
       })
   }
 
-  callPostBranch(rent: Rent){
+  callPostRent(rent: Rent){
     this.rentsService.postMethod(rent)
     .subscribe(
       data => {
@@ -150,20 +153,72 @@ export class VehicleComponent implements OnInit {
       })
   }
 
+  callPutVehicleUnavailable(){
+    this.vehicle.Unavailable = true;
+    this.vehiclesService.putVehicleUnavailable(this.vehicle)
+    .subscribe(
+      data => {
+        let ret = data;
+      },
+      error => {
+        console.log(error);
+      })
+  }
+
+  callGetRents(vehicelId: number){
+    this.rentsService.getRents(vehicelId.toString())
+    .subscribe(
+      data => {
+        this.rents = data;
+      },
+      error => {
+        console.log(error);
+      })
+  }
+
   reserveV(){
+    // if(){ // korisnik ima dokument
+
+    // }
+    // if(){ // korisnik vec rezervisao vozilo
+
+    // }
+    
+    if(this.start == undefined || this.end == undefined || this.branch1 == null || this.branch2 == null){
+      alert("You must select the dates and the branches!")
+      return;
+    }
     if(this.end < this.start){
       alert("Start date must be earlier then return date!")
       return;
     }
 
+
     this.rent = new Rent(this.start, this.end, this.branch1.Id, this.branch2.Id, +this.Id);
 
-    this.callPostBranch(this.rent);
+    
+    if(this.isReserved()){ // vozilo rezervisano
+      alert("This vehicle is already rented for that period");
+      this.reserved = false;
+      this.reserve = false;
+      return;
+    }
 
-    this.selectedBr1 = false;
-    this.selectedBr2 = false;
-    this.reserve = false;
+    this.callPostRent(this.rent);
     this.reserved = true;
+    this.reserve = false;
+  }
+
+  isReserved(){
+    this.rentsService.getTryReserve(this.rent)
+    .subscribe(
+      data => {
+        return data;
+      },
+      error => {
+        console.log(error); 
+        return false;
+      })
   }
 
   reserveVehicle(){
