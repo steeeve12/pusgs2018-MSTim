@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 import { VehiclesService } from '../services/vehicle-service';
 import { RentsService } from '../services/rent-service';
@@ -34,8 +34,6 @@ export class VehicleComponent implements OnInit {
   private reserve: boolean = false;
   private reserved: boolean = false;
   private listImages: string[] = [];
-  private start: Date;
-  private end: Date;
   private rent: Rent;
   private rents: Rent[] = [];
   private userDocument: string;
@@ -59,6 +57,16 @@ export class VehicleComponent implements OnInit {
   mapInfo1: MapInfo;
   mapInfo2: MapInfo;
 
+  temp = new Date();
+  minDate = new Date(this.temp.getFullYear(), this.temp.getMonth(), this.temp.getDate());
+  maxDate = new Date(2030, 1, 1);
+
+  private invalidDates: {[id: string] : boolean} = {};
+  private start = new FormControl(new Date());
+  private end = new FormControl(new Date());
+  private tempS: Date;
+  private tempE: Date;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private branchesService: BranchService, private rentsService: RentsService, private usersService: UserService) {
     activatedRoute.params.subscribe(params => {this.Id = params["vehicleId"], this.serviceId = params["serviceId"]});
     this.mapInfo1 = new MapInfo(45.25800424228705, 19.833547029022156, 
@@ -71,6 +79,12 @@ export class VehicleComponent implements OnInit {
 
   ngOnInit() {
     this.callGetVehicle();
+  }
+
+  dateFilter = (d: Date): boolean => {
+    // Using a JS Object as a lookup table of valid dates
+    // Undefined will be falsy.
+    return !this.invalidDates[d.toISOString().split("T")[0]];  // daje za jedan vise dan od valid dates
   }
 
   placeMarker1($event){
@@ -170,6 +184,40 @@ export class VehicleComponent implements OnInit {
     .subscribe(
       data => {
         this.rents = data;
+
+        let dateArray = [];
+
+        this.rents.forEach(obj => {
+          this.tempS = new Date(obj.Start);
+          this.tempE = new Date(obj.End);
+
+          // let today = new Date();
+
+          // if(this.tempS != today){
+          //   let i = this.tempS.getDate() % 2;
+          //   if(i !== 0){ 
+          //     this.tempS.setDate(this.tempS.getDate() - 1); // nekako ga prikazuje za dan vise kad se odradi toJSON za neparne, a parne ne treba...
+          //     this.tempE.setDate(this.tempE.getDate() - 1);
+          //   }
+          // }
+          // else{
+          //   if(this.tempS.getDate() % 2 != 0){ 
+          //     this.tempE.setDate(this.tempE.getDate() - 1);
+          //   }
+          // }
+
+          let currentDate = new Date(this.tempS);
+
+          while (currentDate <= this.tempE) {
+            let p = currentDate.toJSON().split("T")[0];
+            dateArray.push(p);
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+
+          dateArray.forEach(childObj => {
+            this.invalidDates[childObj] = true;
+          })
+        })
       },
       error => {
         console.log(error);
@@ -184,40 +232,40 @@ export class VehicleComponent implements OnInit {
 
     // }
     
-    if(this.start == undefined || this.end == undefined || this.branch1 == null || this.branch2 == null){
+    if(this.start.value == undefined || this.end.value == undefined || this.branch1 == null || this.branch2 == null){
       alert("You must select the dates and the branches!")
       return;
     }
-    if(this.end < this.start){
+    if(this.end.value < this.start.value){
       alert("Start date must be earlier then return date!")
       return;
     }
 
+    this.start.value.setDate(this.start.value.getDate() + 1); // ne znam zasto smanjuje i povecava za jedan... ovako ga vratim kako je selektovano
+    this.end.value.setDate(this.end.value.getDate() + 1);
 
-    this.rent = new Rent(this.start, this.end, this.branch1.Id, this.branch2.Id, +this.Id);
+    this.rent = new Rent(this.start.value.toISOString().split("T")[0], this.end.value.toISOString().split("T")[0], this.branch1.Id, this.branch2.Id, +this.Id);
 
-    
-    if(this.isReserved()){ // vozilo rezervisano
-      alert("This vehicle is already rented for that period");
-      this.reserved = false;
-      this.reserve = false;
-      return;
-    }
-
-    this.callPostRent(this.rent);
-    this.reserved = true;
-    this.reserve = false;
+    this.isReserved(); // da li je vozilo rezervisano
   }
 
   isReserved(){
     this.rentsService.getTryReserve(this.rent)
     .subscribe(
       data => {
-        return data;
+        if(data == true){
+          this.callPostRent(this.rent);
+          this.reserved = true;
+          this.reserve = false;
+        }
+        else{
+          alert("This vehicle is already rented for that period");
+          this.reserved = false;
+          this.reserve = false;
+        }
       },
       error => {
         console.log(error); 
-        return false;
       })
   }
 
@@ -225,6 +273,7 @@ export class VehicleComponent implements OnInit {
     this.reserve = true;
     this.reserved = false;
     this.callGetBranches();
+    this.callGetRents(this.vehicle.Id);
   }
 
   markerClick1(lat: number, lgt: number){

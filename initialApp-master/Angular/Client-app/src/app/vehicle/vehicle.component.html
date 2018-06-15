@@ -61,13 +61,17 @@
                         <h3 class="text-center mb-4">Reservation</h3>
                         <br>
                         <p>Select date when you want to pick up the vehicle:</p>
-                        <div class="form-group has-success">
-                            <input class="form-control input-lg" name="Start" type="date" [(ngModel)]="start" required>
-                        </div>    
+                        <mat-form-field class="example-full-width">
+                          <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="dateFilter"  [matDatepicker]="picker1" placeholder="Choose a date" [formControl]="start">
+                          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
                         <p>Select date when you want to return the vehicle:</p>
-                        <div class="form-group has-success">
-                            <input class="form-control input-lg" name="End" type="date" [(ngModel)]="end" required>
-                        </div>                                                               
+                        <mat-form-field class="example-full-width">
+                          <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="dateFilter"  [matDatepicker]="picker2" placeholder="Choose a date" [formControl]="end">
+                          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                          <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>                                                                    
                     </div>
             </div>
         </div>

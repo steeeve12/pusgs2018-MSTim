@@ -23,6 +23,9 @@ import { AgmCoreModule } from '@agm/core';
 
 import { TruncateModule } from 'ng2-truncate';
 
+import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule } from '@angular/material'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 const Routes = [
 {
   path: '',
@@ -75,7 +78,11 @@ const Routes = [
     RatingModule,
     Ng2CarouselamosModule,
     TruncateModule,
-    AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'})
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'}),
+    MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [SignalRService],
   bootstrap: [AppComponent]
