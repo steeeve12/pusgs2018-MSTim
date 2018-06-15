@@ -7,14 +7,33 @@ import { Observable } from 'rxjs';
 
 import { LoginUser, RegisterUser } from '../models/user.model'
 
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
- constructor(private httpClient: HttpClient) { }
+
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
  getCurrentUser(Email: string): Observable<RegisterUser> {
   return this.httpClient.get<RegisterUser>(`http://localhost:51680/api/Account/GetCurrent?email=${Email}`);
+}
+
+callGetCurrentUser(email: string){
+  this.getCurrentUser(email)
+  .subscribe(
+    data => {
+      if(data != null){
+        localStorage.setItem('currentUserEmail', data.Email);
+        localStorage.setItem('currentUserFullName', data.FullName);
+      }else{
+        console.log(`Error in callGetCurrentUser(${email})`);
+      }
+    },
+    error => {
+      console.log(error);
+    })
 }
 
 getTheToken(user: LoginUser){
@@ -45,13 +64,18 @@ getTheToken(user: LoginUser){
 
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
+
+          this.callGetCurrentUser(user.Username);
+          this.router.navigateByUrl('/home');
+
+          return true;
         },
         err => {
           console.log("Error occured");
           alert("You are not authenticated!");
+          return false;
         }
       );
     }
-    
   }
 }

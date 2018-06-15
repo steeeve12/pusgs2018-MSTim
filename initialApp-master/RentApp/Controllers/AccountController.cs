@@ -439,6 +439,11 @@ namespace RentApp.Controllers
                 }
             }
 
+            if(currentUser == null)
+            {
+                return null;
+            }
+
             return new AppUser() { FullName = currentUser.FullName, Email = currentUser.Email};
         }
 

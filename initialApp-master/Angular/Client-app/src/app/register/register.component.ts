@@ -42,8 +42,10 @@ export class RegisterComponent implements OnInit {
           this.loginUser.Username = user.Email;
           this.loginUser.Password = user.Password;
           this.authService.getTheToken(this.loginUser);
-          this.callGetCurrentUser(user.Email);
-          this.router.navigateByUrl('/home');
+          if(localStorage.jwt){
+            this.callGetCurrentUser(user.Email);
+            this.router.navigateByUrl('/home');
+          }
         },
         error => {
           console.log(error);
