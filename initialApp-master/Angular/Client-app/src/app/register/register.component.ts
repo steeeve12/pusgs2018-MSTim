@@ -42,6 +42,7 @@ export class RegisterComponent implements OnInit {
           this.loginUser.Username = user.Email;
           this.loginUser.Password = user.Password;
           this.authService.getTheToken(this.loginUser);
+          this.callGetCurrentUser(user.Email);
           this.router.navigateByUrl('/home');
         },
         error => {
@@ -52,8 +53,19 @@ export class RegisterComponent implements OnInit {
     }else{
       alert("Password does not match the confirm password!");
       return;
-    }
-
-    
+    }    
   }
+
+  callGetCurrentUser(email: string){
+    this.authService.getCurrentUser(email)
+    .subscribe(
+      data => {
+        localStorage.setItem('currentUserEmail', data.Email);
+        localStorage.setItem('currentUserFullName', data.FullName);
+      },
+      error => {
+        console.log(error);
+      })
+  }
+  
 }

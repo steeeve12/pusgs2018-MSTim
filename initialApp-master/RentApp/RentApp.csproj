@@ -354,6 +354,10 @@
     <Compile Include="Migrations\201806140644148_Images da bude string u Vehicle.Designer.cs">
       <DependentUpon>201806140644148_Images da bude string u Vehicle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.cs" />
+    <Compile Include="Migrations\201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.Designer.cs">
+      <DependentUpon>201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -514,6 +518,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806140644148_Images da bude string u Vehicle.resx">
       <DependentUpon>201806140644148_Images da bude string u Vehicle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.resx">
+      <DependentUpon>201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

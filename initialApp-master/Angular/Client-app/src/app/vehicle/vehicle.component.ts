@@ -17,6 +17,8 @@ import OlXYZ from 'ol/source/xyz';
 import OlTileLayer from 'ol/layer/tile';
 import OlView from 'ol/view';
 import OlProj from 'ol/proj';
+import { UserService } from 'src/app/services/user-service';
+import { UserRent } from '../models/putUserRent'
 
 @Component({
   selector: 'app-vehicle',
@@ -47,13 +49,14 @@ export class VehicleComponent implements OnInit {
   private lgt2: number;
   private selectedBr1: boolean = false;
   private selectedBr2: boolean = false;
+  private member: UserRent = new UserRent("","");
 
   private retRent: Rent;
 
   mapInfo1: MapInfo;
   mapInfo2: MapInfo;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private branchesService: BranchService, private rentsService: RentsService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private branchesService: BranchService, private rentsService: RentsService, private usersService: UserService) {
     activatedRoute.params.subscribe(params => {this.Id = params["vehicleId"], this.serviceId = params["serviceId"]});
     this.mapInfo1 = new MapInfo(45.25800424228705, 19.833547029022156, 
       "assets/ftn.png",
@@ -126,6 +129,21 @@ export class VehicleComponent implements OnInit {
     .subscribe(
       data => {
         this.retRent = data;
+        let em = localStorage.getItem('currentUserEmail');
+        this.callPutUserRentId(em);
+      },
+      error => {
+        console.log(error);
+      })
+  }
+
+  callPutUserRentId(email: string){
+    this.member.Id = this.retRent.Id.toString();
+    this.member.Email = email;
+    this.usersService.putMethod(this.member)
+    .subscribe(
+      data => {
+        let retUserRent = data;
       },
       error => {
         console.log(error);

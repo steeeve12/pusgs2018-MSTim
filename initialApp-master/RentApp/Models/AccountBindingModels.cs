@@ -67,6 +67,14 @@ namespace RentApp.Models
         public string Email { get; set; }
     }
 
+    public class PutRentUserBindingModel
+    {
+        [Required]
+        public int Id { get; set; }
+        [Required]
+        public string Email { get; set; }
+    }
+
     public class RemoveLoginBindingModel
     {
         [Required]

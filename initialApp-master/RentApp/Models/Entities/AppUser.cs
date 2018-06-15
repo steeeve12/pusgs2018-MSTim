@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -24,6 +25,9 @@ namespace RentApp.Models.Entities
         public string PersonalDocument { get; set; }
 
         public bool Activated { get; set; }
+
+        [ForeignKey("RentAccount")]
+        public int? RentAccountId { get; set; }
 
         public virtual Rent RentAccount { get; set; }
     }

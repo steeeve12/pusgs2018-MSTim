@@ -18,7 +18,6 @@ namespace RentApp.Models.Entities
 
         public DateTime? Time { get; set; }
 
-
         public virtual AppUser AppUser { get; set; }
     }
 }

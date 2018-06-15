@@ -120,9 +120,9 @@ namespace RentApp.Migrations
             v.Year = 2005;
             v.Description = "";
 
-            br.Address = "br_1_addr";
-            br.Latitude = 555555;
-            br.Longitude = 666666;
+            br.Address = "Cara Urosa 6";
+            br.Latitude = 45.253651;
+            br.Longitude = 19.832706;
             br.Picture = "";
 
             i.Comment = "Top servis";
@@ -157,9 +157,9 @@ namespace RentApp.Migrations
             v1.Year = 2014;
             v1.Description = "";
 
-            br1.Address = "New Address";
-            br1.Latitude = 45.257059;
-            br1.Longitude = 19.840957;
+            br1.Address = "Vuka Karadzica 5a";
+            br1.Latitude = 45.257742;
+            br1.Longitude = 19.840818;
             br1.Picture = "";
 
             ser1.Name = "Service 2";
@@ -196,6 +196,9 @@ namespace RentApp.Migrations
 
             ser1.Branches.Add(br2);
             ser1.Vehicles.Add(v2);
+
+            VehicleType vt3 = new VehicleType();
+            vt3.Name = "Jeep";
             // -------------------------------------
 
             Service[] services = { ser, ser1 };
@@ -223,7 +226,7 @@ namespace RentApp.Migrations
 
             SaveChanges(context);
 
-            VehicleType[] types = { vt, vt1, vt2 };
+            VehicleType[] types = { vt, vt1, vt2, vt3 };
 
             context.VehicleTypes.AddOrUpdate(
 

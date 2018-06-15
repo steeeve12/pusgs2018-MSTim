@@ -34,4 +34,8 @@ export class UserService {
     return this.httpClient.post("http://localhost:51680/api/Account/Register", newMember)
   }
 
+  putMethod(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Account/PutRentUser", newMember)
+  }
+
 }

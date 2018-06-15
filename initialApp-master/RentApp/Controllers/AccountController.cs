@@ -18,6 +18,9 @@ using RentApp.Models.Entities;
 using RentApp.Providers;
 using RentApp.Results;
 using RentApp.Persistance.UnitOfWork;
+using System.Web.Http.Description;
+using System.Data.Entity.Infrastructure;
+using System.Net;
 
 namespace RentApp.Controllers
 {
@@ -380,7 +383,40 @@ namespace RentApp.Controllers
             return Ok();
         }
 
+        // PUT: api/Account/5
+        [AllowAnonymous]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        [Route("PutRentUser")]
+        public IHttpActionResult PutRentUser(PutRentUserBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+            try
+            {
+                appUser.RentAccountId = model.Id;
+                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.Complete();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        } 
 
 
         [AllowAnonymous]
