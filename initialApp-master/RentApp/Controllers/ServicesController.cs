@@ -89,6 +89,21 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (service.Impressions == null)
+            {
+                service.Impressions = new List<Impression>();
+            }
+
+            if(service.Branches == null)
+            {
+                service.Branches = new List<Branch>();
+            }
+
+            if(service.Vehicles == null)
+            {
+                service.Vehicles = new List<Vehicle>();
+            }
+
             unitOfWork.Services.Add(service);
             unitOfWork.Complete();
 

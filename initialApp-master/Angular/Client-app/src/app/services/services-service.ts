@@ -35,7 +35,7 @@ export class ServicesService {
   }
 
   postMethod(newMember): Observable<any> {
-    return this.httpClient.post("https://jsonplaceholder.typicode.com/posts", newMember)
+    return this.httpClient.post("http://localhost:51680/api/Services", newMember)
   }
 
 }

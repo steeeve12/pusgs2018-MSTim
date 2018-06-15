@@ -228,7 +228,7 @@ export class ServiceComponent implements OnInit {
     fvehicle.VehicleTypeId = this.vehicleTypes.find(veh => veh.Name == fvehicle.Type).Id;
 
     if(fvehicle.Manufactor == "" || fvehicle.Model == "" || (!fvehicle.Year) || fvehicle.Images.length == 0 || fvehicle.PricePerHour == undefined || fvehicle.Type == ""){
-      alert("You must fill all the fields provided and select at least one image!");
+      alert("You must fill all the fields provided!");
       return;
     }
 
