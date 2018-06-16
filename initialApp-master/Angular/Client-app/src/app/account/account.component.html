@@ -1,0 +1,123 @@
+<div class="container py-5">
+    <h2 class="text-center mb-4">User Account</h2>
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+                <br/>
+                <br/>
+                <div class="card card-body">
+
+          <div class="row">
+            <div class="col-md-7 col-sm-7">
+              <h2 class="card-title">Full name: {{this.user.FullName}}</h2>
+              <br>
+              <p class="card-text"><strong>Email: </strong> {{this.user.Email}} </p>
+              <p class="card-text"><strong>Birthday: </strong> {{this.user.Birthday}} </p>
+            </div>
+            <div class="col-md-4 col-sm-4 text-center">
+              <img *ngIf="!this.user.PersonalDocument" src="http://placehold.it/300x200" alt="" style="border-radius:30%;">
+              <img *ngIf="this.user.PersonalDocument" src="http://localhost:51680{{this.user.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
+            </div> 
+            <div class="col-md-6 col-sm-6">       
+            <button class="btn btn-lg btn-primary" (click)="showChange()">Change password</button>  
+            </div>         
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+  <div class="row" *ngIf="change == true">
+      <div class="col-md-6 mx-auto">
+      <hr>
+      <div class="card card-body">    
+      <h3 class="text-center mb-4">Change password</h3>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+      <div class="form-group has-success">
+          <input class="form-control input-lg" placeholder="Old password" name="OldPassword" type="text" ngModel required>
+      </div>
+      <div class="form-group has-error">
+          <input class="form-control input-lg" placeholder="New password" name="NewPassword" type="Password" ngModel required>
+      </div>                       
+      <div class="form-group has-success">
+          <input class="form-control input-lg" placeholder="Confirm password" name="ConfirmPassword" value="" type="Password" ngModel required>
+      </div>
+                        
+      <input class="btn btn-lg btn-primary btn-block" value="Change" type="submit">
+  </form>
+  </div>
+</div>
+</div>
+
+  <div *ngIf="!this.user.PersonalDocument">
+    <hr>
+    <h2 class="text-center mb-4">Add document</h2>
+      <div class="container">    
+          <div class="row">
+            <div class="col-md-3">
+   
+              <h3>Select file</h3>        
+              <input type="file" ng2FileSelect [uploader]="uploader"/>
+          </div>
+   
+          <div class="col-md-9" style="margin-bottom: 40px">
+   
+              <h3>Upload queue</h3>
+              <p>Queue length: {{ uploader?.queue?.length }}</p>
+   
+              <table class="table">
+                  <thead>
+                  <tr>
+                      <th width="50%">Name</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of uploader.queue">
+                      <td><strong>{{ item?.file?.name }}</strong></td>
+                      <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                      <td *ngIf="uploader.isHTML5">
+                          <div class="progress" style="margin-bottom: 0;">
+                              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                          </div>
+                      </td>
+                      <td class="text-center">
+                          <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                          <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                          <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                      </td>
+                  </tr>
+                  </tbody>
+              </table>
+   
+              <div>
+                     <div>
+                         Queue progress:
+                         <div class="progress" style="">
+                             <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                         </div>
+                     </div>
+                     <button type="button" class="btn btn-success btn-s"
+                          (click)="addAndUpload()" [disabled]="!uploader.getNotUploadedItems().length">
+                          <span class="glyphicon glyphicon-upload"></span> Upload
+                      </button>
+                      <button type="button" class="btn btn-warning btn-s"
+                              (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                          <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                      </button>
+                      <button type="button" class="btn btn-danger btn-s"
+                              (click)="castAndClear()" [disabled]="!uploader.queue.length">
+                          <span class="glyphicon glyphicon-trash"></span> Remove
+                      </button>
+                  </div>
+                 </div>
+                 <br>
+                 <br>
+                 <p *ngIf="added == true">Click here to add document:  </p>
+                 <button *ngIf="added == true" type="button" class="btn btn-success btn-s" (click)="uploadDocument()" style="margin-left: 20px; margin-top: -10px">Add document</button>
+          </div>
+       
+          <h2 *ngIf="finished == true">Document has succesefully been added!</h2>
+          </div>
+
+          <br><br><br>
+      </div>
+

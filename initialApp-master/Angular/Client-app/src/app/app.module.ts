@@ -25,6 +25,7 @@ import { TruncateModule } from 'ng2-truncate';
 
 import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule } from '@angular/material'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AccountComponent } from './account/account.component';
 
 const Routes = [
 {
@@ -51,6 +52,10 @@ const Routes = [
 {
   path: "vehicle/:vehicleId/:serviceId",
   component: VehicleComponent
+},
+{
+  path: "account",
+  component: AccountComponent
 }
 ]
 
@@ -65,7 +70,8 @@ const Routes = [
     ServiceComponent,
     VehicleComponent,
     FileSelectDirective,
-    FileDropDirective 
+    FileDropDirective,
+    AccountComponent 
   ],
   imports: [
     BrowserModule,

@@ -112,6 +112,7 @@ namespace RentApp.Controllers
         }
 
         // POST api/Account/ChangePassword
+        [AllowAnonymous]
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -334,7 +335,7 @@ namespace RentApp.Controllers
             }
 
             var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, Id = model.Email, AppUser = new AppUser { Birthday = model.Birthday, Email = model.Email, FullName = model.FullName } };
-            
+
             user.PasswordHash = RAIdentityUser.HashPassword(model.Password);
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
@@ -416,7 +417,42 @@ namespace RentApp.Controllers
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        } 
+        }
+
+        // PUT: api/Account/5
+        [AllowAnonymous]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        [Route("PutDocumentUser")]
+        public IHttpActionResult PutDocumentUser(PutDocumentUserBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+            try
+            {
+                appUser.PersonalDocument = model.PersonalDocument;
+                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.Complete();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
 
 
         [AllowAnonymous]
@@ -428,23 +464,14 @@ namespace RentApp.Controllers
                 return null;
             }
 
-            AppUser currentUser = null;
+            AppUser currentUser = unitOfWork.AppUsers.Get(email);
 
-            foreach (var item in unitOfWork.AppUsers.GetAll())
-            {
-                if (item.Email == email)
-                {
-                    currentUser = item;
-                    break;
-                }
-            }
-
-            if(currentUser == null)
+            if (currentUser == null)
             {
                 return null;
             }
 
-            return new AppUser() { FullName = currentUser.FullName, Email = currentUser.Email};
+            return currentUser;
         }
 
         [AllowAnonymous]
@@ -456,18 +483,21 @@ namespace RentApp.Controllers
                 return null;
             }
 
-            AppUser currentUser = null;
+            AppUser appUser = unitOfWork.AppUsers.Get(email);
 
-            foreach (var item in unitOfWork.AppUsers.GetAll())
+            if (appUser == null)
             {
-                if (item.Email == email)
-                {
-                    currentUser = item;
-                    break;
-                }
+                string notFound = "User not found";
+                return notFound;
+            }
+            else if(appUser.PersonalDocument == null)
+            {
+                string notFound = "Document not found";
+                return notFound;
             }
 
-            return currentUser.PersonalDocument;
+
+            return appUser.PersonalDocument;
         }
 
         [AllowAnonymous]
@@ -479,18 +509,18 @@ namespace RentApp.Controllers
                 return -1;
             }
 
-            AppUser currentUser = null;
+            AppUser appUser = unitOfWork.AppUsers.Get(email);
 
-            foreach (var item in unitOfWork.AppUsers.GetAll())
+            if (appUser == null)
             {
-                if (item.Email == email)
-                {
-                    currentUser = item;
-                    break;
-                }
+                return -1;
+            }
+            else if(appUser.RentAccountId == null)
+            {
+                return 0;
             }
 
-            return currentUser.RentAccountId;
+            return appUser.RentAccountId;
         }
 
 

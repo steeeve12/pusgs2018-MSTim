@@ -35,7 +35,7 @@ export class ServiceComponent implements OnInit {
   private temp: string;
   private description: string = "";
   private listImages: string[] = [];
-  private postImpression: Impression = new Impression("", 0, new RegisterUser("", "", null, "", ""));
+  private postImpression: Impression = new Impression("", 0, new RegisterUser("", "", null, "", "", ""));
 
   private service: Service;
   private grade: number = 0;
