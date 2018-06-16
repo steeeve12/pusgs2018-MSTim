@@ -31,7 +31,12 @@ namespace RentApp.Controllers
             return unitOfWork.Rents.GetAll();
         }
 
-  //      [Route("TryReserve")]
+        public IEnumerable<Rent> GetRents(int idVehicle)
+        {
+            return unitOfWork.Rents.GetAll(idVehicle);
+        }
+
+        //      [Route("TryReserve")]
         public bool GetReserve(DateTime start, DateTime end, int idVehicle)
         {           
             return unitOfWork.Rents.TryReserve(start, end, idVehicle);

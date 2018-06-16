@@ -11,14 +11,24 @@ import { VehicleTypesService } from '../services/vehicle-type-service';
 import { FileUploader } from 'ng2-file-upload';
 import { VehicleType } from '../models/vehicle-type.model';
 
-import { TruncateModule } from 'ng2-truncate';
-import { Dictionary, ImplicitPartial } from 'lodash';
 import { RegisterUser } from 'src/app/models/user.model';
+import { Branch } from '../models/branch.model';
+
+import OlMap from 'ol/map';
+import OlXYZ from 'ol/source/xyz';
+import OlTileLayer from 'ol/layer/tile';
+import OlView from 'ol/view';
+import OlProj from 'ol/proj';
+
+import { MapInfo } from '../models/map-info-model';
+import { Marker } from '../models/marker-model';
+import { BranchService } from '../services/branch-service';
 
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
-  styleUrls: ['./service.component.css']
+  styleUrls: ['./service.component.css'],
+  styles: ['agm-map {height: 500px; width: 700px;}'] //postavljamo sirinu i visinu mape
 })
 export class ServiceComponent implements OnInit {
 
@@ -32,7 +42,9 @@ export class ServiceComponent implements OnInit {
   private numbers: number[];
   private pageNum: number;
   private resp: string[] = [];
+  private resp2: string;
   private temp: string;
+  private temp2: string;
   private description: string = "";
   private listImages: string[] = [];
   private postImpression: Impression = new Impression("", 0, new RegisterUser("", "", null, "", "", ""));
@@ -43,12 +55,25 @@ export class ServiceComponent implements OnInit {
   private comment: string = "";
 
   private added: boolean = false;
+  private added2: boolean = false;
+
+  mapInfo: MapInfo;
+  private lat: number = -1;
+  private lgt: number = -1;
+
+  private branches: Branch[];
+  private branch: Branch = new Branch(0, "", "", 0, 0);
+  private markers: Marker[] = [];
+  private marker: Marker;
+  private tempMarker: Marker = new Marker(0, 0);
+  private address: string;
 
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
+  public uploader2:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
 
-  constructor(private impressionService: ImpressionService, private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private vehicleTypesService: VehicleTypesService, private servicesService: ServicesService) {
+  constructor(private impressionService: ImpressionService, private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private vehicleTypesService: VehicleTypesService, private servicesService: ServicesService, private branchesService: BranchService) {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}); 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
@@ -61,8 +86,28 @@ export class ServiceComponent implements OnInit {
       else{
         this.temp = response.replace('"', "");
         this.temp = this.temp.replace('"', "");
-        this.resp.push(this.temp)};
+        this.resp.push(this.temp)
+      };
+    }
+
+    this.uploader2.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
+      console.log("ImageUpload:uploaded:", item, status);
+      if(response == "Please Upload image of type .jpg,.gif,.png,.img,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
+          
       }
+      else if(response == ""){
+        this.resp2 = "";
+      }
+      else{
+        this.temp2 = response.replace('"', "");
+        this.temp2 = this.temp2.replace('"', "");
+        this.resp2 = this.temp2;
+      };
+    }
+
+    this.mapInfo = new MapInfo(45.25800424228705, 19.833547029022156, 
+      "assets/ftn.png",
+      "Novi Sad" , "" , "");
   }
 
   ngOnInit() {
@@ -70,7 +115,15 @@ export class ServiceComponent implements OnInit {
     this.callGetVehicleTypes();
     this.callGetServices();
     this.callGetImpressions();
+    this.callGetBranches();
     this.pageNum = 1;
+  }
+
+  placeMarker($event){
+    this.tempMarker.Lat = $event.coords.lat;
+    this.tempMarker.Lgt = $event.coords.lng;
+    this.lat = $event.coords.lat;
+    this.lgt = $event.coords.lng;
   }
 
   addAndUpload(){
@@ -81,6 +134,16 @@ export class ServiceComponent implements OnInit {
   castAndClear(){
     this.resp = [];
     this.uploader.clearQueue();
+  }  
+
+  addAndUpload2(){
+    this.added = false;
+    this.uploader2.uploadAll();
+  }
+
+  castAndClear2(){
+    this.resp2 = "";
+    this.uploader2.clearQueue();
   }  
 
   callGetVehicles(){
@@ -140,6 +203,21 @@ export class ServiceComponent implements OnInit {
         error => {
           console.log(error);
         })
+  }
+
+  callGetBranches(){
+    this.branchesService.getAllBranches()
+    .subscribe(
+      data => {
+        this.branches = data;
+        this.branches.forEach(obj => {
+          this.marker = new Marker(obj.Latitude, obj.Longitude);
+          this.markers.push(this.marker);
+        })
+      },
+      error => {
+        console.log(error);
+      })
   }
 
   page(page: string){
@@ -255,6 +333,34 @@ export class ServiceComponent implements OnInit {
         error => {
           console.log(error);
         })
+  }
+
+  addBranch(){
+    if(this.address == "" || this.resp2 == "" || this.lat < 0 || this.lat == undefined || this.lgt < 0 || this.lgt == undefined){
+      alert("You must fill in the address and select a place on the map!")
+      return;
+    }
+
+    if(this.address == ""){
+      this.address = "__empty__";
+    }
+
+    this.branch.Picture = this.resp2;
+    this.branch.Address = this.Id.toString() + "#" + this.address;
+    this.branch.Latitude = this.lat;
+    this.branch.Longitude = this.lgt;
+
+    this.branchesService.postMethod(this.branch)
+    .subscribe(
+      data => {
+        let br = data;
+        this.added2 = true;
+        this.resp2 = "";
+        this.castAndClear2();
+      },
+      error => {
+        console.log(error);
+      })
   }
 
   public fileOverBase(e:any):void {

@@ -18,6 +18,11 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Rents.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+        public IEnumerable<Rent> GetAll(int idVehicle)
+        {
+            return RADBContext.Rents.Where(r => r.VehicleId == idVehicle).ToList();
+        }
+
         public bool TryReserve(DateTime start, DateTime end, int idVehicle)
         {
             var temp = RADBContext.Rents.Where(r => r.VehicleId == idVehicle);

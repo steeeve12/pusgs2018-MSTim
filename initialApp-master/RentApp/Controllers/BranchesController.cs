@@ -29,6 +29,11 @@ namespace RentApp.Controllers
             return unitOfWork.Branches.GetAll(idService);
         }
 
+        public IEnumerable<Branch> GetBranches()
+        {
+            return unitOfWork.Branches.GetAll();
+        }
+
         // GET: api/Branches/5
         [ResponseType(typeof(Branch))]
         public IHttpActionResult GetBranch(int id)
@@ -99,6 +104,21 @@ namespace RentApp.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if(branch.Latitude < 0 || branch.Longitude < 0)
+                return BadRequest(ModelState);
+
+            string[] fullAddress = branch.Address.Split('#');
+
+            int serId = int.Parse(fullAddress[0]);
+
+            if (fullAddress[1] == "__empty__")
+                return BadRequest(ModelState);
+            else
+                branch.Address = fullAddress[1];
+
+            Service ser = unitOfWork.Services.Get(serId);
+            ser.Branches.Add(branch);
 
             unitOfWork.Branches.Add(branch);
             unitOfWork.Complete();
