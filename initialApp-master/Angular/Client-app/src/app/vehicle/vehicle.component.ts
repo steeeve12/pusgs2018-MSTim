@@ -225,13 +225,6 @@ export class VehicleComponent implements OnInit {
   }
 
   reserveV(){
-    // if(){ // korisnik ima dokument
-
-    // }
-    // if(){ // korisnik vec rezervisao vozilo
-
-    // }
-    
     if(this.start.value == undefined || this.end.value == undefined || this.branch1 == null || this.branch2 == null){
       alert("You must select the dates and the branches!")
       return;
@@ -246,7 +239,47 @@ export class VehicleComponent implements OnInit {
 
     this.rent = new Rent(this.start.value.toISOString().split("T")[0], this.end.value.toISOString().split("T")[0], this.branch1.Id, this.branch2.Id, +this.Id);
 
-    this.isReserved(); // da li je vozilo rezervisano
+    this.isReserved(); // provere: dokumenta, da nije vec rezervisao, da li je vozilo vec neko rezervisao u tom periodu
+  }
+
+  hasPersonalDocument(){
+    this.usersService.getPersonalDocument(localStorage.getItem("currentUserEmail"))
+    .subscribe(
+      data => {
+        if(data == "User not found")
+          return false;
+        else if(data == "Document not found"){
+          alert("Please upload your id or your drivers licence!");
+          this.router.navigateByUrl('/account');
+          return false;
+        }
+        else{
+          this.hasAlreadyReserved();         
+        }
+      },
+      error => {
+        console.log(error); 
+        return false;
+      })
+  }
+
+  hasAlreadyReserved(){
+    this.usersService.getRentAccountId(localStorage.getItem("currentUserEmail"))
+    .subscribe(
+      data => {
+        if(data == 0){
+          this.reserveVehicle();
+          return false;
+        }
+        else{
+          alert("You have already rented one vehicle!");
+          return true;
+        }
+      },
+      error => {
+        console.log(error); 
+        return true;
+      })
   }
 
   isReserved(){
@@ -268,6 +301,8 @@ export class VehicleComponent implements OnInit {
         console.log(error); 
       })
   }
+
+
 
   reserveVehicle(){
     this.reserve = true;

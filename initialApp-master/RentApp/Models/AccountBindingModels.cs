@@ -72,6 +72,7 @@ namespace RentApp.Models
         [Required]
         public int Id { get; set; }
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
     }
 
@@ -80,6 +81,7 @@ namespace RentApp.Models
         [Required]
         public string PersonalDocument { get; set; }
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
     }
 

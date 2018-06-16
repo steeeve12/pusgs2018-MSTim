@@ -78,23 +78,6 @@ export class AccountComponent implements OnInit {
       })
   }
 
-  hasPersonalDocument(){      // prekopirati i iskoristiti u vehicle comp
-    this.usersService.getPersonalDocument(localStorage.getItem("currentUserEmail"))
-    .subscribe(
-      data => {
-        if(data == "User not found")
-          return false;
-        else if(data == "Document not found")
-          return false;
-        else
-          return true;
-      },
-      error => {
-        console.log(error); 
-        return false;
-      })
-  }
-
   callGetCurrentUser(){
     this.authService.getCurrentUser(localStorage.getItem("currentUserEmail"))
     .subscribe(

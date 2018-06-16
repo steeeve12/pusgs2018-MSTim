@@ -27,7 +27,7 @@
         </li>
         <li>Type: {{vehicle.VehicleType.Name}}</li>
       </ul>
-      <p>{{vehicle.Description}}</p>
+      <p>Description: {{vehicle.Description}}</p>
     </div>
   </div>
   <!-- /.row -->
@@ -41,7 +41,7 @@
       <p>If you want to make a reservation for this vehicle click here:</p>
     </div>
     <div class="col-md-5">
-      <a class="btn btn-lg btn-secondary btn-block btn-success" href="#" [routerLink]="" (click)="reserveVehicle()">Make a reservation</a>
+      <a class="btn btn-lg btn-secondary btn-block btn-success" href="#" [routerLink]="" (click)="hasPersonalDocument()">Make a reservation</a>
     </div>
     <br>
     <br>
