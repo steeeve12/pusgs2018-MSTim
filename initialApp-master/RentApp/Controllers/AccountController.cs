@@ -112,7 +112,7 @@ namespace RentApp.Controllers
         }
 
         // POST api/Account/ChangePassword
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -121,8 +121,10 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
+            string userId = UserManager.FindByName(model.Email)?.Id;
+            // User.Identity.GetUserId() vraca null.. ovo gore vrati userId koji je potreban u ChangePasswordAsync    
+
+            IdentityResult result = await UserManager.ChangePasswordAsync(userId, model.OldPassword, model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -385,7 +387,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Account/5
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [HttpPut]
         [ResponseType(typeof(void))]
         [Route("PutRentUser")]
@@ -420,7 +422,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Account/5
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [HttpPut]
         [ResponseType(typeof(void))]
         [Route("PutDocumentUser")]
@@ -455,7 +457,7 @@ namespace RentApp.Controllers
         }
 
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetCurrent")]
         public AppUser GetCurrent(string email)
         {
@@ -474,7 +476,7 @@ namespace RentApp.Controllers
             return currentUser;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetPersonalDocument")]
         public string GetPersonalDocument(string email)
         {
@@ -500,7 +502,7 @@ namespace RentApp.Controllers
             return appUser.PersonalDocument;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetRentAccountId")]
         public int? GetRentAccountId(string email)
         {
@@ -523,7 +525,12 @@ namespace RentApp.Controllers
             return appUser.RentAccountId;
         }
 
-
+        [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Route("GetAllUsers")]
+        public IEnumerable<AppUser> GetAllUsers()
+        {
+            return unitOfWork.AppUsers.GetAll();
+        }
 
         protected override void Dispose(bool disposing)
         {

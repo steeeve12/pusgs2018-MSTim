@@ -27,13 +27,33 @@ export class RegisterUser {
 }
 
 export class ChangePassword {
+    Email: string;
     OldPassword: string;
     NewPassword: string;
     ConfirmPassword: string;
 
-    constructor(oldPassword: string, newPassword: string, confirmPassword: string) {
+    constructor(email:string, oldPassword: string, newPassword: string, confirmPassword: string) {
+        this.Email = email;
         this.OldPassword = oldPassword;
         this.NewPassword = newPassword;
         this.ConfirmPassword = confirmPassword;
+    }
+}
+
+export class AppUser{
+    FullName: string;
+    Email: string;   
+    Birthday: Date;
+    PersonalDocument: string;
+    Activated: boolean;
+    RentAccountId: number;
+
+    constructor(fullname: string, email: string, birthday: Date, personalDocument: string, activated: boolean, rentAccountId: number) {
+        this.FullName = fullname;
+        this.Email = email;       
+        this.Birthday = birthday;
+        this.PersonalDocument = personalDocument;
+        this.Activated = activated;
+        this.RentAccountId = rentAccountId;
     }
 }

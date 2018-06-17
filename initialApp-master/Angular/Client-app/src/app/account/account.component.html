@@ -19,7 +19,12 @@
             </div> 
             <div class="col-md-6 col-sm-6">       
             <button class="btn btn-lg btn-primary" (click)="showChange()">Change password</button>  
-            </div>         
+            </div>       
+            <br>
+            <br>
+            <div class="col-md-10">
+                <h3 *ngIf="passChanged == true">You have succesefully changed your password!</h3>
+            </div>  
           </div>
         </div>
       </div>
@@ -47,6 +52,10 @@
   </div>
 </div>
 </div>
+
+
+
+
 
   <div *ngIf="!this.user.PersonalDocument">
     <hr>

@@ -5,7 +5,7 @@ import { Headers, RequestOptions } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { RegisterUser, LoginUser } from '../models/user.model';
+import { RegisterUser, LoginUser, AppUser } from '../models/user.model';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -29,6 +29,10 @@ export class UserService {
   // getMethod(): Observable<RegisterUser[]> {
   //  return this.httpClient.get<RegisterUser[]>('http://localhost:51680/api/Services')
   //}
+
+  getAllUsers(): Observable<AppUser[]>{
+    return this.httpClient.get<AppUser[]>(`http://localhost:51680/api/Account/GetAllUsers`)
+  }
 
   getPersonalDocument(email: string): Observable<string>{
     return this.httpClient.get<string>(`http://localhost:51680/api/Account/GetPersonalDocument?email=${email}`)

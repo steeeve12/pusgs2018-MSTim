@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user-service';
 import { AuthService } from '../services/auth-service';
-import { RegisterUser } from '../models/user.model';
+import { RegisterUser, AppUser } from '../models/user.model';
 import { ChangePassword } from '../models/user.model';
 
 import { FileUploader } from 'ng2-file-upload';
 
 import { UserDocument } from '../models/putUserDocument'
+import { ServicesService } from '../services/services-service';
+import { Service } from '../models/service.model';
 
 @Component({
   selector: 'app-account',
@@ -20,17 +22,23 @@ export class AccountComponent implements OnInit {
   private change: boolean = false;
   private added: boolean = false;
   private finished: boolean = false;
+  private passChanged: boolean = false;
 
   resp: string = "";
   private temp: string;
 
   private document: UserDocument = new UserDocument("","");
 
+  private role: string;
+
+  private users: AppUser[];
+  private services: Service[];
+
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
 
-  constructor(private usersService: UserService, private authService: AuthService) { 
+  constructor(private usersService: UserService, private authService: AuthService, private servicesService: ServicesService) { 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
       if(response == "Please Upload image of type .jpg,.gif,.png,.img,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
@@ -83,6 +91,26 @@ export class AccountComponent implements OnInit {
     .subscribe(
       data => {
         this.user = data;
+        this.role = localStorage.getItem("role");
+
+        //if(this.role == "Admin"){
+          this.usersService.getAllUsers()
+          .subscribe(
+            data => {
+              this.users = data;
+            },
+            error => {
+              console.log(error);
+            })
+          this.servicesService.getAllServices()
+          .subscribe(
+            data => {
+              this.services = data;
+            },
+            error => {
+              console.log(error);
+            })
+        //}
       },
       error => {
         console.log(error);
@@ -90,7 +118,8 @@ export class AccountComponent implements OnInit {
   }
 
   showChange(){
-    //this.change = true;
+    this.change = true;
+    this.passChanged = false;
   }
 
   onSubmit(changePassword: ChangePassword){
@@ -104,11 +133,13 @@ export class AccountComponent implements OnInit {
   }
 
   changePassword(changePassword: ChangePassword){
+    changePassword.Email = localStorage.getItem("currentUserEmail");
     this.usersService.postChangePassword(changePassword)
     .subscribe(
       data => {
         let ok = data;
         this.change = false;
+        this.passChanged = true;
       },
       error => {
         console.log(error); 

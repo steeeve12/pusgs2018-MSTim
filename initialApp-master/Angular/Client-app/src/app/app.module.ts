@@ -27,6 +27,10 @@ import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputM
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccountComponent } from './account/account.component';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/interceptor';
+import { CanActivateViaAuthGuard } from './guard/auth.guard';
+
 const Routes = [
 {
   path: '',
@@ -71,7 +75,7 @@ const Routes = [
     VehicleComponent,
     FileSelectDirective,
     FileDropDirective,
-    AccountComponent 
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,7 +94,20 @@ const Routes = [
     ReactiveFormsModule,
     BrowserAnimationsModule
   ],
-  providers: [SignalRService],
+  providers: [SignalRService,
+    CanActivateViaAuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: 'CanAlwaysActivateGuard',
+      useValue: () => {
+        return true;
+      } 
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
