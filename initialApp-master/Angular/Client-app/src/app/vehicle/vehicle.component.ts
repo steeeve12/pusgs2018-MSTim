@@ -67,6 +67,8 @@ export class VehicleComponent implements OnInit {
   private tempS: Date;
   private tempE: Date;
 
+  private available: boolean;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private branchesService: BranchService, private rentsService: RentsService, private usersService: UserService) {
     activatedRoute.params.subscribe(params => {this.Id = params["vehicleId"], this.serviceId = params["serviceId"]});
     this.mapInfo1 = new MapInfo(45.25800424228705, 19.833547029022156, 
@@ -102,6 +104,7 @@ export class VehicleComponent implements OnInit {
     .subscribe(
       data => {
         this.vehicle = data;
+        this.available = !this.vehicle.Unavailable;
         this.listImages = this.vehicle.Images.split(";");
         this.listImages.pop();
       },
@@ -190,21 +193,6 @@ export class VehicleComponent implements OnInit {
         this.rents.forEach(obj => {
           this.tempS = new Date(obj.Start);
           this.tempE = new Date(obj.End);
-
-          // let today = new Date();
-
-          // if(this.tempS != today){
-          //   let i = this.tempS.getDate() % 2;
-          //   if(i !== 0){ 
-          //     this.tempS.setDate(this.tempS.getDate() - 1); // nekako ga prikazuje za dan vise kad se odradi toJSON za neparne, a parne ne treba...
-          //     this.tempE.setDate(this.tempE.getDate() - 1);
-          //   }
-          // }
-          // else{
-          //   if(this.tempS.getDate() % 2 != 0){ 
-          //     this.tempE.setDate(this.tempE.getDate() - 1);
-          //   }
-          // }
 
           let currentDate = new Date(this.tempS);
 
@@ -323,6 +311,33 @@ export class VehicleComponent implements OnInit {
     this.lgt2 = lgt;
     this.selectedBr2 = true;
     this.callGetBranch(this.lat2, this.lgt2, 2);
+}
+
+availability(){
+  if(this.available){
+    this.available = false;
+    this.vehicle.Unavailable = true;
+    this.vehiclesService.putVehicleUnavailable(this.vehicle)
+    .subscribe(
+      data => {
+        let retVehicle = data;
+      },
+      error => {
+        console.log(error);
+      })
+  }
+  else{
+    this.available = true;
+    this.vehicle.Unavailable = false;
+    this.vehiclesService.putVehicleUnavailable(this.vehicle)
+    .subscribe(
+      data => {
+        let retVehicle = data;
+      },
+      error => {
+        console.log(error);
+      })
+  }
 }
 
   logged(){
