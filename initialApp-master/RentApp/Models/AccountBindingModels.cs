@@ -84,11 +84,22 @@ namespace RentApp.Models
 
     public class PutDocumentUserBindingModel
     {
-        [Required]
+        [Required(AllowEmptyStrings = true)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string PersonalDocument { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+    }
+
+    public class PutUserActivatedBindingModel
+    {
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+
+        [Required]
+        public bool Activated { get; set; }
     }
 
     public class RemoveLoginBindingModel

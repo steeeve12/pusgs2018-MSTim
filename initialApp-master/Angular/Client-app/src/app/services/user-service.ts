@@ -54,8 +54,16 @@ export class UserService {
     return this.httpClient.put("http://localhost:51680/api/Account/PutDocumentUser", newMember)
   }
 
-  putMethod(newMember): Observable<any> {
+  putUserRentId(newMember): Observable<any> {
     return this.httpClient.put("http://localhost:51680/api/Account/PutRentUser", newMember)
+  }
+
+  putUserActivated(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Account/PutUserActivated", newMember)
+  }
+
+  putUserDenied(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Account/PutUserDenied", newMember)
   }
 
 }

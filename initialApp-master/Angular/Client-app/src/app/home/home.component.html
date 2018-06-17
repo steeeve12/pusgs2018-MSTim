@@ -9,23 +9,25 @@
       <div class="container"> 
           <div class="card-deck row">
               <div class="card col-md-4" *ngFor="let service of services">
-                  <a href="#"><img class="card-img-top" src="http://localhost:51680{{service.Logo}}" alt=""></a>
-                  <div class="card-body">
-                    <h4 class="card-title">
-                      <a [routerLink]="['/service', service.Id]" href="#">{{service.Name}}</a>
-                    </h4>
-                    <h5 class="card-title">
-                      <p class="card-text">{{service.Email}}</p>
-                    </h5>
-                    <p class="card-text">{{service.Description}}</p>
-                    <rating [(ngModel)]="service.Grade"
-                      [max]="5"
-                      [readonly]="true"
-                      [disabled]="false"
-                      [required]="false"
-                      [float]="true">
-                    </rating>
-                  </div>
+                  <div *ngIf="service.Approved">
+                    <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{service.Logo}}" alt=""></a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                        <a [routerLink]="['/service', service.Id]" href="#">{{service.Name}}</a>
+                        </h4>
+                        <h5 class="card-title">
+                        <p class="card-text">{{service.Email}}</p>
+                        </h5>
+                        <p class="card-text">{{service.Description}}</p>
+                        <rating [(ngModel)]="service.Grade"
+                        [max]="5"
+                        [readonly]="true"
+                        [disabled]="false"
+                        [required]="false"
+                        [float]="true">
+                        </rating>
+                    </div>
+                </div>
               </div>
           </div>
       </div>
@@ -94,7 +96,7 @@
                   </div>
                  </div>
                  <br>
-                 <h2 *ngIf="added == true">Service has succesefully been added!</h2>
+                 <h2 *ngIf="added == true">Service is now pending for approval...</h2>
           </div>
    
       </div>

@@ -47,16 +47,11 @@ namespace RentApp.Controllers
         // PUT: api/Services/5
  //       [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutService(int id, Service service)
+        public IHttpActionResult PutService(Service service)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-
-            if (id != service.Id)
-            {
-                return BadRequest();
             }
 
             try
@@ -66,7 +61,7 @@ namespace RentApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ServiceExists(id))
+                if (!ServiceExists(service.Id))
                 {
                     return NotFound();
                 }

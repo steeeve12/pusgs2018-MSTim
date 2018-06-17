@@ -57,3 +57,33 @@ export class AppUser{
         this.RentAccountId = rentAccountId;
     }
 }
+
+export class UserRent {
+    Id: string;
+    Email: string;
+
+    constructor(id: string, email: string) {
+        this.Id = id;
+        this.Email = email;
+    }
+}
+
+export class UserDocument {
+    PersonalDocument: string;
+    Email: string;
+
+    constructor(personalDocument: string, email: string) {
+        this.PersonalDocument = personalDocument;
+        this.Email = email;
+    }
+}
+
+export class UserActivated{
+    Activated: boolean;
+    Email: string;
+
+    constructor(activated: boolean, email: string) {
+        this.Activated = activated;
+        this.Email = email;
+    }
+}

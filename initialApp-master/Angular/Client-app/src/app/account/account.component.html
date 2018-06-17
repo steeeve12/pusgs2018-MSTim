@@ -31,8 +31,8 @@
     </div>
   </div> 
 
-  <div class="row" *ngIf="change == true">
-      <div class="col-md-6 mx-auto">
+<div class="row" *ngIf="change == true">
+    <div class="col-md-6 mx-auto">
       <hr>
       <div class="card card-body">    
       <h3 class="text-center mb-4">Change password</h3>
@@ -54,7 +54,65 @@
 </div>
 
 
+<div class="container py-5">
+    <h2 class="text-center mb-4">Admin Account</h2>
+    <div class="row">
+        <h3>Pending user accounts:</h3>
+        <div class="col-md-10 mx-auto">
+            <br/>
+            <br/>
+            <div *ngFor="let userAcc of users">
+            <div class="card card-body" *ngIf="!userAcc.Activated && userAcc.PersonalDocument">
+                <div class="row">
+                    <div class="col-md-7 col-sm-7">
+                        <h2 class="card-title">Full name: {{userAcc.FullName}}</h2>
+                        <br>
+                        <p class="card-text"><strong>Email: </strong> {{userAcc.Email}} </p>
+                        <p class="card-text"><strong>Birthday: </strong> {{userAcc.Birthday}} </p>
+                    </div>
+                    <div class="col-md-4 col-sm-4 text-center">
+                        <img *ngIf="userAcc.PersonalDocument" src="http://localhost:51680{{userAcc.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
+                    </div> 
+                    <div class="col-md-6 col-sm-6">       
+                        <button class="btn btn-lg btn-success" (click)="acceptUserAccount()">Accept</button>
+                        <button class="btn btn-lg btn-danger" (click)="denyUserAccount()">Deny</button>    
+                    </div>         
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
 
+    <hr>
+
+    <div class="row">
+        <h3>Pending services:</h3>
+        <div class="col-md-10 mx-auto">
+            <br/>
+            <br/>
+            <div *ngFor="let service of services">
+            <div class="card card-body" *ngIf="!service.Approved">
+                <div class="row">
+                    <div class="col-md-7 col-sm-7">
+                        <h2 class="card-title">Name: {{service.Name}}</h2>
+                        <br>
+                        <p class="card-text"><strong>Email: </strong> {{service.Email}} </p>
+                        <p class="card-text"><strong>Description: </strong> {{service.Description}} </p>
+                    </div>
+                    <div class="col-md-4 col-sm-4 text-center">
+                        <img *ngIf="!service.Logo" src="http://placehold.it/300x200" alt="" style="border-radius:30%;">
+                        <img *ngIf="service.Logo" src="http://localhost:51680{{service.Logo}}" width="300" height="200" alt="" style="border-radius:30%;">
+                    </div> 
+                    <div class="col-md-6 col-sm-6">       
+                        <button class="btn btn-lg btn-success" (click)="acceptService(service)">Accept</button>
+                        <button class="btn btn-lg btn-danger" (click)="denyService(service)">Deny</button>    
+                    </div>         
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div> 
 
 
   <div *ngIf="!this.user.PersonalDocument">

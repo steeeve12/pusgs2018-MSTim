@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user-service';
 import { AuthService } from '../services/auth-service';
-import { RegisterUser, AppUser } from '../models/user.model';
+import { RegisterUser, AppUser, UserActivated } from '../models/user.model';
 import { ChangePassword } from '../models/user.model';
 
 import { FileUploader } from 'ng2-file-upload';
 
-import { UserDocument } from '../models/putUserDocument'
+import { UserDocument } from '../models/user.model'
 import { ServicesService } from '../services/services-service';
 import { Service } from '../models/service.model';
 
@@ -33,6 +33,9 @@ export class AccountComponent implements OnInit {
 
   private users: AppUser[];
   private services: Service[];
+
+  private userActivated: UserActivated = new UserActivated(false, "");
+  private documentDenied: UserDocument = new UserDocument("","");
 
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
@@ -140,6 +143,90 @@ export class AccountComponent implements OnInit {
         let ok = data;
         this.change = false;
         this.passChanged = true;
+      },
+      error => {
+        console.log(error); 
+      })
+  }
+
+  acceptUserAccount(){
+    this.userActivated.Activated = true;
+    this.userActivated.Email = localStorage.getItem("currentUserEmail");
+
+    this.usersService.putUserActivated(this.userActivated)
+    .subscribe(
+      data => {
+        let ok = data;
+        this.usersService.getAllUsers()
+          .subscribe(
+            data => {
+              this.users = data;
+            },
+            error => {
+              console.log(error);
+            })
+      },
+      error => {
+        console.log(error); 
+      })
+  }
+
+  denyUserAccount(){
+    this.documentDenied.Email = "";
+    this.documentDenied.Email = localStorage.getItem("currentUserEmail");
+
+    this.usersService.putUserDenied(this.documentDenied)
+    .subscribe(
+      data => {
+        let ok = data;
+        this.usersService.getAllUsers()
+          .subscribe(
+            data => {
+              this.users = data;
+            },
+            error => {
+              console.log(error);
+            })
+      },
+      error => {
+        console.log(error); 
+      })
+  }
+
+  acceptService(service: Service){
+    service.Approved = true;
+
+    this.servicesService.putServiceApproved(service)
+    .subscribe(
+      data => {
+        let ok = data;
+        this.servicesService.getAllServices()
+          .subscribe(
+            data => {
+              this.services = data;
+            },
+            error => {
+              console.log(error);
+            })
+      },
+      error => {
+        console.log(error); 
+      })
+  }
+
+  denyService(service: Service){
+    this.servicesService.deleteService(service.Id)
+    .subscribe(
+      data => {
+        let ok = data;
+        this.servicesService.getAllServices()
+          .subscribe(
+            data => {
+              this.services = data;
+            },
+            error => {
+              console.log(error);
+            })
       },
       error => {
         console.log(error); 

@@ -73,7 +73,8 @@ export class HomeComponent implements OnInit {
   }
 
   extractGrade(){
-    let arr = this.services.forEach(obj => {
+    this.grade = 0;
+    this.services.forEach(obj => {
       obj.Impressions.forEach(childObj => {
         this.grade += childObj.Grade;
         this.cnt += 1;

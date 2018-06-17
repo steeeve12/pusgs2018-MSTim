@@ -18,7 +18,7 @@ import OlTileLayer from 'ol/layer/tile';
 import OlView from 'ol/view';
 import OlProj from 'ol/proj';
 import { UserService } from 'src/app/services/user-service';
-import { UserRent } from '../models/putUserRent'
+import { UserRent } from '../models/user.model'
 
 @Component({
   selector: 'app-vehicle',
@@ -160,7 +160,7 @@ export class VehicleComponent implements OnInit {
   callPutUserRentId(email: string){
     this.member.Id = this.retRent.Id.toString();
     this.member.Email = email;
-    this.usersService.putMethod(this.member)
+    this.usersService.putUserRentId(this.member)
     .subscribe(
       data => {
         let retUserRent = data;

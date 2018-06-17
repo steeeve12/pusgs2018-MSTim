@@ -153,6 +153,9 @@ export class ServiceComponent implements OnInit {
           this.vehicles = data;
           this.pages = Math.ceil((this.vehicles.length)/9);
           this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
+          if(this.numbers.length == 0){
+            this.numbers.push(1);
+          }
 
           this.vehicles.forEach(obj => {
             this.listImages.push(obj.Images.split(";")[0]);
@@ -179,9 +182,6 @@ export class ServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.impressions = data;
-          this.pages = Math.ceil((this.impressions.length)/9);
-          this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
-
           this.comment = "";
           this.extractGrade();
           this.grade /= this.cnt;

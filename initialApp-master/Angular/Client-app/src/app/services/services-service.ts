@@ -38,4 +38,11 @@ export class ServicesService {
     return this.httpClient.post("http://localhost:51680/api/Services", newMember)
   }
 
+  putServiceApproved(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Services", newMember)
+  }
+
+  deleteService(newMember): Observable<any> {
+    return this.httpClient.delete(`http://localhost:51680/api/Services?id=${newMember}`)
+  }
 }

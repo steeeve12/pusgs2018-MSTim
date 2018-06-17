@@ -456,6 +456,79 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        //[Authorize(Roles = "Admin")]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        [Route("PutUserActivated")]
+        public IHttpActionResult PutUserActivated(PutUserActivatedBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+            try
+            {
+                appUser.Activated = model.Activated;
+                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.Complete();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        [Route("PutUserDenied")]
+        public IHttpActionResult PutUserDenied(PutDocumentUserBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+            if(model.PersonalDocument == "")
+            {
+                model.PersonalDocument = null;
+            }
+
+            try
+            {
+                appUser.PersonalDocument = model.PersonalDocument;
+                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.Complete();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
 
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetCurrent")]
