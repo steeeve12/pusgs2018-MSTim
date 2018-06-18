@@ -42,4 +42,8 @@ export class BranchService {
     return this.httpClient.post("http://localhost:51680/api/Branches/PostBranches", newMember)
   }
 
+
+  deleteBranch(Id): Observable<any> {
+    return this.httpClient.delete(`http://localhost:51680/api/Branches?id=${Id}`);
+  }
 }

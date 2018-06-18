@@ -43,4 +43,7 @@ export class VehiclesService {
     return this.httpClient.put("http://localhost:51680/api/Vehicles/PutVehicle", newMember)
   }
 
+  deleteVehicle(Id): Observable<any> {
+    return this.httpClient.delete(`http://localhost:51680/api/Vehicles?id=${Id}`);
+  }
 }

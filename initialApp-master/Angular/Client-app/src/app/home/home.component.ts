@@ -120,6 +120,18 @@ export class HomeComponent implements OnInit {
         })
   }
 
+  removeService(id: string){
+    this.servicesService.deleteService(id)
+    .subscribe(
+      data => {
+        this.callGet();
+      },
+      error => {
+        console.log(error);
+        alert(error.error.Message);
+      })
+  }
+
   //   this.servicesService.postMethod(newMember)
   //   .subscribe(
   //     data => {

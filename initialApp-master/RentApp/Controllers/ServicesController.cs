@@ -110,10 +110,52 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Service))]
         public IHttpActionResult DeleteService(int id)
         {
+
+            var ser = unitOfWork.Services.Get(id);
+            var listOfRents = unitOfWork.Rents.GetAll();
+            var listOfBranches = ser.Branches;
+
+            foreach (Branch b in listOfBranches)
+            {
+                
+                foreach (Rent r in listOfRents)
+                {
+                    if (r.Branch1Id == b.Id || r.Branch2Id == b.Id)
+                    {
+                        if (r.Start <= DateTime.Now && r.End >= DateTime.Now)
+                        {
+                            return BadRequest("Service is in use!");
+                        }
+
+                        foreach (AppUser u in unitOfWork.AppUsers.GetAll())
+                        {
+                            if (u.Rents.Remove(r))
+                            {
+                                break;
+                            }
+                        }
+
+                        unitOfWork.Rents.Remove(r);
+                    }
+                }
+
+                unitOfWork.Branches.Remove(b);
+            }
+
             Service service = unitOfWork.Services.Get(id);
             if (service == null)
             {
                 return NotFound();
+            }
+
+            foreach (Impression i in service.Impressions)
+            {
+                unitOfWork.Impressions.Remove(i);
+            }
+
+            foreach (Vehicle v in service.Vehicles)
+            {
+                unitOfWork.Vehicles.Remove(v);
             }
 
             unitOfWork.Services.Remove(service);

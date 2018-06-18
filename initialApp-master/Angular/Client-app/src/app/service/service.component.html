@@ -1,6 +1,5 @@
   <!-- Page Content -->
   <div class="container">
-
     <!-- Page Heading/Breadcrumbs -->
     <h1 class="mt-4 mb-3">{{this.service.Name}}</h1>
 
@@ -13,10 +12,42 @@
 
     <div>
         <!-- Preview Image -->
-        <img class="img-fluid rounded center" src="http://localhost:51680{{this.service.Logo}}" alt="">
+        <img class="img-fluid rounded center" src="http://localhost:51680{{this.service.Logo}}" alt=""/>
 
+    </div>
+
+    <!--div>
+            <h2>Branches</h2>
+        <div class="app flex-row align-items-center">   
+                <div class="container"> 
+                    <div class="card-deck row">
+                        <div class="card col-md-4" *ngFor="let branch of branches; let i = index">
+                          <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{branch.Picture}}" alt=""></a>                                  
+                            <div class="card-body">
+                              <h4 class="card-title">
+                                {{branch.Address}}
+                              <h4>
+                                <div class="row"> 
+                                    <div class="col-md-9">
+                                        <button (click)="removeBranch(branch.Id)" class="btn btn-danger btn-s" >Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div -->
+
+    <div class="card-deck row" *ngFor="let branch of branches1">  
+        <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{branch.Picture}}" alt=""></a>                                  
+        <h3>{{branch.Address}}</h3>
+        <button (click)="removeBranch(branch.Id)" class="btn btn-danger btn-s" >Remove</button>
+    </div>
         <hr>
-
+    <div>
+        <h2>Vehicles</h2>
         <div class="app flex-row align-items-center">   
           <div class="container"> 
               <div class="card-deck row">
@@ -30,12 +61,17 @@
                           <p class="card-text">{{vehicle.PricePerHour}} &euro;</p>
                         </h5>
                         <p class="card-text">{{vehicle.Description}}</p>
+                            <div class="row"> 
+                                <div class="col-md-9">
+                                <button (click)="removeVehicle(vehicle.Id)" class="btn btn-danger btn-s" >Remove</button>
+                            </div>
+                        </div>
                       </div>
                   </div>
               </div>
           </div>
       </div>
-
+    </div>
       <hr>
 
       <!-- Pagination -->
@@ -298,9 +334,7 @@
             {{impression.Comment}}   
           </div>
         </div>
-      </div>
-
-  </div>
+    </div>
   <!-- /.container -->
 
   <!-- Footer -->

@@ -131,10 +131,42 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Branch))]
         public IHttpActionResult DeleteBranch(int id)
         {
+            var list = unitOfWork.Rents.GetAll();
+
+            // delete all
+            foreach (Rent r in list)
+            {
+                if (r.Branch1Id == id || r.Branch2Id == id)
+                {
+                    if (r.Start <= DateTime.Now && r.End >= DateTime.Now)
+                    {
+                        return BadRequest("Branch is in use!");
+                    }
+
+                    foreach (AppUser u in unitOfWork.AppUsers.GetAll())
+                    {
+                        if (u.Rents.Remove(r))
+                        {
+                            break;
+                        }
+                    }
+
+                    unitOfWork.Rents.Remove(r);
+                }
+            }
+
             Branch branch = unitOfWork.Branches.Get(id);
             if (branch == null)
             {
                 return NotFound();
+            }
+
+            foreach (Service s in unitOfWork.Services.GetAll())
+            {
+                if (s.Branches.Remove(branch))
+                {
+                    break;
+                }
             }
 
             unitOfWork.Branches.Remove(branch);

@@ -113,10 +113,46 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Vehicle))]
         public IHttpActionResult DeleteVehicle(int id)
         {
+            var list = unitOfWork.Rents.GetAll(id);
+
+            list = list.OrderBy(r => r.Start);
+
+            foreach(Rent r in list)
+            {
+                if(r.Start <= DateTime.Now && r.End >= DateTime.Now)
+                {
+                    return BadRequest("Vehicle is in use!");
+                }
+            }
+
+
+            // delete all
+            foreach (Rent r in list)
+            {
+                foreach(AppUser u in unitOfWork.AppUsers.GetAll())
+                {
+                    if (u.Rents.Remove(r))
+                    {
+                        break;
+                    }
+                }
+
+                unitOfWork.Rents.Remove(r);
+            }
+
+
             Vehicle vehicle = unitOfWork.Vehicles.Get(id);
             if (vehicle == null)
             {
                 return NotFound();
+            }
+
+            foreach(Service s in unitOfWork.Services.GetAll())
+            {
+                if (s.Vehicles.Remove(vehicle))
+                {
+                    break;
+                }
             }
 
             unitOfWork.Vehicles.Remove(vehicle);

@@ -62,6 +62,7 @@ export class ServiceComponent implements OnInit {
   private lgt: number = -1;
 
   private branches: Branch[];
+  private branches1: Branch[];
   private branch: Branch = new Branch(0, "", "", 0, 0);
   private markers: Marker[] = [];
   private marker: Marker;
@@ -116,6 +117,7 @@ export class ServiceComponent implements OnInit {
     this.callGetServices();
     this.callGetImpressions();
     this.callGetBranches();
+    this.getServiceBranches();
     this.pageNum = 1;
   }
 
@@ -357,6 +359,7 @@ export class ServiceComponent implements OnInit {
         this.added2 = true;
         this.resp2 = "";
         this.castAndClear2();
+        this.getServiceBranches();
       },
       error => {
         console.log(error);
@@ -369,5 +372,40 @@ export class ServiceComponent implements OnInit {
  
   public fileOverAnother(e:any):void {
     this.hasAnotherDropZoneOver = e;
+  }
+
+  removeVehicle(id: string){
+    this.vehiclesService.deleteVehicle(id)
+    .subscribe(
+      data => {
+        this.callGetVehicles();
+      },
+      error => {
+        console.log(error);
+        alert(error.error.Message);        
+      })
+  }
+
+  removeBranch(id: string){
+    this.branchesService.deleteBranch(id)
+    .subscribe(
+      data => {
+        this.getServiceBranches();
+      },
+      error => {
+        console.log(error);
+        alert(error.error.Message);        
+      })
+  }
+
+  getServiceBranches(){
+    this.branchesService.getBranches(this.Id).subscribe(
+      data1 => {
+        this.branches1 = data1;
+      },
+      error => {
+        console.log(error);
+        alert(error.error.Message);        
+      })
   }
 }
