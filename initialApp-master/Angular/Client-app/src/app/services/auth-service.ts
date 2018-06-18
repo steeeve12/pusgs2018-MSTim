@@ -20,21 +20,9 @@ export class AuthService {
   return this.httpClient.get<RegisterUser>(`http://localhost:51680/api/Account/GetCurrent?email=${Email}`);
 }
 
-callGetCurrentUser(email: string){
-  this.getCurrentUser(email)
-  .subscribe(
-    data => {
-      if(data != null){
-        localStorage.setItem('currentUserEmail', data.Email);
-        localStorage.setItem('currentUserFullName', data.FullName);
-      }else{
-        console.log(`Error in callGetCurrentUser(${email})`);
-      }
-    },
-    error => {
-      console.log(error);
-    })
-}
+// callGetCurrentUser(email: string){
+  
+// }
 
 getTheToken(user: LoginUser){
 
@@ -65,8 +53,20 @@ getTheToken(user: LoginUser){
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
 
-          this.callGetCurrentUser(user.Username);
-          this.router.navigateByUrl('/home');
+          this.getCurrentUser(user.Username)
+          .subscribe(
+            data => {
+              if(data != null){
+                localStorage.setItem('currentUserEmail', data.Email);
+                localStorage.setItem('currentUserFullName', data.FullName);
+                this.router.navigateByUrl('/home');
+              }else{
+                console.log(`Error in callGetCurrentUser(${user.Username})`);
+              }
+            },
+            error => {
+              console.log(error);
+            })
 
           return true;
         },
