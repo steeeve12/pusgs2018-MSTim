@@ -23,6 +23,8 @@ import OlProj from 'ol/proj';
 import { MapInfo } from '../models/map-info-model';
 import { Marker } from '../models/marker-model';
 import { BranchService } from '../services/branch-service';
+import { RentsService } from '../services/rent-service';
+import { Rent } from '../models/rent.model';
 
 @Component({
   selector: 'app-service',
@@ -57,6 +59,8 @@ export class ServiceComponent implements OnInit {
   private added: boolean = false;
   private added2: boolean = false;
 
+  private firstRentEnded: boolean = false;
+
   mapInfo: MapInfo;
   private lat: number = -1;
   private lgt: number = -1;
@@ -69,12 +73,15 @@ export class ServiceComponent implements OnInit {
   private tempMarker: Marker = new Marker(0, 0);
   private address: string;
 
+  private rents: Rent[];
+
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public uploader2:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
 
-  constructor(private impressionService: ImpressionService, private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, private vehicleTypesService: VehicleTypesService, private servicesService: ServicesService, private branchesService: BranchService) {
+  constructor(private impressionService: ImpressionService, private router: Router, private activatedRoute: ActivatedRoute, private vehiclesService: VehiclesService, 
+    private vehicleTypesService: VehicleTypesService, private servicesService: ServicesService, private branchesService: BranchService, private rentsService: RentsService) {
     activatedRoute.params.subscribe(params => {this.Id = params["Id"]}); 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
@@ -118,6 +125,7 @@ export class ServiceComponent implements OnInit {
     this.callGetImpressions();
     this.callGetBranches();
     this.getServiceBranches();
+    this.getUserRents();
     this.pageNum = 1;
   }
 
@@ -251,11 +259,8 @@ export class ServiceComponent implements OnInit {
     })
   }
 
-  loggedAndReserved(){
-    if(!localStorage.jwt)
-      return true;
-    //if(ako nije rezervisao)
-      //return true;
+  logged(){
+    return localStorage.jwt;
   }
 
   
@@ -402,6 +407,18 @@ export class ServiceComponent implements OnInit {
     this.branchesService.getBranches(this.Id).subscribe(
       data1 => {
         this.branches1 = data1;
+      },
+      error => {
+        console.log(error);
+        alert(error.error.Message);        
+      })
+  }
+
+  getUserRents(){
+    this.rentsService.getIsFirstRentEnded(localStorage.getItem('currentUserEmail'))
+    .subscribe(
+      data => {
+        this.firstRentEnded = data;
       },
       error => {
         console.log(error);

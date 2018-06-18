@@ -34,6 +34,10 @@ export class RentsService {
     return this.httpClient.get<Rent[]>(`http://localhost:51680/api/Rents?idVehicle=${id}`)
   }
 
+  getIsFirstRentEnded(email: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(`http://localhost:51680/api/Rents?email=${email}`)
+  }
+
   getTryReserve(model: Rent): Observable<boolean> {
     return this.httpClient.get<boolean>(`http://localhost:51680/api/Rents?start=${model.Start}&end=${model.End}&idVehicle=${model.VehicleId}`)
   }

@@ -36,6 +36,11 @@ namespace RentApp.Controllers
             return unitOfWork.Rents.GetAll(idVehicle);
         }
 
+        public bool GetIsFirstRentEnded(string email)
+        {
+            return unitOfWork.Rents.IsFirstRentEnded(email);
+        }
+
         //      [Route("TryReserve")]
         public bool GetReserve(DateTime start, DateTime end, int idVehicle)
         {           

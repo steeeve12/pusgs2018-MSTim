@@ -23,6 +23,18 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Rents.Where(r => r.VehicleId == idVehicle).ToList();
         }
 
+        public bool IsFirstRentEnded(string email)
+        {
+            AppUser appUser = RADBContext.AppUsers.First(a => a.Email == email);
+
+            List<Rent> listOfRents = appUser.Rents.OrderBy(r => r.Start).ToList();
+
+            if (listOfRents[0].End < DateTime.Now.Date) // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
+                return true;
+
+            return false;
+        }
+
         public bool TryReserve(DateTime start, DateTime end, int idVehicle)
         {
             var temp = RADBContext.Rents.Where(r => r.VehicleId == idVehicle);
