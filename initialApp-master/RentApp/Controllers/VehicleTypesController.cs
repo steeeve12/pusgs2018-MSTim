@@ -87,6 +87,11 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (unitOfWork.VehicleTypes.Exists(vehicleType.Name))
+            {
+                return BadRequest(ModelState);
+            }
+
             unitOfWork.VehicleTypes.Add(vehicleType);
             unitOfWork.Complete();
 

@@ -9,6 +9,8 @@ import { FileUploader } from 'ng2-file-upload';
 import { UserDocument } from '../models/user.model'
 import { ServicesService } from '../services/services-service';
 import { Service } from '../models/service.model';
+import { VehicleTypesService } from 'src/app/services/vehicle-type-service';
+import { VehicleType } from 'src/app/models/vehicle-type.model';
 
 @Component({
   selector: 'app-account',
@@ -34,6 +36,9 @@ export class AccountComponent implements OnInit {
   private users: AppUser[];
   private services: Service[];
 
+  private vehicleTypes: VehicleType[];
+  private vehTypeAdded: boolean = false;
+
   private userActivated: UserActivated = new UserActivated(false, "");
   private documentDenied: UserDocument = new UserDocument("","");
 
@@ -41,7 +46,7 @@ export class AccountComponent implements OnInit {
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
 
-  constructor(private usersService: UserService, private authService: AuthService, private servicesService: ServicesService) { 
+  constructor(private usersService: UserService, private authService: AuthService, private servicesService: ServicesService, private vehicleTypesService: VehicleTypesService) { 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
       if(response == "Please Upload image of type .jpg,.gif,.png,.img,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
@@ -109,6 +114,14 @@ export class AccountComponent implements OnInit {
           .subscribe(
             data => {
               this.services = data;
+            },
+            error => {
+              console.log(error);
+            })
+          this.vehicleTypesService.getVehicleTypes()
+          .subscribe(
+            data => {
+              this.vehicleTypes = data;
             },
             error => {
               console.log(error);
@@ -231,6 +244,31 @@ export class AccountComponent implements OnInit {
       error => {
         console.log(error); 
       })
+  }
+
+  onSubmitVehicleType(vehicleType: VehicleType){
+    this.vehicleTypesService.postMethod(vehicleType)
+    .subscribe(
+      data => {
+        let ok = data;
+        this.vehTypeAdded = true;
+
+        this.vehicleTypesService.getVehicleTypes()
+        .subscribe(
+          data => {
+            this.vehicleTypes = data;
+          },
+          error => {
+            console.log(error);
+          })
+      },
+      error => {
+        console.log(error); 
+      })
+  }
+
+  hide(){
+    this.vehTypeAdded = false;
   }
 
   public fileOverBase(e:any):void {

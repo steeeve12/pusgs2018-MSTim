@@ -18,6 +18,20 @@ namespace RentApp.Persistance.Repository
             return RADBContext.VehicleTypes.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+
+        public bool Exists(string name)
+        {
+            VehicleType v = RADBContext.VehicleTypes.First(vt => vt.Name == name);
+            if (v == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }
