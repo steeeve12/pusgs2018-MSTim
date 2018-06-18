@@ -358,6 +358,10 @@
     <Compile Include="Migrations\201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.Designer.cs">
       <DependentUpon>201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806180822063_list rents AppUser.cs" />
+    <Compile Include="Migrations\201806180822063_list rents AppUser.Designer.cs">
+      <DependentUpon>201806180822063_list rents AppUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -521,6 +525,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.resx">
       <DependentUpon>201806150657492_Id-evi kao polja za reference kod AppUser-a i Rent-e.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806180822063_list rents AppUser.resx">
+      <DependentUpon>201806180822063_list rents AppUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
