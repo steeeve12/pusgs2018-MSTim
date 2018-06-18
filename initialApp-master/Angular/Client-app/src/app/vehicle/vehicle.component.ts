@@ -242,7 +242,8 @@ export class VehicleComponent implements OnInit {
           return false;
         }
         else{
-          this.hasAlreadyReserved();         
+          this.reserveVehicle();
+          //this.hasAlreadyReserved();         
         }
       },
       error => {
@@ -251,24 +252,24 @@ export class VehicleComponent implements OnInit {
       })
   }
 
-  hasAlreadyReserved(){
-    this.usersService.getRentAccountId(localStorage.getItem("currentUserEmail"))
-    .subscribe(
-      data => {
-        if(data == 0){
-          this.reserveVehicle();
-          return false;
-        }
-        else{
-          alert("You have already rented one vehicle!");
-          return true;
-        }
-      },
-      error => {
-        console.log(error); 
-        return true;
-      })
-  }
+  // hasAlreadyReserved(){
+  //   this.usersService.getRentAccountId(localStorage.getItem("currentUserEmail"))
+  //   .subscribe(
+  //     data => {
+  //       if(data == 0){
+  //         this.reserveVehicle();
+  //         return false;
+  //       }
+  //       else{
+  //         alert("You have already rented one vehicle!");
+  //         return true;
+  //       }
+  //     },
+  //     error => {
+  //       console.log(error); 
+  //       return true;
+  //     })
+  //}
 
   isReserved(){
     this.rentsService.getTryReserve(this.rent)

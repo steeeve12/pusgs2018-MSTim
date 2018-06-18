@@ -75,6 +75,11 @@ namespace RentApp.Persistance.Repository
             return false;
         }
 
+        Rent IRentRepository.FindRent(int id)
+        {
+            return RADBContext.Rents.First(r => r.Id == id);
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

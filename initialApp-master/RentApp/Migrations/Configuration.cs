@@ -62,7 +62,7 @@ namespace RentApp.Migrations
 
                   u => u.FullName,
 
-                  new AppUser() { FullName = "Admin Adminovic", Email = "admin@yahoo.com", Activated = true }
+                  new AppUser() { FullName = "Admin Adminovic", Email = "admin@yahoo.com", Activated = true, Rents = new System.Collections.Generic.List<Rent>() }
 
             );
 
@@ -72,13 +72,13 @@ namespace RentApp.Migrations
 
                   u => u.FullName,
 
-                  new AppUser() { FullName = "Menadzer Menadzerovic", Email = "menadzer@yahoo.com", Activated = true }
+                  new AppUser() { FullName = "Menadzer Menadzerovic", Email = "menadzer@yahoo.com", Activated = true, Rents = new System.Collections.Generic.List<Rent>() }
 
             );
 
             SaveChanges(context);
 
-            AppUser app = new AppUser() { FullName = "AppUser AppUserovic", Email = "appu@yahoo.com" };
+            AppUser app = new AppUser() { FullName = "AppUser AppUserovic", Email = "appu@yahoo.com", Rents = new System.Collections.Generic.List<Rent>() };
 
             context.AppUsers.AddOrUpdate(
 

@@ -336,7 +336,7 @@ namespace RentApp.Controllers
                 }
             }
 
-            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, Id = model.Email, AppUser = new AppUser { Birthday = model.Birthday, Email = model.Email, FullName = model.FullName } };
+            var user = new RAIdentityUser() { UserName = model.Email, Email = model.Email, Id = model.Email, AppUser = new AppUser { Birthday = model.Birthday, Email = model.Email, FullName = model.FullName, Rents = new System.Collections.Generic.List<Rent>() } };
 
             user.PasswordHash = RAIdentityUser.HashPassword(model.Password);
 
@@ -399,10 +399,16 @@ namespace RentApp.Controllers
             }
 
             AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+            Rent r = unitOfWork.Rents.FindRent(model.Id);
+
+            if(r == null)
+            {
+                return NotFound();
+            }
 
             try
             {
-                appUser.RentAccountId = model.Id;
+                appUser.Rents.Add(r);
                 unitOfWork.AppUsers.Update(appUser);
                 unitOfWork.Complete();
             }
@@ -575,28 +581,28 @@ namespace RentApp.Controllers
             return appUser.PersonalDocument;
         }
 
-        [Authorize(Roles = "Admin, Manager, AppUser")]
-        [Route("GetRentAccountId")]
-        public int? GetRentAccountId(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                return -1;
-            }
+        //[Authorize(Roles = "Admin, Manager, AppUser")]
+        //[Route("GetRentAccountId")]
+        //public int? GetRentAccountId(string email)
+        //{
+        //    if (string.IsNullOrWhiteSpace(email))
+        //    {
+        //        return -1;
+        //    }
 
-            AppUser appUser = unitOfWork.AppUsers.Get(email);
+        //    AppUser appUser = unitOfWork.AppUsers.Get(email);
 
-            if (appUser == null)
-            {
-                return -1;
-            }
-            else if(appUser.RentAccountId == null)
-            {
-                return 0;
-            }
+        //    if (appUser == null)
+        //    {
+        //        return -1;
+        //    }
+        //    else if(appUser.RentAccountId == null)
+        //    {
+        //        return 0;
+        //    }
 
-            return appUser.RentAccountId;
-        }
+        //    return appUser.RentAccountId;
+        //}
 
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetAllUsers")]

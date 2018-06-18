@@ -38,9 +38,9 @@ export class UserService {
     return this.httpClient.get<string>(`http://localhost:51680/api/Account/GetPersonalDocument?email=${email}`)
   }
 
-  getRentAccountId(email: string): Observable<any>{
-    return this.httpClient.get(`http://localhost:51680/api/Account/GetRentAccountId?email=${email}`)
-  }
+  // getRentAccountId(email: string): Observable<any>{
+  //   return this.httpClient.get(`http://localhost:51680/api/Account/GetRentAccountId?email=${email}`)
+  // }
 
   postMethod(newMember): Observable<any> {
     return this.httpClient.post("http://localhost:51680/api/Account/Register", newMember)

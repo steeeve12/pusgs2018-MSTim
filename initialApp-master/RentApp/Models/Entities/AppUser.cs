@@ -26,9 +26,8 @@ namespace RentApp.Models.Entities
 
         public bool Activated { get; set; }
 
-        [ForeignKey("RentAccount")]
-        public int? RentAccountId { get; set; }
+        public bool Forbidden { get; set; }
 
-        public virtual Rent RentAccount { get; set; }
+        public virtual List<Rent> Rents { get; set; }
     }
 }
