@@ -535,7 +535,6 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetCurrent")]
         public AppUser GetCurrent(string email)

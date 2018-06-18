@@ -61,7 +61,7 @@
         <div class="col-md-6 mx-auto">
 
             <!-- form card login -->
-            <div class="card rounded-0" *ngIf="isInRole('Admin')">
+            <div class="card rounded-0">
                 <div class="card-header">
                     <h3 class="mb-0">Add new type:</h3>
                 </div>
@@ -89,11 +89,34 @@
             <!-- /form card login -->
 
         </div>
-
-
     </div>
 
-    <div class="row" *ngIf="isInRole('Admin')">
+    
+    <div class="row">
+            <div class="col-md-6 mx-auto">
+    
+                <!-- form card login -->
+                <div class="card rounded-0">
+                    <div class="card-header">
+                        <h3 class="mb-0">Ban one of the following managers from creating new services:</h3>
+                    </div>
+                    <div>
+                        <ul>
+                            <li *ngFor="let manager of managers">{{manager.UserId}}</li>
+                            <button *ngIf="!manager.Forbidden" class="col-sm-1 mt-4 mb-3 btn btn-md btn-warning" (click)="toggleBan()" style="margin-top: 15px">Ban</button>
+                            <button *ngIf="manager.Forbidden" class="col-sm-1 mt-4 mb-3 btn btn-md btn-success" (click)="toggleBan()" style="margin-top: 15px">Allow</button>
+                        </ul>
+                    </div>
+                </div>
+    
+                <br>
+                <h2 *ngIf="managerBanned == true">Manager has succesefully been banned!</h2>
+                <!-- /form card login -->
+    
+            </div>
+        </div>
+
+    <div class="row">
         <h3>Pending user accounts:</h3>
         <div class="col-md-10 mx-auto">
             <br/>
@@ -122,7 +145,7 @@
 
     <hr>
 
-    <div class="row" *ngIf="isInRole('Admin')">
+    <div class="row">
         <h3>Pending services:</h3>
         <div class="col-md-10 mx-auto">
             <br/>

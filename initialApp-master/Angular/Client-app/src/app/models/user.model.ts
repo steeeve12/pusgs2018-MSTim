@@ -15,14 +15,16 @@ export class RegisterUser {
     Password: string;
     ConfirmPassword: string;
     PersonalDocument: string;
+    Forbidden: boolean;
 
-    constructor(fullname: string, email: string, birthday: Date, password: string, confirmPassword: string, personalDocument: string) {
+    constructor(fullname: string, email: string, birthday: Date, password: string, confirmPassword: string, personalDocument: string, forbidden: boolean) {
         this.FullName = fullname;
         this.Email = email;       
         this.Birthday = birthday;
         this.Password = password;
         this.ConfirmPassword = confirmPassword;
         this.PersonalDocument = personalDocument;
+        this.Forbidden = forbidden;
     }
 }
 

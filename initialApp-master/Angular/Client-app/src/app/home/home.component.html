@@ -40,7 +40,12 @@
 
   <hr>
 
+  <div *ngIf="!isInRole('AppUser') && logged()">
   <h2 class="text-center mb-4">Add new service</h2>
+    <div *ngIf="this.user.Forbidden">
+        <p>You are not allowed to create new services... Ask administrator why</p>
+    </div>
+  <div *ngIf="!this.user.Forbidden">
   <p>First, select logo for the service:</p>
   <div class="container">    
       <div class="row">
@@ -105,7 +110,8 @@
           </div>
    
       </div>
-   
+    </div>
+    </div>
       <hr>
 
   <div class="container py-5" *ngIf="this.resp != ''">

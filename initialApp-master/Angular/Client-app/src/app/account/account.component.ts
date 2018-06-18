@@ -101,7 +101,7 @@ export class AccountComponent implements OnInit {
         this.user = data;
         this.role = localStorage.getItem("role");
 
-        //if(this.role == "Admin"){
+        if(this.role == "Admin"){
           this.usersService.getAllUsers()
           .subscribe(
             data => {
@@ -126,7 +126,7 @@ export class AccountComponent implements OnInit {
             error => {
               console.log(error);
             })
-        //}
+        }
       },
       error => {
         console.log(error);
@@ -269,6 +269,10 @@ export class AccountComponent implements OnInit {
 
   hide(){
     this.vehTypeAdded = false;
+  }
+
+  toggleBan(){
+
   }
 
   public fileOverBase(e:any):void {

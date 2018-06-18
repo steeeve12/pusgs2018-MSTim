@@ -16,8 +16,10 @@ export class TokenInterceptor implements HttpInterceptor {
     if (jwt) 
     {
         console.log(request)
+
         request = request.clone(
             {
+                //url: request.url.replace('http://localhost:51680', 'https://localhost:44395'),
                 setHeaders: 
                 { 
                     Authorization: `Bearer ${jwt}`

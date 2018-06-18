@@ -3,6 +3,9 @@ import { ServicesService } from '../services/services-service';
 import { Service } from '../models/service.model';
 
 import { FileUploader } from 'ng2-file-upload';
+import { UserService } from 'src/app/services/user-service';
+import { AuthService } from 'src/app/services/auth-service';
+import { RegisterUser } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-home',
@@ -23,12 +26,14 @@ export class HomeComponent implements OnInit {
   private temp: string;
 
   private retService: Service;
+
+  private user: RegisterUser = new RegisterUser("","", null, "", "", "", false);
   
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
 
-  constructor(private servicesService: ServicesService) {
+  constructor(private servicesService: ServicesService, private authService: AuthService) {
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
       if(response == "Please Upload image of type .jpg,.gif,.png,.img,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
@@ -47,6 +52,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.callGet();
+    this.callGetUser();
   }
 
   addAndUpload(){
@@ -70,6 +76,17 @@ export class HomeComponent implements OnInit {
         error => {
           console.log(error);
         })
+  }
+
+  callGetUser(){
+    this.authService.getCurrentUser(localStorage.getItem("currentUserEmail"))
+    .subscribe(
+      data => {
+        this.user = data;
+      },
+      error => {
+        console.log(error);
+      })
   }
 
   extractGrade(){
@@ -118,6 +135,22 @@ export class HomeComponent implements OnInit {
         error => {
           console.log(error);
         })
+  }
+
+  isInRole(r: string){
+    if(localStorage.getItem('role') == r){
+      return true;
+    }
+
+    return false;
+  }
+
+  
+  logged(){
+    if(localStorage.jwt)
+      return true;
+    else
+      return false;
   }
 
   removeService(id: string){
