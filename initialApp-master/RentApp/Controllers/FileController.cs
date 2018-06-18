@@ -66,7 +66,7 @@ namespace RentApp.Controllers
                 var res = string.Format("Please Upload a image.");
                 return Request.CreateResponse(HttpStatusCode.NotFound, res);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var res = string.Format("some Message");
                 dict.Add("error", res);

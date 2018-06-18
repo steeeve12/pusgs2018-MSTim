@@ -49,6 +49,26 @@ export class AppUser{
     PersonalDocument: string;
     Activated: boolean;
     RentAccountId: number;
+    Forbidden: boolean;
+
+    constructor(fullname: string, email: string, birthday: Date, personalDocument: string, activated: boolean, rentAccountId: number, forbidden: boolean) {
+        this.FullName = fullname;
+        this.Email = email;       
+        this.Birthday = birthday;
+        this.PersonalDocument = personalDocument;
+        this.Activated = activated;
+        this.RentAccountId = rentAccountId;
+        this.Forbidden = forbidden;
+    }
+}
+
+export class Manager{
+    FullName: string;
+    Email: string;   
+    Birthday: Date;
+    PersonalDocument: string;
+    Activated: boolean;
+    RentAccountId: number;
 
     constructor(fullname: string, email: string, birthday: Date, personalDocument: string, activated: boolean, rentAccountId: number) {
         this.FullName = fullname;
@@ -86,6 +106,16 @@ export class UserActivated{
 
     constructor(activated: boolean, email: string) {
         this.Activated = activated;
+        this.Email = email;
+    }
+}
+
+export class UserForbidden{
+    Forbidden: boolean;
+    Email: string;
+
+    constructor(forbidden: boolean, email: string) {
+        this.Forbidden = forbidden;
         this.Email = email;
     }
 }

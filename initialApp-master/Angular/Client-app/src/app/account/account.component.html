@@ -53,14 +53,15 @@
 </div>
 </div>
 
+<hr>
 
 <div class="container py-5" *ngIf="isInRole('Admin')">
-    <h2 class="text-center mb-4">Admin Account</h2>
 
     <div class="row">
         <div class="col-md-6 mx-auto">
 
             <!-- form card login -->
+            <div class="row">
             <div class="card rounded-0">
                 <div class="card-header">
                     <h3 class="mb-0">Add new type:</h3>
@@ -83,6 +84,19 @@
                 </div>
                 <!--/card-block-->
             </div>
+            <div class="card rounded-0">
+                    <div class="card-header">
+                        <h3 class="mb-0">Remove type:</h3>
+                    </div>
+                    <div>
+                        <ul>
+                            <div *ngFor="let vehicleType of vehicleTypes">
+                                <li>{{vehicleType.Name}} &nbsp; <button class="btn btn-sm btn-danger" (click)="onRemoveVehicleType(vehicleType.Id)">Remove</button></li>                                
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
             <br>
             <h2 *ngIf="vehTypeAdded == true">Vehicle type has succesefully been added!</h2>
@@ -91,30 +105,32 @@
         </div>
     </div>
 
+    <hr>
     
     <div class="row">
             <div class="col-md-6 mx-auto">
     
-                <!-- form card login -->
                 <div class="card rounded-0">
                     <div class="card-header">
                         <h3 class="mb-0">Ban one of the following managers from creating new services:</h3>
                     </div>
                     <div>
                         <ul>
-                            <li *ngFor="let manager of managers">{{manager.UserId}}</li>
-                            <button *ngIf="!manager.Forbidden" class="col-sm-1 mt-4 mb-3 btn btn-md btn-warning" (click)="toggleBan()" style="margin-top: 15px">Ban</button>
-                            <button *ngIf="manager.Forbidden" class="col-sm-1 mt-4 mb-3 btn btn-md btn-success" (click)="toggleBan()" style="margin-top: 15px">Allow</button>
+                            <div *ngFor="let manager of managers">
+                                <li>{{manager.FullName}} &nbsp;
+                                    <button *ngIf="!manager.Forbidden" class="btn btn-sm btn-warning" (click)="toggleBan(manager)">Ban</button>
+                                    <button *ngIf="manager.Forbidden" class="btn btn-sm btn-success" (click)="toggleBan(manager)">Allow</button>
+                                </li>      
+                            </div>                   
                         </ul>
                     </div>
                 </div>
     
                 <br>
                 <h2 *ngIf="managerBanned == true">Manager has succesefully been banned!</h2>
-                <!-- /form card login -->
     
             </div>
-        </div>
+    </div>
 
     <div class="row">
         <h3>Pending user accounts:</h3>
@@ -134,8 +150,8 @@
                         <img *ngIf="userAcc.PersonalDocument" src="http://localhost:51680{{userAcc.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
                     </div> 
                     <div class="col-md-6 col-sm-6">       
-                        <button class="btn btn-lg btn-success" (click)="acceptUserAccount()">Accept</button>
-                        <button class="btn btn-lg btn-danger" (click)="denyUserAccount()">Deny</button>    
+                        <button class="btn btn-lg btn-success" (click)="acceptUserAccount(userAcc.Email)">Accept</button>
+                        <button class="btn btn-lg btn-danger" (click)="denyUserAccount(userAcc.Email)">Deny</button>    
                     </div>         
                 </div>
             </div>
@@ -175,7 +191,7 @@
 </div> 
 
 
-  <div *ngIf="!this.user.PersonalDocument">
+  <div *ngIf="!this.user.PersonalDocument && !isInRole('Admin')">
     <hr>
     <h2 class="text-center mb-4">Add document</h2>
       <div class="container">    

@@ -3,13 +3,12 @@
 
   <h1 class="my-4">Services</h1>
 
-
-
   <div class="app flex-row align-items-center">   
       <div class="container"> 
           <div class="card-deck row">
-              <div class="card col-md-4" *ngFor="let service of services">
-                  <div *ngIf="service.Approved">
+              <div *ngFor="let service of services">
+              <div class="card col-md-10" *ngIf="service.Approved">
+                  <div>
                     <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{service.Logo}}" alt=""></a>
                     <div class="card-body">
                         <h4 class="card-title">
@@ -26,13 +25,11 @@
                         [required]="false"
                         [float]="true">
                         </rating>
-                        <div class="row"> 
-                            <div class="col-md-9">
-                                <button (click)="removeService(service.Id)" class="btn btn-danger btn-s" >Remove</button>
-                            </div>
-                        </div>
+                        &nbsp; &nbsp;
+                        <button (click)="removeService(service.Id)" class="btn btn-danger btn-sm">Remove</button>
                     </div>
                 </div>
+            </div>
               </div>
           </div>
       </div>
@@ -43,7 +40,7 @@
   <div *ngIf="!isInRole('AppUser') && logged()">
   <h2 class="text-center mb-4">Add new service</h2>
     <div *ngIf="this.user.Forbidden">
-        <p>You are not allowed to create new services... Ask administrator why</p>
+        <h4 class="text-center mb-4">You are not allowed to create new services! Ask administrator why...</h4>
     </div>
   <div *ngIf="!this.user.Forbidden">
   <p>First, select logo for the service:</p>

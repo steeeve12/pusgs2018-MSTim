@@ -96,7 +96,7 @@ namespace RentApp.Migrations
             if (!context.Users.Any(u => u.UserName == "admin"))
             {
                 var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "Admin Adminovic");
-                var user = new RAIdentityUser() { Id = "admin", UserName = "admin@yahoo.com", Email = "admin@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("admin"), AppUserId = _appUser.Id };
+                var user = new RAIdentityUser() { Id = "admin@yahoo.com", UserName = "admin@yahoo.com", Email = "admin@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("admin"), AppUserId = _appUser.Id };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Admin");
             }
@@ -104,7 +104,7 @@ namespace RentApp.Migrations
             if (!context.Users.Any(u => u.UserName == "menadzer"))
             {
                 var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "Menadzer Menadzerovic");
-                var user = new RAIdentityUser() { Id = "menadzer", UserName = "menadzer@yahoo.com", Email = "menadzer@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("menadzer"), AppUserId = _appUser.Id };
+                var user = new RAIdentityUser() { Id = "menadzer@yahoo.com", UserName = "menadzer@yahoo.com", Email = "menadzer@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("menadzer"), AppUserId = _appUser.Id };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Manager");
             }
@@ -114,7 +114,7 @@ namespace RentApp.Migrations
             {
 
                 var _appUser = context.AppUsers.FirstOrDefault(a => a.FullName == "AppUser AppUserovic");
-                var user = new RAIdentityUser() { Id = "appu", UserName = "appu@yahoo.com", Email = "appu@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("appu"), AppUserId = _appUser.Id };
+                var user = new RAIdentityUser() { Id = "appu@yahoo.com", UserName = "appu@yahoo.com", Email = "appu@yahoo.com", PasswordHash = RAIdentityUser.HashPassword("appu"), AppUserId = _appUser.Id };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
 

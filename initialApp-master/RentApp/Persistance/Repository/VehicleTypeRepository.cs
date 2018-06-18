@@ -21,15 +21,16 @@ namespace RentApp.Persistance.Repository
 
         public bool Exists(string name)
         {
-            VehicleType v = RADBContext.VehicleTypes.First(vt => vt.Name == name);
-            if (v == null)
+            try
+            {
+                VehicleType v = RADBContext.VehicleTypes.First(vt => vt.Name == name);
+            }
+            catch
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         }
 
         protected RADBContext RADBContext { get { return context as RADBContext; } }

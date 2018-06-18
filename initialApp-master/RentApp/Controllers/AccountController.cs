@@ -535,6 +535,40 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        //[Authorize(Roles = "Admin")]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        [Route("PutUserForbidden")]
+        public IHttpActionResult PutUserForbidden(PutUserForbiddenBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+            try
+            {
+                appUser.Forbidden = model.Forbidden;
+                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.Complete();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetCurrent")]
         public AppUser GetCurrent(string email)
@@ -578,6 +612,23 @@ namespace RentApp.Controllers
 
 
             return appUser.PersonalDocument;
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("GetAllManagers")]
+        public IEnumerable<AppUser> GetAllManagers()
+        {
+            List<AppUser> managers = new List<AppUser>();
+
+            foreach (var user in unitOfWork.AppUsers.GetAll())
+            {
+                if(UserManager.IsInRole(user.Email, "Manager"))
+                {
+                    managers.Add(user);
+                }
+            }
+
+            return managers;
         }
 
         //[Authorize(Roles = "Admin, Manager, AppUser")]

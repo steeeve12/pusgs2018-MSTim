@@ -341,7 +341,16 @@ availability(){
   }
 }
 
-  logged(){
-    return localStorage.jwt;
+isInRole(r: string){
+  if(localStorage.getItem('role') == r){
+    return true;
   }
+
+  return false;
+}
+
+logged(){
+  return localStorage.jwt;
+}
+
 }

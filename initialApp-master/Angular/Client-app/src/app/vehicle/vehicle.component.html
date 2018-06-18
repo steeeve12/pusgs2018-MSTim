@@ -1,7 +1,7 @@
       <div class="row mb-4" align="center">
         <h1 class="col-md-5 mt-4 mb-3">{{vehicle.Manufactor}} {{vehicle.Model}}</h1>
-        <button *ngIf="!this.available" class="col-sm-1 mt-4 mb-3 btn btn-md btn-warning" (click)="availability()" style="margin-top: 15px">Unavailable</button>
-        <button *ngIf="this.available" class="col-sm-1 mt-4 mb-3 btn btn-md btn-success" (click)="availability()" style="margin-top: 15px">Available</button>
+        <button *ngIf="!this.available && !isInRole('AppUser')" class="col-sm-1 mt-4 mb-3 btn btn-md btn-warning" (click)="availability()" style="margin-top: 15px">Unavailable</button>
+        <button *ngIf="this.available && !isInRole('AppUser')" class="col-sm-1 mt-4 mb-3 btn btn-md btn-success" (click)="availability()" style="margin-top: 15px">Available</button>
       </div>
       <hr>
             <div class="row">

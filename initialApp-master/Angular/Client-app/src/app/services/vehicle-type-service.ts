@@ -34,4 +34,8 @@ export class VehicleTypesService {
     return this.httpClient.post("http://localhost:51680/api/VehicleTypes", newMember)
   }
 
+  deleteVehicleType(id: number): Observable<any> {
+    return this.httpClient.delete<any>(`http://localhost:51680/api/VehicleTypes?id=${id}`);
+  }
+
 }

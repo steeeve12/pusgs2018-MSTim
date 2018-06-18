@@ -102,6 +102,16 @@ namespace RentApp.Models
         public bool Activated { get; set; }
     }
 
+    public class PutUserForbiddenBindingModel
+    {
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+
+        [Required]
+        public bool Forbidden { get; set; }
+    }
+
     public class RemoveLoginBindingModel
     {
         [Required]

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user-service';
 import { AuthService } from '../services/auth-service';
-import { RegisterUser, AppUser, UserActivated } from '../models/user.model';
+import { RegisterUser, AppUser, UserActivated, UserForbidden } from '../models/user.model';
 import { ChangePassword } from '../models/user.model';
 
 import { FileUploader } from 'ng2-file-upload';
@@ -35,12 +35,14 @@ export class AccountComponent implements OnInit {
 
   private users: AppUser[];
   private services: Service[];
+  private managers: AppUser[];
 
   private vehicleTypes: VehicleType[];
   private vehTypeAdded: boolean = false;
 
   private userActivated: UserActivated = new UserActivated(false, "");
   private documentDenied: UserDocument = new UserDocument("","");
+  private userForbidden: UserForbidden = new UserForbidden(false, "");
 
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public hasBaseDropZoneOver:boolean = false;
@@ -126,6 +128,14 @@ export class AccountComponent implements OnInit {
             error => {
               console.log(error);
             })
+          this.usersService.getAllManagers()
+          .subscribe(
+            data => {
+              this.managers = data;
+            },
+            error => {
+              console.log(error);
+            })
         }
       },
       error => {
@@ -162,9 +172,9 @@ export class AccountComponent implements OnInit {
       })
   }
 
-  acceptUserAccount(){
+  acceptUserAccount(email: string){
     this.userActivated.Activated = true;
-    this.userActivated.Email = localStorage.getItem("currentUserEmail");
+    this.userActivated.Email = email;
 
     this.usersService.putUserActivated(this.userActivated)
     .subscribe(
@@ -184,9 +194,9 @@ export class AccountComponent implements OnInit {
       })
   }
 
-  denyUserAccount(){
+  denyUserAccount(email: string){
     this.documentDenied.Email = "";
-    this.documentDenied.Email = localStorage.getItem("currentUserEmail");
+    this.documentDenied.Email = email;
 
     this.usersService.putUserDenied(this.documentDenied)
     .subscribe(
@@ -267,12 +277,56 @@ export class AccountComponent implements OnInit {
       })
   }
 
+  onRemoveVehicleType(id: number){
+    this.vehicleTypesService.deleteVehicleType(id)
+    .subscribe(
+      data => {
+        let ok = data;
+
+        this.vehicleTypesService.getVehicleTypes()
+        .subscribe(
+          data => {
+            this.vehicleTypes = data;
+          },
+          error => {
+            console.log(error);
+          })
+      },
+      error => {
+        console.log(error); 
+      })
+  }
+
   hide(){
     this.vehTypeAdded = false;
   }
 
-  toggleBan(){
+  toggleBan(manager: AppUser){
+    if(!manager.Forbidden){
+      this.userForbidden.Forbidden = true;
+    }
+    else{
+      this.userForbidden.Forbidden = false;
+    }
+    
+    this.userForbidden.Email = manager.Email;
 
+    this.usersService.putUserForbidden(this.userForbidden)
+    .subscribe(
+      data => {
+        let ok = data;
+        this.usersService.getAllManagers()
+          .subscribe(
+            data => {
+              this.managers = data;
+            },
+            error => {
+              console.log(error);
+            })
+      },
+      error => {
+        console.log(error); 
+      })
   }
 
   public fileOverBase(e:any):void {

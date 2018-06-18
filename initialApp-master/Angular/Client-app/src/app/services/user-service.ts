@@ -34,6 +34,10 @@ export class UserService {
     return this.httpClient.get<AppUser[]>(`http://localhost:51680/api/Account/GetAllUsers`)
   }
 
+  getAllManagers(): Observable<AppUser[]>{
+    return this.httpClient.get<AppUser[]>(`http://localhost:51680/api/Account/GetAllManagers`)
+  }
+
   getPersonalDocument(email: string): Observable<string>{
     return this.httpClient.get<string>(`http://localhost:51680/api/Account/GetPersonalDocument?email=${email}`)
   }
@@ -64,6 +68,10 @@ export class UserService {
 
   putUserDenied(newMember): Observable<any> {
     return this.httpClient.put("http://localhost:51680/api/Account/PutUserDenied", newMember)
+  }
+
+  putUserForbidden(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Account/PutUserForbidden", newMember)
   }
 
 }
