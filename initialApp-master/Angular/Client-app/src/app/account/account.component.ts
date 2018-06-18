@@ -278,4 +278,12 @@ export class AccountComponent implements OnInit {
   public fileOverAnother(e:any):void {
     this.hasAnotherDropZoneOver = e;
   }
+
+  isInRole(r: string){
+    if(localStorage.getItem('role') == r){
+      return true;
+    }
+
+    return false;
+  }
 }
