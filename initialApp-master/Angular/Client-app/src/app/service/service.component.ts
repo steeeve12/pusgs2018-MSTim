@@ -132,7 +132,7 @@ export class ServiceComponent implements OnInit {
 
   ngOnInit() {
     this.callGetAllVehicles();
-    this.callGetVehicles();
+    //this.callGetVehicles();
     this.callGetVehicleTypes();
     this.callGetServices();
     this.callGetImpressions();
@@ -173,36 +173,22 @@ export class ServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.allVehicles = data;
-          //this.pages = Math.ceil((this.vehicles.length)/9);
-          //this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
-          //if(this.numbers.length == 0){
-          //  this.numbers.push(1);
-          //}
         },
         error => {
           console.log(error);
         })
   }
 
-  callGetVehicles(){
-    this.vehiclesService.getVehicles(this.Id, this.Ind)
-      .subscribe(
-        data => {
-          this.vehicles = data;
-          //this.pages = Math.ceil((this.vehicles.length)/9);
-          //this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
-          //if(this.numbers.length == 0){
-          //  this.numbers.push(1);
-          //}
-
-          this.vehicles.forEach(obj => {
-            this.listImages.push(obj.Images.split(";")[0]);
-          })
-        },
-        error => {
-          console.log(error);
-        })
-  }
+  // callGetVehicles(){
+  //   this.vehiclesService.getVehicles(this.Id, this.Ind)
+  //     .subscribe(
+  //       data => {
+  //         this.vehicles = data;
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       })
+  // }
 
   callGetVehicleTypes(){
     this.vehicleTypesService.getVehicleTypes()
@@ -234,9 +220,6 @@ export class ServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.service = data;
-          // ovo radim u onSubmit(imp: Impression) 
-      //    this.extractGrade();
-      //    this.grade /= this.cnt;
         },
         error => {
           console.log(error);
@@ -261,28 +244,7 @@ export class ServiceComponent implements OnInit {
   onChange($event){
     this.p1 = $event;
     this.Ind = this.p1.toString();
-    this.listImages = [];
-    this.callGetVehicles();
   }
-
-  // page(page: string){
-  //   if(page == "prev"){
-  //     if(this.pageNum > 1){
-  //       this.Ind = (this.pageNum - 1).toString();
-  //       this.callGetVehicles();
-  //     }
-  //   }
-  //   else if(page == "next"){
-  //     if(this.pageNum < this.pages){
-  //       this.Ind = (this.pageNum + 1).toString();
-  //       this.callGetVehicles();
-  //     }
-  //   }
-  //   else{
-  //     this.Ind = (this.pageNum).toString();
-  //     this.callGetVehicles();
-  //   }
-  // }
 
   extractGrade(){
     this.cnt = 0;
@@ -367,7 +329,7 @@ export class ServiceComponent implements OnInit {
         data => {
           this.retVehicle = data;
           this.listImages = [];
-          this.callGetVehicles();
+          this.callGetAllVehicles();
           this.added = true;
           this.resp = [];
           this.castAndClear();
@@ -418,7 +380,7 @@ export class ServiceComponent implements OnInit {
     this.vehiclesService.deleteVehicle(id)
     .subscribe(
       data => {
-        this.callGetVehicles();
+        this.callGetAllVehicles();
       },
       error => {
         console.log(error);
