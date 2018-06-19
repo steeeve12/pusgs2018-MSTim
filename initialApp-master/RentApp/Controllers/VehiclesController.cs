@@ -68,7 +68,13 @@ namespace RentApp.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }         
+            }
+
+            if (vehicle.Description == "__empty__")
+                vehicle.Description = "";
+
+            VehicleType vt = unitOfWork.VehicleTypes.Get(vehicle.VehicleTypeId);
+            vehicle.VehicleType = vt;
 
             try
             {

@@ -62,7 +62,12 @@ export class ServiceComponent implements OnInit {
   private added2: boolean = false;
 
   private seeAddBranch: boolean = false;
+  private seeModifyBranch: boolean = false;
   private seeAddVehicle: boolean = false;
+  private seeModifyVehicle: boolean = false;
+
+  private mBranch: Branch;
+  private mVehicle: Vehicle;
 
   private firstRentEnded: boolean = false;
 
@@ -150,6 +155,11 @@ export class ServiceComponent implements OnInit {
     this.tempMarker.Lgt = $event.coords.lng;
     this.lat = $event.coords.lat;
     this.lgt = $event.coords.lng;
+  }
+
+  placeMarker2($event){
+    this.mBranch.Latitude = $event.coords.lat;
+    this.mBranch.Longitude = $event.coords.lng;
   }
 
   addAndUpload(){
@@ -280,11 +290,88 @@ export class ServiceComponent implements OnInit {
   toggleAddBranch(){
     this.added2 = false;
     this.seeAddBranch = true;
+    this.seeModifyBranch = false;
   }
 
   toggleAddVehicle(){
     this.added = false;
     this.seeAddVehicle = true;
+    this.seeModifyVehicle = false;
+  }
+
+  toggleModifyBranch(branch: Branch){
+    this.seeModifyBranch = true;
+    this.seeAddBranch = false;
+    this.mBranch = branch;
+  }
+
+  toggleModifyVehicle(vehicle: Vehicle){
+    this.seeModifyVehicle = true;
+    this.seeAddVehicle = false;
+    this.mVehicle = vehicle;
+  }
+
+  modifyBranch(){
+    if(this.mBranch.Address == "" || this.mBranch.Latitude < 0 || this.mBranch.Latitude == undefined || this.mBranch.Longitude < 0 || this.mBranch.Longitude == undefined){
+      alert("You must fill in the address and select a place on the map!")
+      return;
+    }
+
+    if(this.resp2){
+      this.mBranch.Picture = this.resp2;
+    }
+
+    this.branchesService.putMethod(this.mBranch)
+    .subscribe(
+      data => {
+        let br = data;
+        this.added2 = true;
+        this.seeModifyBranch = false;
+        this.resp2 = "";
+        this.castAndClear2();
+        this.getServiceBranches();
+      },
+      error => {
+        console.log(error);
+      })
+  }
+
+  onSubmitModifyVehicle(){
+    this.mVehicle.Manufactor = this.mVehicle.Manufactor.trim();
+    this.mVehicle.Model = this.mVehicle.Model.trim();
+
+    this.resp.forEach(obj => {
+      this.mVehicle.Images += obj;
+      this.mVehicle.Images += ";";
+    })
+
+    if(this.mVehicle.Manufactor == "" || this.mVehicle.Model == "" || (!this.mVehicle.Year) || this.mVehicle.PricePerHour == undefined || this.mVehicle.Type == ""){
+      alert("You must fill all the fields provided!");
+      return;
+    }
+
+    if(this.mVehicle.Description == ""){
+      this.mVehicle.Description = "__empty__";
+    }
+
+    if(this.mVehicle.Year < 1930 || this.mVehicle.Year > 2018){
+      alert("Year must be between 1930. and 2018.");
+      return;
+    }
+      this.vehiclesService.putVehicle(this.mVehicle)
+      .subscribe(
+        data => {
+          let ok = data;
+          this.listImages = [];
+          this.callGetAllVehicles();
+          this.added = true;
+          this.seeModifyVehicle = false;
+          this.resp = [];
+          this.castAndClear();
+        },
+        error => {
+          console.log(error);
+        })
   }
 
   onSubmit(imp: Impression) {
@@ -345,8 +432,8 @@ export class ServiceComponent implements OnInit {
 
     fvehicle.Description =  this.Id.toString() + "#" + fvehicle.Description;
 
-    if(fvehicle.Year < 1970 || fvehicle.Year > 2018){
-      alert("Year must be between 1970. and 2018.");
+    if(fvehicle.Year < 1930 || fvehicle.Year > 2018){
+      alert("Year must be between 1930. and 2018.");
       return;
     }
       this.vehiclesService.postVehicle(fvehicle)

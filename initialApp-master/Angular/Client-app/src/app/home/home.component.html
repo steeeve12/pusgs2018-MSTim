@@ -107,7 +107,7 @@
                 <h4 class="text-center mb-4">You are not allowed to modify services! Ask administrator why...</h4>
             </div>
           <div *ngIf="!this.user.Forbidden">
-          <p>First, select logo for the service:</p>
+          <p>Select logo for the service:</p>
           <div class="container">    
               <div class="row">
                   <div class="col-md-3">
@@ -186,7 +186,7 @@
                                 <div class="form-group has-error">
                                     <input class="form-control input-lg" placeholder="E-mail Address" name="Email" type="text" [(ngModel)]="mService.Email" required>
                                 </div>                                                                                       
-                                <input class="btn btn-lg btn-primary btn-block" value="Add" type="submit">
+                                <input class="btn btn-lg btn-primary btn-block" value="Modify" type="submit">
                             </form>
                             <br>
                             <textarea name="comment" [(ngModel)]="mService.Description" name="Description" placeholder="Description"></textarea>

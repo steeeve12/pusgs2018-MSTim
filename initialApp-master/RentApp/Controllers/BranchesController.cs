@@ -62,19 +62,13 @@ namespace RentApp.Controllers
         // PUT: api/Branches/5
         [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBranch(int id, Branch branch)
+        public IHttpActionResult PutBranch(Branch branch)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != branch.Id)
-            {
-                return BadRequest();
-            }
             
-
             try
             {
                 unitOfWork.Branches.Update(branch);
@@ -82,7 +76,7 @@ namespace RentApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BranchExists(id))
+                if (!BranchExists(branch.Id))
                 {
                     return NotFound();
                 }

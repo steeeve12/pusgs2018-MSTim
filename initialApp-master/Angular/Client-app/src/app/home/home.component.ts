@@ -200,6 +200,10 @@ export class HomeComponent implements OnInit {
       return;
     }
 
+    if(this.resp){
+      this.mService.Logo = this.resp;
+    }
+
       this.servicesService.putService(this.mService)
       .subscribe(
         data => {

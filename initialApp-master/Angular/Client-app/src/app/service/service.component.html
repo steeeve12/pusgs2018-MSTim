@@ -129,6 +129,117 @@
                     </div>
                </div>
             </div>
+
+
+            <div *ngIf="seeModifyBranch == true">
+                    <hr>
+                    <h2 class="text-center mb-4">Modify branch</h2>
+                    <p>Select picture for branch:</p>
+                    <div class="container">    
+                        <div class="row">
+                            <div class="col-md-3">                
+                                <h3>Select file</h3>        
+                                <input type="file" ng2FileSelect [uploader]="uploader2"/>
+                            </div>
+                     
+                            <div class="col-md-9" style="margin-bottom: 40px">
+                     
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ uploader2?.queue?.length }}</p>
+                     
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of uploader2.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="uploader2.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="uploader2.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                     
+                                <div>
+                                       <div>
+                                           Queue progress:
+                                           <div class="progress" style="">
+                                               <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader2.progress + '%' }"></div>
+                                           </div>
+                                       </div>
+                                       <button type="button" class="btn btn-success btn-s"
+                                               (click)="addAndUpload2()" [disabled]="!uploader2.getNotUploadedItems().length">
+                                           <span class="glyphicon glyphicon-upload"></span> Upload
+                                       </button>
+                                       <button type="button" class="btn btn-warning btn-s"
+                                               (click)="uploader2.cancelAll()" [disabled]="!uploader2.isUploading">
+                                           <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                       </button>
+                                       <button type="button" class="btn btn-danger btn-s"
+                                               (click)="castAndClear2()" [disabled]="!uploader2.queue.length">
+                                           <span class="glyphicon glyphicon-trash"></span> Remove
+                                       </button>
+                                   </div>
+                                   <br>                      
+                            </div>
+                     
+                        </div>
+                     
+                        <hr>
+                        <div>
+                        <p>Then, fill in the rest of information:</p>
+                        <div class="container py-5">
+                           <div class="row mb-4">    
+                                <p>Type the address of the branch: </p>              
+                               <div class="col-md-6 mx-auto" style="margin-top: -30px;">
+                                    <div class="card card-body">
+                                        <div class="form-group has-success">
+                                            <input class="form-control input-lg" placeholder="Address" name="Address" type="text" [(ngModel)]="mBranch.Address" required>
+                                        </div>                                   
+                                    </div>
+                               </div>
+                           </div>             
+                       </div>
+            
+                       <div class="row mb-4">
+                            <p>Select the place on map where is your branch located:</p>
+                            <div class="col-md-1">
+                              <div style="width:50%; margin: 0 auto">
+                                <p>
+                                  <!-- Kreiramo mapu -->
+                                  <agm-map [latitude]="mapInfo.centerLat" [longitude]="mapInfo.centerLong" [zoom]="13" (mapClick)="placeMarker2($event)">
+                                   
+                                    <!-- Postavljamo markere -->
+                                    <agm-marker *ngFor="let data of markers;" [latitude]="data.Lat" [longitude]="data.Lgt"></agm-marker>
+                                    <agm-marker [latitude]="this.mBranch.Latitude" [longitude]="this.mBranch.Longitude"></agm-marker>
+                                  </agm-map>
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="container py-5">
+                            <div class="row">
+                                <div class="col-md-6 mx-auto">
+                                    <button class="btn btn-lg btn-primary btn-block" (click)="modifyBranch()">Modify</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        </div>
+                   </div>
+                </div>
         
             <!-- <h2 *ngIf="added2 == true">Branch has succesefully been added!</h2> -->
             <div class="app flex-row align-items-center">   
@@ -139,6 +250,8 @@
                           <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{branch.Picture}}" alt=""></a>                                  
                             <div class="card-body">
                               <p class="card-text">{{branch.Address}}<p>
+                              <button *ngIf="!isInRole('AppUser') && logged()" (click)="toggleModifyBranch(branch)" class="btn btn-warning btn-sm">Modify</button>
+                               &nbsp;
                               <button *ngIf="!isInRole('AppUser') && logged()" (click)="removeBranch(branch.Id)" class="btn btn-danger btn-sm" >Remove</button>
                             </div>
                         </div>
@@ -260,6 +373,108 @@
                    </div>
                </div>
               </div>
+
+
+              <div *ngIf="seeModifyVehicle == true">
+                    <hr>
+                    <h2 class="text-center mb-4">Modify vehicle</h2>
+                    <p>Select images of vehicle:</p>
+                    <div class="container">    
+                        <div class="row">
+                            <div class="col-md-3">
+                     
+                                <h3>Select file</h3>        
+                                <input type="file" ng2FileSelect [uploader]="uploader" multiple/>
+                            </div>
+                     
+                            <div class="col-md-9" style="margin-bottom: 40px">
+                     
+                                <h3>Upload queue</h3>
+                                <p>Queue length: {{ uploader?.queue?.length }}</p>
+                     
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="50%">Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of uploader.queue">
+                                        <td><strong>{{ item?.file?.name }}</strong></td>
+                                        <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                                        <td *ngIf="uploader.isHTML5">
+                                            <div class="progress" style="margin-bottom: 0;">
+                                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                            <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                     
+                                <div>
+                                       <div>
+                                           Queue progress:
+                                           <div class="progress" style="">
+                                               <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                                           </div>
+                                       </div>
+                                       <button type="button" class="btn btn-success btn-s"
+                                               (click)="addAndUpload()" [disabled]="!uploader.getNotUploadedItems().length">
+                                           <span class="glyphicon glyphicon-upload"></span> Upload all
+                                       </button>
+                                       <button type="button" class="btn btn-warning btn-s"
+                                               (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                                           <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                                       </button>
+                                       <button type="button" class="btn btn-danger btn-s"
+                                               (click)="castAndClear()" [disabled]="!uploader.queue.length">
+                                           <span class="glyphicon glyphicon-trash"></span> Remove all
+                                       </button>
+                                   </div>
+                                   <br>
+                            </div>
+                     
+                        </div>
+                     
+                        <hr>
+               
+                        <div class="container py-5">
+                           <div class="row">
+                              <p>Then, fill in the rest of information:</p>
+                               <div class="col-md-6 mx-auto">
+                                       <div class="card card-body">
+                                           <form #f="ngForm" (ngSubmit)="onSubmitModifyVehicle()">
+                                               <div class="form-group has-success">
+                                                   <input class="form-control input-lg" placeholder="Model" name="Model" type="text" [(ngModel)]="mVehicle.Model" required>
+                                               </div>
+                                               <div class="form-group has-error">
+                                                   <input class="form-control input-lg" placeholder="Manufactor" name="Manufactor" type="text" [(ngModel)]="mVehicle.Manufactor" required>
+                                               </div>                       
+                                               <div class="form-group has-success">
+                                                   <input class="form-control input-lg" placeholder="Year" name="Year" type="number" [(ngModel)]="mVehicle.Year" required>
+                                               </div>
+                                               <div class="form-group has-success">
+                                                   <input class="form-control input-lg" placeholder="PricePerHour" name="PricePerHour" type="number" [(ngModel)]="mVehicle.PricePerHour" required>
+                                               </div>
+                                               <div class="form-group has-success" *ngFor="let vehicleType of vehicleTypes">
+                                                   <input type="radio" name="Type" value="{{vehicleType.Id}}" [(ngModel)]="mVehicle.VehicleTypeId"> {{vehicleType.Name}} <br>
+                                               </div>
+                                               <input class="btn btn-lg btn-primary btn-block" value="Modify" type="submit">
+                                           </form>
+                                           <br>
+                                           <textarea name="comment" [(ngModel)]="mVehicle.Description" name="Description" placeholder="Description"></textarea>
+                                       </div>
+                               </div>
+                           </div>    
+                           <hr>         
+                       </div>
+                   </div>
+                  </div>
           
               <!-- <h2 *ngIf="added == true">Vehicle has succesefully been added!</h2> -->
         
@@ -299,6 +514,8 @@
                           <p class="card-text">{{vehicle.PricePerHour}} &euro;</p>
                         </h5>
                         <p class="card-text">{{vehicle.Description}}</p>
+                        <button *ngIf="!isInRole('AppUser') && logged()" (click)="toggleModifyVehicle(vehicle)" class="btn btn-warning btn-sm">Modify</button>
+                        &nbsp;
                         <button *ngIf="!isInRole('AppUser') && logged()" (click)="removeVehicle(vehicle.Id)" class="btn btn-danger btn-sm" >Remove</button>
                       </div>
                     </div>
