@@ -38,6 +38,10 @@ namespace RentApp.Controllers
 
         public bool GetIsFirstRentEnded(string email)
         {
+            if(email == "null")
+            {
+                return false;
+            }
             return unitOfWork.Rents.IsFirstRentEnded(email);
         }
 

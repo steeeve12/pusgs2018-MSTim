@@ -21,11 +21,17 @@ export class HomeComponent implements OnInit {
   private resp: string = "";
 
   private added: boolean = false;
+  private added2: boolean = false;
+  private seeAddService: boolean = false;
+  private seeModifyService: boolean = false;
 
   private description: string = "";
   private temp: string;
 
   private retService: Service;
+  private mService: Service;
+
+  private p1 = 1;
 
   private user: RegisterUser = new RegisterUser("","", null, "", "", "", false);
   
@@ -57,6 +63,7 @@ export class HomeComponent implements OnInit {
 
   addAndUpload(){
     this.added = false;
+    this.added2 = false;
     this.uploader.uploadAll();
   }
 
@@ -130,11 +137,22 @@ export class HomeComponent implements OnInit {
           this.retService = data;
           this.callGet();
           this.added = true;
+          this.seeAddService = false;
           this.castAndClear();
         },
         error => {
           console.log(error);
         })
+  }
+
+  toggleAddService(){
+    this.added = false;
+    this.seeAddService = true;
+    this.seeModifyService = false;
+  }
+
+  onChange($event){
+    this.p1 = $event;
   }
 
   isInRole(r: string){
@@ -165,14 +183,41 @@ export class HomeComponent implements OnInit {
       })
   }
 
-  //   this.servicesService.postMethod(newMember)
-  //   .subscribe(
-  //     data => {
-  //       this.service = data;
-  //       alert("POST: id: " + this.service.Id);
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     })
-  // }
+  toggleModifyService(service: Service){
+    this.seeModifyService = true;
+    this.seeAddService = false;
+    this.mService = service;
+  }
+
+  onSubmitModify(){
+    this.mService.Email = this.mService.Email.trim();
+    this.mService.Name = this.mService.Name.trim();
+    this.added2 = false;
+    this.mService.Approved = false;
+
+    if(this.mService.Email == "" || this.mService.Name == "" || this.mService.Description == ""){
+      alert("You must fill all the fields provided!");
+      return;
+    }
+
+      this.servicesService.putService(this.mService)
+      .subscribe(
+        data => {
+          let ok = data;
+          this.servicesService.getAllServices()
+            .subscribe(
+              data => {
+                this.services = data;
+                this.added2 = true;
+                this.seeModifyService = false;
+                this.castAndClear();
+              },
+              error => {
+                console.log(error);
+              })
+        },
+        error => {
+          console.log(error); 
+        })
+  }
 }

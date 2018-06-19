@@ -61,6 +61,9 @@ export class ServiceComponent implements OnInit {
   private added: boolean = false;
   private added2: boolean = false;
 
+  private seeAddBranch: boolean = false;
+  private seeAddVehicle: boolean = false;
+
   private firstRentEnded: boolean = false;
 
   mapInfo: MapInfo;
@@ -86,6 +89,7 @@ export class ServiceComponent implements OnInit {
   private vehiclesSearch: string;
 
   private p1 = 1;
+  private p2 = 1;
 
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public uploader2:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
@@ -149,7 +153,6 @@ export class ServiceComponent implements OnInit {
   }
 
   addAndUpload(){
-    this.added = false;
     this.uploader.uploadAll();
   }
 
@@ -159,7 +162,6 @@ export class ServiceComponent implements OnInit {
   }  
 
   addAndUpload2(){
-    this.added = false;
     this.uploader2.uploadAll();
   }
 
@@ -235,6 +237,10 @@ export class ServiceComponent implements OnInit {
     this.Ind = this.p1.toString();
   }
 
+  onChange2($event){
+    this.p2 = $event;
+  }
+
   search(){
     if(this.vehiclesSearch == "" || this.vehiclesSearch == undefined){
       return;
@@ -263,7 +269,23 @@ export class ServiceComponent implements OnInit {
     return localStorage.jwt;
   }
 
+  isInRole(r: string){
+    if(localStorage.getItem('role') == r){
+      return true;
+    }
   
+    return false;
+  }
+
+  toggleAddBranch(){
+    this.added2 = false;
+    this.seeAddBranch = true;
+  }
+
+  toggleAddVehicle(){
+    this.added = false;
+    this.seeAddVehicle = true;
+  }
 
   onSubmit(imp: Impression) {
     if(!imp){
@@ -334,6 +356,7 @@ export class ServiceComponent implements OnInit {
           this.listImages = [];
           this.callGetAllVehicles();
           this.added = true;
+          this.seeAddVehicle = false;
           this.resp = [];
           this.castAndClear();
         },
@@ -362,6 +385,7 @@ export class ServiceComponent implements OnInit {
       data => {
         let br = data;
         this.added2 = true;
+        this.seeAddBranch = false;
         this.resp2 = "";
         this.castAndClear2();
         this.getServiceBranches();

@@ -55,14 +55,21 @@ namespace RentApp.Controllers
                 return BadRequest(ModelState);
             }
 
+            Service uS = unitOfWork.Services.Get(service.Id);   // bez ovih 6 linija baca exception u Repository na update-u
+            uS.Approved = service.Approved;                     // Attaching an entity of type 'X' failed because another entity of the same type already has the same primary key value
+            uS.Description = service.Description;               
+            uS.Email = service.Email;
+            uS.Logo = service.Logo;
+            uS.Name = service.Name;
+
             try
             {
-                unitOfWork.Services.Update(service);
+                unitOfWork.Services.Update(uS);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ServiceExists(service.Id))
+                if (!ServiceExists(uS.Id))
                 {
                     return NotFound();
                 }
@@ -72,17 +79,20 @@ namespace RentApp.Controllers
                 }
             }
 
-            MailMessage mail = new MailMessage("rentAVehicle@gmail.com", "steeeveize@gmail.com");   // ovo izgleda ne vredi, tj. vredi drugi parametar
-            SmtpClient client = new SmtpClient();
-            client.Port = 587;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            //client.Credentials = new NetworkCredential("steeeveize@gmail.com", "sifra");     // ovo treba iskoristiti i onda posalje s tog mejla na onaj gore drugi parametar
-            client.Host = "smtp.gmail.com";
-            client.EnableSsl = true;
-            mail.Subject = "Service approved";
-            mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
-            client.Send(mail);
+            if(service.Approved == true)
+            {
+                MailMessage mail = new MailMessage("rentAVehicle@gmail.com", "steeeveize@gmail.com");   // ovo izgleda ne vredi, tj. vredi drugi parametar
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                //client.Credentials = new NetworkCredential("steeeveize@gmail.com", "sifra");     // ovo treba iskoristiti i onda posalje s tog mejla na onaj gore drugi parametar
+                client.Host = "smtp.gmail.com";
+                client.EnableSsl = true;
+                mail.Subject = "Service approved";
+                mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
+                client.Send(mail);
+            }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
