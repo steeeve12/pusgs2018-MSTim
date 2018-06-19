@@ -29,8 +29,9 @@ namespace RentApp.Persistance.Repository
 
             List<Rent> listOfRents = appUser.Rents.OrderBy(r => r.Start).ToList();
 
-            if (listOfRents[0].End < DateTime.Now.Date) // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
-                return true;
+            if(listOfRents.Count > 0)
+                if (listOfRents[0].End < DateTime.Now.Date) // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
+                    return true;
 
             return false;
         }

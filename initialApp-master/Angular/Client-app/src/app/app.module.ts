@@ -31,6 +31,10 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/interceptor';
 import { CanActivateViaAuthGuard } from './guard/auth.guard';
 
+import { VehicleSearchPipe } from './pipes/vehilce-search-pipe';
+
+import { NgxPaginationModule } from 'ngx-pagination';
+
 const Routes = [
 {
   path: '',
@@ -76,6 +80,7 @@ const Routes = [
     FileSelectDirective,
     FileDropDirective,
     AccountComponent,
+    VehicleSearchPipe
   ],
   imports: [
     BrowserModule,
@@ -92,7 +97,8 @@ const Routes = [
     MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxPaginationModule
   ],
   providers: [SignalRService,
     CanActivateViaAuthGuard,

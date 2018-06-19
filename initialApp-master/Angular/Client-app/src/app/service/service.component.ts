@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VehiclesService } from '../services/vehicle-service';
 import { ServicesService } from '../services/services-service';
@@ -30,19 +30,23 @@ import { Rent } from '../models/rent.model';
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css'],
-  styles: ['agm-map {height: 500px; width: 700px;}'] //postavljamo sirinu i visinu mape
+  styles: ['agm-map {height: 500px; width: 700px;}'], //postavljamo sirinu i visinu mape
 })
 export class ServiceComponent implements OnInit {
+
+  @Input() maxSize: number;
+  @Output() pageChange: EventEmitter<number>;
 
   private Id: string = "-1";
   private retVehicle: Vehicle;
   private vehicles: Vehicle[];
+  private allVehicles: Vehicle[];
   private vehicleTypes: VehicleType[];
   private impressions: Impression[];
   private Ind: string = "1";
-  private pages: number;
+  //private pages: number;
   private numbers: number[];
-  private pageNum: number;
+  //private pageNum: number;
   private resp: string[] = [];
   private resp2: string;
   private temp: string;
@@ -74,6 +78,14 @@ export class ServiceComponent implements OnInit {
   private address: string;
 
   private rents: Rent[];
+
+  private modelSearch: string;
+  private manufactorSearch: string;
+  private yearSearch: number;
+  private pricePerHourSearch: number;
+  private vehicleTypeSearch: string;
+
+  private p1 = 1;
 
   public uploader:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
   public uploader2:FileUploader = new FileUploader({url: 'http://localhost:51680/api/file'});
@@ -119,6 +131,7 @@ export class ServiceComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.callGetAllVehicles();
     this.callGetVehicles();
     this.callGetVehicleTypes();
     this.callGetServices();
@@ -126,7 +139,6 @@ export class ServiceComponent implements OnInit {
     this.callGetBranches();
     this.getServiceBranches();
     this.getUserRents();
-    this.pageNum = 1;
   }
 
   placeMarker($event){
@@ -156,16 +168,32 @@ export class ServiceComponent implements OnInit {
     this.uploader2.clearQueue();
   }  
 
+  callGetAllVehicles(){
+    this.vehiclesService.getAllVehicles(this.Id)
+      .subscribe(
+        data => {
+          this.allVehicles = data;
+          //this.pages = Math.ceil((this.vehicles.length)/9);
+          //this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
+          //if(this.numbers.length == 0){
+          //  this.numbers.push(1);
+          //}
+        },
+        error => {
+          console.log(error);
+        })
+  }
+
   callGetVehicles(){
     this.vehiclesService.getVehicles(this.Id, this.Ind)
       .subscribe(
         data => {
           this.vehicles = data;
-          this.pages = Math.ceil((this.vehicles.length)/9);
-          this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
-          if(this.numbers.length == 0){
-            this.numbers.push(1);
-          }
+          //this.pages = Math.ceil((this.vehicles.length)/9);
+          //this.numbers = Array.from(new Array(this.pages),(val,index)=>index+1);
+          //if(this.numbers.length == 0){
+          //  this.numbers.push(1);
+          //}
 
           this.vehicles.forEach(obj => {
             this.listImages.push(obj.Images.split(";")[0]);
@@ -230,24 +258,31 @@ export class ServiceComponent implements OnInit {
       })
   }
 
-  page(page: string){
-    if(page == "prev"){
-      if(this.pageNum > 1){
-        this.Ind = (this.pageNum - 1).toString();
-        this.callGetVehicles();
-      }
-    }
-    else if(page == "next"){
-      if(this.pageNum < this.pages){
-        this.Ind = (this.pageNum + 1).toString();
-        this.callGetVehicles();
-      }
-    }
-    else{
-      this.Ind = (this.pageNum).toString();
-      this.callGetVehicles();
-    }
+  onChange($event){
+    this.p1 = $event;
+    this.Ind = this.p1.toString();
+    this.listImages = [];
+    this.callGetVehicles();
   }
+
+  // page(page: string){
+  //   if(page == "prev"){
+  //     if(this.pageNum > 1){
+  //       this.Ind = (this.pageNum - 1).toString();
+  //       this.callGetVehicles();
+  //     }
+  //   }
+  //   else if(page == "next"){
+  //     if(this.pageNum < this.pages){
+  //       this.Ind = (this.pageNum + 1).toString();
+  //       this.callGetVehicles();
+  //     }
+  //   }
+  //   else{
+  //     this.Ind = (this.pageNum).toString();
+  //     this.callGetVehicles();
+  //   }
+  // }
 
   extractGrade(){
     this.cnt = 0;
