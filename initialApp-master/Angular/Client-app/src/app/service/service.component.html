@@ -548,7 +548,7 @@
                 [float]="true"
                 name="Grade">
               </rating>
-
+              &nbsp;  &nbsp;
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
@@ -561,6 +561,9 @@
             <h5 class="mt-0">{{impression.AppUser.FullName}}</h5>
             {{impression.Comment}}   
           </div>
+          <!-- <button *ngIf="checkUser(impression)" (click)="modifyImpression(impression)" class="btn btn-warning btn-sm">Modify</button>
+           &nbsp; -->
+          <button *ngIf="checkUser(impression)" (click)="removeImpression(impression)" class="btn btn-danger btn-sm" >Remove</button>
         </div>
     </div>
   <!-- /.container -->

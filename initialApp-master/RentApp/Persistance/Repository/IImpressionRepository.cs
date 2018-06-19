@@ -11,5 +11,7 @@ namespace RentApp.Persistance.Repository
     {
         IEnumerable<Impression> GetAll(int pageIndex, int pageSize);
         IEnumerable<Impression> GetAll(int id);
+        Impression GetFirst(int idUser);
+        Impression GetFirstWithoutGrade(int idUser);
     }
 }

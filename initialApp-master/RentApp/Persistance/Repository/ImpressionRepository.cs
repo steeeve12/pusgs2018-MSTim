@@ -24,7 +24,33 @@ namespace RentApp.Persistance.Repository
             return s.Impressions;
         }
 
+        public Impression GetFirst(int idUser)
+        {
+            Impression i = null;
+            try
+            {
+                i = RADBContext.Impressions.First(imp => imp.AppUser.Id == idUser);
+            }
+            catch
+            {
+                i = null;
+            }
+            return i;
+        }
 
+        public Impression GetFirstWithoutGrade(int idUser)
+        {
+            Impression i = null;
+            try
+            {
+                i = RADBContext.Impressions.First(imp => imp.AppUser.Id == idUser && imp.Grade == 0);
+            }
+            catch
+            {
+                i = null;
+            }
+            return i;
+        }
 
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }

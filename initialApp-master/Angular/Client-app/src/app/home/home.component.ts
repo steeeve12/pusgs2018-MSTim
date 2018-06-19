@@ -100,8 +100,10 @@ export class HomeComponent implements OnInit {
     this.grade = 0;
     this.services.forEach(obj => {
       obj.Impressions.forEach(childObj => {
-        this.grade += childObj.Grade;
-        this.cnt += 1;
+        if(childObj.Grade != 0){
+          this.grade += childObj.Grade;
+          this.cnt += 1;
+        }
       })
       obj.Grade = this.grade/this.cnt;
       this.grade = 0;

@@ -14,7 +14,6 @@ using RentApp.Persistance.UnitOfWork;
 
 namespace RentApp.Controllers
 {
-    [RoutePrefix("api/Impressions")]
 
     public class ImpressionsController : ApiController
     {
@@ -53,26 +52,34 @@ namespace RentApp.Controllers
         // PUT: api/Impressions/5
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutImpression(int id, Impression impression)
+        public IHttpActionResult PutImpression(Impression impression)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != impression.Id)
+            Impression i = null;
+            if (impression.Grade == 0)
+                i = unitOfWork.Impressions.GetFirst(impression.AppUser.Id);
+            else
+                i = unitOfWork.Impressions.GetFirstWithoutGrade(impression.AppUser.Id);
+
+            if(i == null)
             {
-                return BadRequest();
+                return StatusCode(HttpStatusCode.NoContent);
             }
+
+            i.Grade = impression.Grade;
 
             try
             {
-                unitOfWork.Impressions.Update(impression);
+                unitOfWork.Impressions.Update(i);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ImpressionExists(id))
+                if (!ImpressionExists(i.Id))
                 {
                     return NotFound();
                 }
@@ -87,7 +94,6 @@ namespace RentApp.Controllers
 
         // POST: api/Impressions/Post
         [Authorize(Roles = "Admin, Manager, AppUser")]
-        [Route("PostImpression")]
         [ResponseType(typeof(Impression))]
         public IHttpActionResult PostImpression(Impression impression)
         {
@@ -122,6 +128,14 @@ namespace RentApp.Controllers
             catch
             {
                 impression.Comment = "";
+            }
+
+            Impression i = unitOfWork.Impressions.GetFirst(impression.AppUser.Id);
+            if(i != null)
+            {
+                i.Grade = impression.Grade;
+                unitOfWork.Impressions.Update(i);
+                impression.Grade = 0;
             }
 
             Service ser = unitOfWork.Services.Get(serId);

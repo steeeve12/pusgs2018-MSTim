@@ -31,7 +31,14 @@ export class ImpressionService {
   }
 
   postMethod(newMember): Observable<any> {
-    return this.httpClient.post("http://localhost:51680/api/Impressions/PostImpression", newMember)
+    return this.httpClient.post("http://localhost:51680/api/Impressions", newMember)
   }
 
+  putMethod(newMember): Observable<any> {
+    return this.httpClient.put("http://localhost:51680/api/Impressions", newMember)
+  }
+
+  deleteMethod(Id: string): Observable<any> {
+    return this.httpClient.delete<any>(`http://localhost:51680/api/Impressions?id=${Id}`);
+  }
 }

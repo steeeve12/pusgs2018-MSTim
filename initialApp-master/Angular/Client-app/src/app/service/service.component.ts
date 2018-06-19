@@ -51,7 +51,7 @@ export class ServiceComponent implements OnInit {
   private temp2: string;
   private description: string = "";
   private listImages: string[] = [];
-  private postImpression: Impression = new Impression("", 0, new RegisterUser("", "", null, "", "", "", false));
+  private postImpression: Impression = new Impression(0, "", 0, new RegisterUser("", "", null, "", "", "", false));
 
   private service: Service;
   private grade: number = 0;
@@ -270,8 +270,10 @@ export class ServiceComponent implements OnInit {
     this.grade = 0;
 
     let arr = this.impressions.forEach(obj => {
-      this.grade += obj.Grade;
-      this.cnt += 1;
+      if(obj.Grade != 0){
+        this.grade += obj.Grade;
+        this.cnt += 1;
+      }
     })
   }
 
@@ -398,15 +400,16 @@ export class ServiceComponent implements OnInit {
       return;
     }
 
-    this.impressionService.postMethod(this.postImpression)
-    .subscribe(
-      data => {
-        this.callGetImpressions();
-      },
-      error => {
-        console.log(error);
-        alert(error.error.Message);
-      })
+        this.impressionService.postMethod(this.postImpression)
+        .subscribe(
+          data => {
+            this.callGetImpressions();
+          },
+          error => {
+            console.log(error);
+            alert(error.error.Message);
+          })
+
   }
 
   onSubmitVehicle(fvehicle: Vehicle){
@@ -536,4 +539,59 @@ export class ServiceComponent implements OnInit {
         alert(error.error.Message);        
       })
   }
+
+  removeImpression(impression: Impression){
+    if(impression.Grade != 0){
+      this.impressionService.putMethod(impression)
+      .subscribe(
+        data => {
+          this.impressionService.deleteMethod(impression.Id.toString())
+          .subscribe(
+            data => {
+              this.callGetImpressions();
+            },
+            error => {
+              console.log(error);
+              alert(error.error.Message);        
+            })
+              },
+              error => {
+                console.log(error);
+                alert(error.error.Message);        
+              })
+    }else{
+      this.impressionService.deleteMethod(impression.Id.toString())
+      .subscribe(
+        data => {
+          this.callGetImpressions();
+        },
+        error => {
+          console.log(error);
+          alert(error.error.Message);        
+        })
+    }
+  }
+  
+  checkUser(impression: Impression){
+    if(impression.AppUser.Email == localStorage.getItem('currentUserEmail')){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  // notGraded(){
+  //   if(this.impressions.length == 0){
+  //     return false;
+  //   }
+    
+  //   this.impressions.forEach(obj => {
+  //     if(obj.AppUser.Email == localStorage.getItem('currentUserEmail')){
+  //       return false;
+  //     }
+  //   })
+
+  //   return true;
+  // }
 }
