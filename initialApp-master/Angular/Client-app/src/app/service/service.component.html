@@ -41,12 +41,24 @@
     <hr>
     
     <div>
-        <h2>Vehicles  <!--&nbsp; &nbsp; &nbsp; <input type="text" [(ngModel)]="search">--></h2> 
+        <div>
+        <h2>Vehicles</h2>
+        <input type="text" placeholder="Search for a vehicle" [(ngModel)]="vehiclesSearch" style="width: 90%"> &nbsp; 
+        <button (click)="search()" class="btn btn-success btn-sm">Search</button>         
+        </div>
         <br>
             <div class="app flex-row align-items-center">   
                 <div class="container"> 
-                    <div>Model: <input type="text" [(ngModel)]="modelSearch"> Manufactor: <input type="text" [(ngModel)]="manufactorSearch">
-                         Year: <input type="number" [(ngModel)]="yearSearch"> PricePerHour: <input type="number" [(ngModel)]="pricePerHourSearch"> VehicleType: <input type="text" [(ngModel)]="vehicleTypeSearch"></div>
+                    <div>Model: <input type="text" placeholder="Filter by model" [(ngModel)]="modelSearch"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        Manufactor: <input type="text" placeholder="Filter by manufactor" [(ngModel)]="manufactorSearch"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Year: <input type="number" placeholder="Filter by year" [(ngModel)]="yearSearch">                        
+                    </div>
+                    <div style="height: 10px;"></div>
+                    <div>
+                        PricePerHour: <input type="number" placeholder="Filter by price per hour" [(ngModel)]="pricePerHourSearch"> 
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        VehicleType: <input type="text" placeholder="Filter by vehicle type" [(ngModel)]="vehicleTypeSearch">                                 
+                        <button (click)="callGetAllVehicles()" class="btn btn-success btn-sm" style="float: right;">Restore all</button>
+                    </div>
                 </div>
             </div>
         <br>

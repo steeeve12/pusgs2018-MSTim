@@ -44,9 +44,7 @@ export class ServiceComponent implements OnInit {
   private vehicleTypes: VehicleType[];
   private impressions: Impression[];
   private Ind: string = "1";
-  //private pages: number;
   private numbers: number[];
-  //private pageNum: number;
   private resp: string[] = [];
   private resp2: string;
   private temp: string;
@@ -84,6 +82,8 @@ export class ServiceComponent implements OnInit {
   private yearSearch: number;
   private pricePerHourSearch: number;
   private vehicleTypeSearch: string;
+
+  private vehiclesSearch: string;
 
   private p1 = 1;
 
@@ -179,17 +179,6 @@ export class ServiceComponent implements OnInit {
         })
   }
 
-  // callGetVehicles(){
-  //   this.vehiclesService.getVehicles(this.Id, this.Ind)
-  //     .subscribe(
-  //       data => {
-  //         this.vehicles = data;
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       })
-  // }
-
   callGetVehicleTypes(){
     this.vehicleTypesService.getVehicleTypes()
     .subscribe(
@@ -244,6 +233,20 @@ export class ServiceComponent implements OnInit {
   onChange($event){
     this.p1 = $event;
     this.Ind = this.p1.toString();
+  }
+
+  search(){
+    if(this.vehiclesSearch == "" || this.vehiclesSearch == undefined){
+      return;
+    }
+    this.vehiclesService.getVehicles(this.Id, this.vehiclesSearch)
+    .subscribe(
+        data => {
+          this.allVehicles = data;
+        },
+        error => {
+          console.log(error);
+        })
   }
 
   extractGrade(){

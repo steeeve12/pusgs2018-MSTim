@@ -30,8 +30,8 @@ export class VehiclesService {
     return this.httpClient.get<Vehicle[]>(`http://localhost:51680/api/Vehicles?idService=${Id}`);
   }
 
-  getVehicles(Id: string, Ind: string): Observable<Vehicle[]> {
-    return this.httpClient.get<Vehicle[]>(`http://localhost:51680/api/Vehicles?idService=${Id}&pageIndex=${Ind}`);
+  getVehicles(Id: string, vehiclesSearch: string): Observable<Vehicle[]> {
+    return this.httpClient.get<Vehicle[]>(`http://localhost:51680/api/Vehicles?idService=${Id}&search=${vehiclesSearch}`);
   }
 
   getVehicle(Id: string): Observable<Vehicle> {

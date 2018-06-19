@@ -11,5 +11,6 @@ namespace RentApp.Persistance.Repository
     {
         IEnumerable<Vehicle> GetAll(int id, int pageIndex, int pageSize);
         IEnumerable<Vehicle> GetAll(int id);
+        IEnumerable<Vehicle> GetAll(int id, string search);
     }
 }
