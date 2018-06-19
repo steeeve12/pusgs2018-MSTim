@@ -153,7 +153,7 @@
                                  </div>
                              </div>
                              <button type="button" class="btn btn-success btn-s"
-                                  (click)="addAndUpload()">
+                                  (click)="addAndUpload()" [disabled]="!uploader.getNotUploadedItems().length">
                                   <span class="glyphicon glyphicon-upload"></span> Upload
                               </button>
                               <button type="button" class="btn btn-warning btn-s"

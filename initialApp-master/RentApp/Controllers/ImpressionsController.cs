@@ -86,7 +86,7 @@ namespace RentApp.Controllers
         }
 
         // POST: api/Impressions/Post
-        //[Authorize(Roles = "Admin, Manager, AppUser")]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("PostImpression")]
         [ResponseType(typeof(Impression))]
         public IHttpActionResult PostImpression(Impression impression)

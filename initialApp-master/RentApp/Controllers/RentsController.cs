@@ -36,6 +36,7 @@ namespace RentApp.Controllers
             return unitOfWork.Rents.GetAll(idVehicle);
         }
 
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         public bool GetIsFirstRentEnded(string email)
         {
             if(email == "null")
@@ -45,7 +46,7 @@ namespace RentApp.Controllers
             return unitOfWork.Rents.IsFirstRentEnded(email);
         }
 
-        //      [Route("TryReserve")]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         public bool GetReserve(DateTime start, DateTime end, int idVehicle)
         {           
             return unitOfWork.Rents.TryReserve(start, end, idVehicle);
@@ -66,7 +67,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Rents/5
- //       [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutRent(int id, Rent rent)
         {
@@ -103,7 +104,7 @@ namespace RentApp.Controllers
         }
 
         // POST: api/Rents
- //       [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [ResponseType(typeof(Rent))]
         public IHttpActionResult PostRent(Rent rent)
         {
@@ -122,7 +123,7 @@ namespace RentApp.Controllers
         }
 
         // DELETE: api/Rents/5
- //       [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Authorize(Roles = "Admin, Manager, AppUser")]
         [ResponseType(typeof(Rent))]
         public IHttpActionResult DeleteRent(int id)
         {

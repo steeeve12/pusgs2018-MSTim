@@ -463,7 +463,7 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [ResponseType(typeof(void))]
         [Route("PutUserActivated")]
@@ -509,7 +509,7 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [ResponseType(typeof(void))]
         [Route("PutUserDenied")]
@@ -548,7 +548,7 @@ namespace RentApp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [ResponseType(typeof(void))]
         [Route("PutUserForbidden")]
@@ -667,7 +667,7 @@ namespace RentApp.Controllers
         //    return appUser.RentAccountId;
         //}
 
-        [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Authorize(Roles = "Admin")]
         [Route("GetAllUsers")]
         public IEnumerable<AppUser> GetAllUsers()
         {

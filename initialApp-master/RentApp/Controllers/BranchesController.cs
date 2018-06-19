@@ -60,7 +60,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Branches/5
-        //       [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutBranch(int id, Branch branch)
         {
@@ -96,7 +96,7 @@ namespace RentApp.Controllers
         }
 
         // POST: api/Branches
-  //      [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Branch))]
         public IHttpActionResult PostBranch(Branch branch)
         {
@@ -127,7 +127,7 @@ namespace RentApp.Controllers
         }
 
         // DELETE: api/Branches/5
- //       [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Branch))]
         public IHttpActionResult DeleteBranch(int id)
         {

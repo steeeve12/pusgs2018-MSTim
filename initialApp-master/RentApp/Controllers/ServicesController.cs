@@ -46,7 +46,7 @@ namespace RentApp.Controllers
         }
 
         // PUT: api/Services/5
-        // [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutService(Service service)
         {
@@ -98,7 +98,7 @@ namespace RentApp.Controllers
         }
 
         // POST: api/Services
-//        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Service))]
         public IHttpActionResult PostService(Service service)
         {
@@ -129,7 +129,7 @@ namespace RentApp.Controllers
         }
 
         // DELETE: api/Services/5
-//        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         [ResponseType(typeof(Service))]
         public IHttpActionResult DeleteService(int id)
         {
