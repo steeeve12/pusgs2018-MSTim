@@ -21,6 +21,7 @@ using RentApp.Persistance.UnitOfWork;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
 using System.Net;
+using System.Net.Mail;
 
 namespace RentApp.Controllers
 {
@@ -492,6 +493,18 @@ namespace RentApp.Controllers
                     throw;
                 }
             }
+
+            MailMessage mail = new MailMessage("rentAVehicle@gmail.com", "steeeveize@gmail.com");   // ovo izgleda ne vredi, tj. vredi drugi parametar
+            SmtpClient client = new SmtpClient();
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            //client.Credentials = new NetworkCredential("steeeveize@gmail.com", "sifra");     // ovo treba iskoristiti i onda posalje s tog mejla na onaj gore drugi parametar
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            mail.Subject = "Document accepted";
+            mail.Body = "The document that you have uploaded has been accepted by our administrators! \n You are now able to rent a vehicle that you like!";
+            client.Send(mail);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
