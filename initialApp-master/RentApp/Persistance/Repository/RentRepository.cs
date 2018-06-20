@@ -23,6 +23,12 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Rents.Where(r => r.VehicleId == idVehicle).ToList();
         }
 
+        public IEnumerable<Rent> GetAllUserRents(string email)
+        {
+            AppUser appU = RADBContext.AppUsers.First(u => u.Email == email);
+            return appU.Rents.Where(r => r.Start > DateTime.Now.Date);
+        }
+
         public bool IsFirstRentEnded(string email)
         {
             AppUser appUser = RADBContext.AppUsers.First(a => a.Email == email);

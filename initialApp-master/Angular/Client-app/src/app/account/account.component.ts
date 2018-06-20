@@ -11,6 +11,10 @@ import { ServicesService } from '../services/services-service';
 import { Service } from '../models/service.model';
 import { VehicleTypesService } from 'src/app/services/vehicle-type-service';
 import { VehicleType } from 'src/app/models/vehicle-type.model';
+import { Rent } from '../models/rent.model';
+import { RentsService } from '../services/rent-service';
+import { Vehicle } from '../models/vehicle.model';
+import { VehiclesService } from '../services/vehicle-service';
 
 @Component({
   selector: 'app-account',
@@ -36,6 +40,9 @@ export class AccountComponent implements OnInit {
   private users: AppUser[];
   private services: Service[];
   private managers: AppUser[];
+  private rents: Rent[];
+  private vehicles: Vehicle[] = [];
+  private vehicleIds: number[] = [];
 
   private vehicleTypes: VehicleType[];
   private vehTypeAdded: boolean = false;
@@ -48,7 +55,8 @@ export class AccountComponent implements OnInit {
   public hasBaseDropZoneOver:boolean = false;
   public hasAnotherDropZoneOver:boolean = false;
 
-  constructor(private usersService: UserService, private authService: AuthService, private servicesService: ServicesService, private vehicleTypesService: VehicleTypesService) { 
+  constructor(private usersService: UserService, private authService: AuthService, private servicesService: ServicesService, 
+    private vehicleTypesService: VehicleTypesService, private rentsService: RentsService, private vehiclesService: VehiclesService) { 
     this.uploader.onCompleteItem = (item:any, response:string, status:any, headers:any) => {
       console.log("ImageUpload:uploaded:", item, status);
       if(response == "Please Upload image of type .jpg,.gif,.png,.img,.jpeg." || response == "Please Upload a file upto 1 mb." || response == "Please Upload a image." || response == "some Message"){
@@ -96,12 +104,63 @@ export class AccountComponent implements OnInit {
       })
   }
 
+  removeRent(rent: Rent){
+    this.rentsService.deleteMethod(rent.Id.toString())
+      .subscribe(
+        data => {
+          let ret = data;
+          this.vehicles = [];
+          this.userRents();
+        },
+        error => {
+          console.log(error);
+        })
+  }
+
+  userRents(){
+    this.rentsService.getUserRents(localStorage.getItem('currentUserEmail'))
+        .subscribe(
+          data => {
+            this.rents = data;
+
+            this.rents.sort((a: Rent, b: Rent) => {
+              if(a.VehicleId < b.VehicleId)
+                return -1;
+              else if(a.VehicleId > b.VehicleId)
+                return 1;
+            })
+
+            this.rents.forEach(obj => {
+              this.vehiclesService.getVehicle(obj.VehicleId.toString())
+              .subscribe(
+                data => {
+                  this.vehicles.push(data);    
+                  this.vehicles.sort((a: Vehicle, b: Vehicle) => {
+                    if(a.Id < b.Id)
+                      return -1;
+                    else if(a.Id > b.Id)
+                      return 1;
+                  })               
+                },
+                error => {
+                  console.log(error);
+                })               
+            })
+          },
+          error => {
+            console.log(error);
+          })
+  }
+
+
   callGetCurrentUser(){
     this.authService.getCurrentUser(localStorage.getItem("currentUserEmail"))
     .subscribe(
       data => {
         this.user = data;
         this.role = localStorage.getItem("role");
+        this.vehicles = [];
+        this.userRents();
 
         if(this.role == "Admin"){
           this.usersService.getAllUsers()

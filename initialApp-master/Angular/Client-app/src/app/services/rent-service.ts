@@ -34,6 +34,11 @@ export class RentsService {
     return this.httpClient.get<Rent[]>(`http://localhost:51680/api/Rents?idVehicle=${id}`)
   }
 
+  getUserRents(email: string): Observable<Rent[]> {
+    return this.httpClient.get<Rent[]>(`http://localhost:51680/api/Rents/GetAllUserRents?email=${email}&tt=3`)
+  }
+
+
   getIsFirstRentEnded(email: string): Observable<boolean> {
     return this.httpClient.get<boolean>(`http://localhost:51680/api/Rents?email=${email}`)
   }
@@ -44,6 +49,10 @@ export class RentsService {
 
   postMethod(newMember): Observable<Rent> {
     return this.httpClient.post<Rent>("http://localhost:51680/api/Rents", newMember)
+  }
+
+  deleteMethod(id: string): Observable<any> {
+    return this.httpClient.delete<any>(`http://localhost:51680/api/Rents?id=${id}`)
   }
    
 }

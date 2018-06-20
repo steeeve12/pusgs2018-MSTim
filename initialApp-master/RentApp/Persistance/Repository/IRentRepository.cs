@@ -11,6 +11,7 @@ namespace RentApp.Persistance.Repository
     {
         IEnumerable<Rent> GetAll(int pageIndex, int pageSize);
         IEnumerable<Rent> GetAll(int idVehicle);
+        IEnumerable<Rent> GetAllUserRents(string email);
         bool IsFirstRentEnded(string email);
         bool TryReserve(DateTime start, DateTime end, int idVehicle);
         Rent FindRent(int id);

@@ -55,6 +55,35 @@
 
 <hr>
 
+<div class="container py-5">
+<div class="row">
+    <h3>Your rents:</h3>
+    <div class="col-md-11 mx-auto">
+        <br/>
+        <br/>
+        <div *ngFor="let rent of rents; let i = index;">
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-md-7 col-sm-7">
+                    <h2 class="card-title">Start date: {{rent.Start.split('T')[0]}}</h2>
+                    <h2 class="card-title">End date: {{rent.End.split('T')[0]}}</h2>
+                    <br>
+                </div>
+                <div class="col-md-4 col-sm-4 text-center">
+                    <img src="http://localhost:51680{{this.vehicles[i].Images.split(';')[0]}}" width="300" height="200" alt="" style="border-radius:30%;">
+                </div> 
+                <div class="col-md-6 col-sm-6">       
+                    <button class="btn btn-md btn-danger" (click)="removeRent(rent)">Remove</button>    
+                </div>         
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr>
+
 <div class="container py-5" *ngIf="isInRole('Admin')">
 
     <div class="row">

@@ -36,6 +36,12 @@ namespace RentApp.Controllers
             return unitOfWork.Rents.GetAll(idVehicle);
         }
 
+        public IEnumerable<Rent> GetAllUserRents(string email, int tt)
+        {
+            return unitOfWork.Rents.GetAllUserRents(email);
+        }
+
+
         [Authorize(Roles = "Admin, Manager, AppUser")]
         public bool GetIsFirstRentEnded(string email)
         {
