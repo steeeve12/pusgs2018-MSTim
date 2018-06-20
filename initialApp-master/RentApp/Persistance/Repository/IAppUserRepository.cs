@@ -10,6 +10,7 @@ namespace RentApp.Persistance.Repository
     public interface IAppUserRepository : IRepository<AppUser, int>
     {
         IEnumerable<AppUser> GetAll(int pageIndex, int pageSize);
+        int GetCountNotActivated();
         AppUser Get(string email);
     }
 }

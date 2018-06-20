@@ -439,6 +439,12 @@ export class ServiceComponent implements OnInit {
       alert("Year must be between 1930. and 2018.");
       return;
     }
+
+    if(fvehicle.PricePerHour > 100){
+      alert("Price per hour cannot be more than 100e.");
+      return;
+    }
+    
       this.vehiclesService.postVehicle(fvehicle)
       .subscribe(
         data => {

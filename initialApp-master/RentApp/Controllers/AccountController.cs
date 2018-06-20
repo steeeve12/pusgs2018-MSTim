@@ -22,6 +22,7 @@ using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
 using System.Net;
 using System.Net.Mail;
+using RentApp.Hubs;
 
 namespace RentApp.Controllers
 {
@@ -32,6 +33,7 @@ namespace RentApp.Controllers
         private const string LocalLoginProvider = "Local";
 
         private readonly IUnitOfWork unitOfWork;
+        public static int AccountCount { get; set; }
 
         public AccountController()
         {
@@ -350,6 +352,9 @@ namespace RentApp.Controllers
 
             UserManager.AddToRole(user.Id, "AppUser");
 
+            // notification --------------------------------------------------------------
+            NotificationsHub.NotifyForUser(++AccountCount);
+
             return Ok();
         }
 
@@ -506,6 +511,9 @@ namespace RentApp.Controllers
             mail.Body = "The document that you have uploaded has been accepted by our administrators! \n You are now able to rent a vehicle that you like!";
             client.Send(mail);
 
+            // notification --------------------------------------------------------------
+            NotificationsHub.NotifyForUser(--AccountCount);
+
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -597,6 +605,15 @@ namespace RentApp.Controllers
             {
                 return null;
             }
+
+            int usersCnt = 0;
+            foreach (var u in unitOfWork.AppUsers.GetAll())
+            {
+                if (!u.Activated)
+                    usersCnt++;
+            }
+            
+            AccountCount = usersCnt;
 
             return currentUser;
         }

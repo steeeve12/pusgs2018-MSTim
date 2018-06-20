@@ -18,6 +18,22 @@ namespace RentApp.Persistance.Repository
             return RADBContext.Services.Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
 
+        public int GetCountNotApproved()
+        {
+            int cnt = 0;
+
+            using (var dataContext = RADBContext)
+            {
+                foreach (Service s in dataContext.Services)
+                {
+                    if (!s.Approved)
+                        cnt++;
+                }
+            }
+
+            return cnt;
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

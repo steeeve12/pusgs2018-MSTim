@@ -17,7 +17,10 @@
           <a *ngIf="!logged()" class="nav-link" [routerLink]="['/register']">Register</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="logged()" class="nav-link" [routerLink]="['/account']">Account</a>
+          <a *ngIf="logged()" class="nav-link" [routerLink]="['/account']">Account</a>        
+        </li>
+        <li class="nav-item">
+          <a *ngIf="logged() && isInRole('Admin')" class="nav-link">a:({{accountNotifications}}) &nbsp; | &nbsp; s:({{serviceNotifications}})</a>   
         </li>
       </ul>
     </div>

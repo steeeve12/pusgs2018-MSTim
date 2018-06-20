@@ -10,5 +10,6 @@ namespace RentApp.Persistance.Repository
     public interface IServiceRepository : IRepository<Service, int>
     {
         IEnumerable<Service> GetAll(int pageIndex, int pageSize);
+        int GetCountNotApproved();
     }
 }

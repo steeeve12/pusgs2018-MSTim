@@ -169,7 +169,7 @@
             <br/>
             <br/>
             <div *ngFor="let userAcc of users">
-            <div class="card card-body" *ngIf="!userAcc.Activated && userAcc.PersonalDocument">
+            <div class="card card-body" *ngIf="!userAcc.Activated">
                 <div class="row">
                     <div class="col-md-7 col-sm-7">
                         <h2 class="card-title">Full name: {{userAcc.FullName}}</h2>
@@ -178,11 +178,12 @@
                         <p class="card-text"><strong>Birthday: </strong> {{userAcc.Birthday}} </p>
                     </div>
                     <div class="col-md-4 col-sm-4 text-center">
+                        <img *ngIf="!userAcc.PersonalDocument" src="http://placehold.it/300x200" alt="" style="border-radius:30%;">
                         <img *ngIf="userAcc.PersonalDocument" src="http://localhost:51680{{userAcc.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
                     </div> 
                     <div class="col-md-6 col-sm-6">       
-                        <button class="btn btn-lg btn-success" (click)="acceptUserAccount(userAcc.Email)">Accept</button>
-                        <button class="btn btn-lg btn-danger" (click)="denyUserAccount(userAcc.Email)">Deny</button>    
+                        <button class="btn btn-lg btn-success" [disabled]="!userAcc.PersonalDocument" (click)="acceptUserAccount(userAcc.Email)">Accept</button>
+                        <button class="btn btn-lg btn-danger" [disabled]="!userAcc.PersonalDocument" (click)="denyUserAccount(userAcc.Email)">Deny</button>    
                     </div>         
                 </div>
             </div>

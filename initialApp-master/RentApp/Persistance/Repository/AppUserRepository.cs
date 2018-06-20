@@ -23,6 +23,22 @@ namespace RentApp.Persistance.Repository
             return RADBContext.AppUsers.First(u => u.Email == email);
         }
 
+        public int GetCountNotActivated()
+        {
+            int cnt = 0;
+
+            using (var dataContext = RADBContext)
+            {
+                foreach (AppUser s in dataContext.AppUsers)
+                {
+                    if (!s.Activated)
+                        cnt++;
+                }
+            }
+
+            return cnt;
+        }
+
         protected RADBContext RADBContext { get { return context as RADBContext; } }
     }
 }

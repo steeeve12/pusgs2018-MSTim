@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpModule, JsonpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
 
@@ -34,6 +34,8 @@ import { CanActivateViaAuthGuard } from './guard/auth.guard';
 import { VehicleSearchPipe } from './pipes/vehilce-search-pipe';
 
 import { NgxPaginationModule } from 'ngx-pagination';
+
+import { NotificationService } from './services/notification.service';
 
 const Routes = [
 {
@@ -98,9 +100,10 @@ const Routes = [
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    JsonpModule
   ],
-  providers: [SignalRService,
+  providers: [SignalRService, NotificationService,
     CanActivateViaAuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

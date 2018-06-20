@@ -1,6 +1,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using RentApp.Hubs;
 using RentApp.Models.Entities;
 using RentApp.Persistance;
 using RentApp.Persistance.Repository;
@@ -61,6 +62,7 @@ namespace RentApp
             container.RegisterType<IVehicleTypeRepository, VehicleTypeRepository>();
             container.RegisterType<IRentRepository, RentRepository>();
             container.RegisterType<IImpressionRepository, ImpressionRepository>();
+            container.RegisterType<NotificationsHub>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:51680"));

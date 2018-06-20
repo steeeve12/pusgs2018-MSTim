@@ -13,13 +13,14 @@ using RentApp.Persistance;
 using RentApp.Persistance.UnitOfWork;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using RentApp.Hubs;
 
 namespace RentApp.Controllers
 {
     public class ServicesController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
-        
+        public static int ServiceCount { get; set; }
 
         public ServicesController(IUnitOfWork unitOfWork)
         {
@@ -29,6 +30,8 @@ namespace RentApp.Controllers
         // GET: api/Services
         public IEnumerable<Service> GetServices()
         {
+            ServiceCount = unitOfWork.Services.GetAll().Where(s => s.Approved == false).Count();
+
             return unitOfWork.Services.GetAll();
         }
 
@@ -92,6 +95,9 @@ namespace RentApp.Controllers
                 mail.Subject = "Service approved";
                 mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
                 client.Send(mail);
+
+                // notification ----------------------------------------------------------------------------------------
+                NotificationsHub.NotifyForService(--ServiceCount);
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -125,6 +131,9 @@ namespace RentApp.Controllers
             unitOfWork.Services.Add(service);
             unitOfWork.Complete();
 
+            // notification ----------------------------------------------------------------------------------------
+            NotificationsHub.NotifyForService(++ServiceCount);
+
             return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
 
@@ -134,12 +143,22 @@ namespace RentApp.Controllers
         public IHttpActionResult DeleteService(int id)
         {
             var ser = unitOfWork.Services.Get(id);
+
+            if(!ser.Approved)
+                // notification ----------------------------------------------------------------------------------------
+                NotificationsHub.NotifyForService(--ServiceCount);
+
             var listOfRents = unitOfWork.Rents.GetAll();
-            var listOfBranches = ser.Branches;
+
+            List<Branch> listOfBranches = new List<Branch>();
+
+            foreach(Branch b in ser.Branches)
+            {
+                listOfBranches.Add(b);
+            }
 
             foreach (Branch b in listOfBranches)
-            {
-                
+            {               
                 foreach (Rent r in listOfRents)
                 {
                     if (r.Branch1Id == b.Id || r.Branch2Id == b.Id)
@@ -164,26 +183,32 @@ namespace RentApp.Controllers
                 unitOfWork.Branches.Remove(b);
             }
 
-            Service service = unitOfWork.Services.Get(id);
-            if (service == null)
+            List<Impression> impressions = new List<Impression>();
+            foreach(Impression i in ser.Impressions)
             {
-                return NotFound();
+                impressions.Add(i);
             }
 
-            foreach (Impression i in service.Impressions)
+            foreach (Impression i in impressions)
             {
                 unitOfWork.Impressions.Remove(i);
             }
 
-            foreach (Vehicle v in service.Vehicles)
+            List<Vehicle> vehicles = new List<Vehicle>();
+            foreach (Vehicle v in ser.Vehicles)
+            {
+                vehicles.Add(v);
+            }
+
+            foreach (Vehicle v in vehicles)
             {
                 unitOfWork.Vehicles.Remove(v);
             }
 
-            unitOfWork.Services.Remove(service);
+            unitOfWork.Services.Remove(ser);
             unitOfWork.Complete();
 
-            return Ok(service);
+            return Ok(ser);
         }
 
         protected override void Dispose(bool disposing)
