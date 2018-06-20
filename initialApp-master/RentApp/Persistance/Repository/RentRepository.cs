@@ -29,15 +29,30 @@ namespace RentApp.Persistance.Repository
             return appU.Rents.Where(r => r.Start > DateTime.Now.Date);
         }
 
-        public bool IsFirstRentEnded(string email)
+        public bool IsFirstRentEnded(string email, string role)
         {
             AppUser appUser = RADBContext.AppUsers.First(a => a.Email == email);
-
             List<Rent> listOfRents = appUser.Rents.OrderBy(r => r.Start).ToList();
 
-            if(listOfRents.Count > 0)
-                if (listOfRents[0].End < DateTime.Now.Date) // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
-                    return true;
+            if (role == "AppUser")
+            {
+                if (listOfRents.Count > 0)
+                {
+                    if (listOfRents[0].End <= DateTime.Now.Date)     // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
+                        return true;
+                    else if (appUser.Forbidden)
+                        return true;
+                }
+                else
+                {
+                    if (appUser.Forbidden)
+                        return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
 
             return false;
         }

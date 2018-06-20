@@ -37,7 +37,7 @@
   <hr>
 
   <!-- Call to Action Section -->
-  <div class="row mb-4" *ngIf="logged() && (this.available == true)">
+  <div class="row mb-4" *ngIf="logged() && (this.available == true) && isInRole('AppUser')">
     <div class="col-md-5">
       <p height="10px"></p>
       <p>If you want to make a reservation for this vehicle click here:</p>

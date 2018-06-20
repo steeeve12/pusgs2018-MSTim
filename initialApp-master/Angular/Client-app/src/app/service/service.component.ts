@@ -529,7 +529,7 @@ export class ServiceComponent implements OnInit {
   }
 
   getUserRents(){
-    this.rentsService.getIsFirstRentEnded(localStorage.getItem('currentUserEmail'))
+    this.rentsService.getIsFirstRentEnded(localStorage.getItem('currentUserEmail'), localStorage.getItem('role'))
     .subscribe(
       data => {
         this.firstRentEnded = data;

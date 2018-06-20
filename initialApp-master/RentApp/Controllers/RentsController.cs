@@ -43,13 +43,24 @@ namespace RentApp.Controllers
 
 
         [Authorize(Roles = "Admin, Manager, AppUser")]
-        public bool GetIsFirstRentEnded(string email)
+        public bool GetIsFirstRentEnded(string email, string role)
         {
-            if(email == "null")
+            if(email == "null" || role == null)
             {
                 return false;
             }
-            return unitOfWork.Rents.IsFirstRentEnded(email);
+            bool ret = unitOfWork.Rents.IsFirstRentEnded(email, role);
+
+            AppUser appUser = unitOfWork.AppUsers.Get(email);
+
+            if (role == "AppUser" && ret && !appUser.Forbidden)
+            {
+                appUser.Forbidden = true;
+                unitOfWork.AppUsers.Update(appUser);
+                unitOfWork.Complete();
+            }
+
+            return ret;
         }
 
         [Authorize(Roles = "Admin, Manager, AppUser")]

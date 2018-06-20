@@ -222,7 +222,12 @@ export class VehicleComponent implements OnInit {
       return;
     }
 
-    this.start.value.setDate(this.start.value.getDate() + 1); // ne znam zasto smanjuje i povecava za jedan... ovako ga vratim kako je selektovano
+    let now = new Date();
+
+    if(this.start.value.toISOString().split("T")[0] != now.toISOString().split("T")[0]){
+      this.start.value.setDate(this.start.value.getDate() + 1); // ne znam zasto smanjuje i povecava za jedan... ovako ga vratim kako je selektovano
+    }
+      
     this.end.value.setDate(this.end.value.getDate() + 1);
 
     this.rent = new Rent(this.start.value.toISOString().split("T")[0], this.end.value.toISOString().split("T")[0], this.branch1.Id, this.branch2.Id, +this.Id);
