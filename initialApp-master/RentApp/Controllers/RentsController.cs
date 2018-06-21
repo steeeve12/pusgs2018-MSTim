@@ -19,6 +19,7 @@ namespace RentApp.Controllers
     public class RentsController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private object syncLock = new object();
 
         public RentsController(IUnitOfWork unitOfWork)
         {
@@ -88,36 +89,39 @@ namespace RentApp.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutRent(int id, Rent rent)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            if (id != rent.Id)
-            {
-                return BadRequest();
-            }
-
-           
-
-            try
-            {
-                unitOfWork.Rents.Update(rent);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RentExists(id))
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                if (id != rent.Id)
+                {
+                    return BadRequest();
+                }
+
+
+
+                try
+                {
+                    unitOfWork.Rents.Update(rent);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RentExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         // POST: api/Rents
@@ -125,18 +129,21 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Rent))]
         public IHttpActionResult PostRent(Rent rent)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (rent.End < rent.Start)
+                    return BadRequest("Start date must be earlier then return date!");
+
+                unitOfWork.Rents.Add(rent);
+                unitOfWork.Complete();
+
+                return CreatedAtRoute("DefaultApi", new { id = rent.Id }, rent);
             }
-
-            if (rent.End < rent.Start)
-                return BadRequest("Start date must be earlier then return date!");
-
-            unitOfWork.Rents.Add(rent);
-            unitOfWork.Complete();
-
-            return CreatedAtRoute("DefaultApi", new { id = rent.Id }, rent);
         }
 
         // DELETE: api/Rents/5

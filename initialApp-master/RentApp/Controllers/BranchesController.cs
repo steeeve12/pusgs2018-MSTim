@@ -17,6 +17,7 @@ namespace RentApp.Controllers
     public class BranchesController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private object syncLock = new object();
 
         public BranchesController(IUnitOfWork unitOfWork)
         {
@@ -64,29 +65,32 @@ namespace RentApp.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutBranch(Branch branch)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-            
-            try
-            {
-                unitOfWork.Branches.Update(branch);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BranchExists(branch.Id))
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                try
+                {
+                    unitOfWork.Branches.Update(branch);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BranchExists(branch.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         // POST: api/Branches
@@ -94,30 +98,33 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Branch))]
         public IHttpActionResult PostBranch(Branch branch)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (branch.Latitude < 0 || branch.Longitude < 0)
+                    return BadRequest(ModelState);
+
+                string[] fullAddress = branch.Address.Split('#');
+
+                int serId = int.Parse(fullAddress[0]);
+
+                if (fullAddress[1] == "__empty__")
+                    return BadRequest(ModelState);
+                else
+                    branch.Address = fullAddress[1];
+
+                Service ser = unitOfWork.Services.Get(serId);
+                ser.Branches.Add(branch);
+
+                unitOfWork.Branches.Add(branch);
+                unitOfWork.Complete();
+
+                return CreatedAtRoute("DefaultApi", new { id = branch.Id }, branch);
             }
-
-            if(branch.Latitude < 0 || branch.Longitude < 0)
-                return BadRequest(ModelState);
-
-            string[] fullAddress = branch.Address.Split('#');
-
-            int serId = int.Parse(fullAddress[0]);
-
-            if (fullAddress[1] == "__empty__")
-                return BadRequest(ModelState);
-            else
-                branch.Address = fullAddress[1];
-
-            Service ser = unitOfWork.Services.Get(serId);
-            ser.Branches.Add(branch);
-
-            unitOfWork.Branches.Add(branch);
-            unitOfWork.Complete();
-
-            return CreatedAtRoute("DefaultApi", new { id = branch.Id }, branch);
         }
 
         // DELETE: api/Branches/5

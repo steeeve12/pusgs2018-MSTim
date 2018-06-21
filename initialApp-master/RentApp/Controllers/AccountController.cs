@@ -34,6 +34,7 @@ namespace RentApp.Controllers
 
         private readonly IUnitOfWork unitOfWork;
         public static int AccountCount { get; set; }
+        private object syncLock = new object();
 
         public AccountController()
         {
@@ -399,38 +400,41 @@ namespace RentApp.Controllers
         [Route("PutRentUser")]
         public IHttpActionResult PutRentUser(PutRentUserBindingModel model)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
-            Rent r = unitOfWork.Rents.FindRent(model.Id);
+                AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+                Rent r = unitOfWork.Rents.FindRent(model.Id);
 
-            if(r == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                appUser.Rents.Add(r);
-                unitOfWork.AppUsers.Update(appUser);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (appUser == null)
+                if (r == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                try
+                {
+                    appUser.Rents.Add(r);
+                    unitOfWork.AppUsers.Update(appUser);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (appUser == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         // PUT: api/Account/5
@@ -440,32 +444,35 @@ namespace RentApp.Controllers
         [Route("PutDocumentUser")]
         public IHttpActionResult PutDocumentUser(PutDocumentUserBindingModel model)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
-
-            try
-            {
-                appUser.PersonalDocument = model.PersonalDocument;
-                unitOfWork.AppUsers.Update(appUser);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (appUser == null)
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+                try
+                {
+                    appUser.PersonalDocument = model.PersonalDocument;
+                    unitOfWork.AppUsers.Update(appUser);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (appUser == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -474,47 +481,50 @@ namespace RentApp.Controllers
         [Route("PutUserActivated")]
         public IHttpActionResult PutUserActivated(PutUserActivatedBindingModel model)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
-
-            try
-            {
-                appUser.Activated = model.Activated;
-                unitOfWork.AppUsers.Update(appUser);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (appUser == null)
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
+
+                AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+                try
                 {
-                    throw;
+                    appUser.Activated = model.Activated;
+                    unitOfWork.AppUsers.Update(appUser);
+                    unitOfWork.Complete();
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (appUser == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar model.Email umesto moje adrese
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("rentappms@gmail.com", "mitarsteva.12");
+                client.Host = "smtp.gmail.com";
+                client.EnableSsl = true;
+                mail.Subject = "Document accepted";
+                mail.Body = "The document that you have uploaded has been accepted by our administrators! \n You are now able to rent a vehicle that you like!";
+                client.Send(mail);
+
+                // notification --------------------------------------------------------------
+                NotificationsHub.NotifyForUser(--AccountCount);
+
+                return StatusCode(HttpStatusCode.NoContent);
             }
-
-            MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar model.Email umesto moje adrese
-            SmtpClient client = new SmtpClient();
-            client.Port = 587;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential("rentappms@gmail.com", "mitarsteva.12");
-            client.Host = "smtp.gmail.com";
-            client.EnableSsl = true;
-            mail.Subject = "Document accepted";
-            mail.Body = "The document that you have uploaded has been accepted by our administrators! \n You are now able to rent a vehicle that you like!";
-            client.Send(mail);
-
-            // notification --------------------------------------------------------------
-            NotificationsHub.NotifyForUser(--AccountCount);
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         [Authorize(Roles = "Admin")]
@@ -523,37 +533,40 @@ namespace RentApp.Controllers
         [Route("PutUserDenied")]
         public IHttpActionResult PutUserDenied(PutDocumentUserBindingModel model)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
-
-            if(model.PersonalDocument == "")
-            {
-                model.PersonalDocument = null;
-            }
-
-            try
-            {
-                appUser.PersonalDocument = model.PersonalDocument;
-                unitOfWork.AppUsers.Update(appUser);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (appUser == null)
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+                if (model.PersonalDocument == "")
+                {
+                    model.PersonalDocument = null;
+                }
+
+                try
+                {
+                    appUser.PersonalDocument = model.PersonalDocument;
+                    unitOfWork.AppUsers.Update(appUser);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (appUser == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -562,32 +575,35 @@ namespace RentApp.Controllers
         [Route("PutUserForbidden")]
         public IHttpActionResult PutUserForbidden(PutUserForbiddenBindingModel model)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
-
-            try
-            {
-                appUser.Forbidden = model.Forbidden;
-                unitOfWork.AppUsers.Update(appUser);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (appUser == null)
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                AppUser appUser = unitOfWork.AppUsers.Get(model.Email);
+
+                try
+                {
+                    appUser.Forbidden = model.Forbidden;
+                    unitOfWork.AppUsers.Update(appUser);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (appUser == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         [Authorize(Roles = "Admin, Manager, AppUser")]

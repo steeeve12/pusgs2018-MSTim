@@ -21,6 +21,7 @@ namespace RentApp.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
         public static int ServiceCount { get; set; }
+        private object syncLock = new object();
 
         public ServicesController(IUnitOfWork unitOfWork)
         {
@@ -53,59 +54,62 @@ namespace RentApp.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutService(Service service)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            Service uS = unitOfWork.Services.Get(service.Id);   // bez ovih 6 linija baca exception u Repository na update-u
-            uS.Approved = service.Approved;                     // Attaching an entity of type 'X' failed because another entity of the same type already has the same primary key value
-            uS.Description = service.Description;               
-            uS.Email = service.Email;
-            uS.Logo = service.Logo;
-            uS.Name = service.Name;
-
-            try
-            {
-                unitOfWork.Services.Update(uS);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ServiceExists(uS.Id))
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
+                }
+
+                Service uS = unitOfWork.Services.Get(service.Id);   // bez ovih 6 linija baca exception u Repository na update-u
+                uS.Approved = service.Approved;                     // Attaching an entity of type 'X' failed because another entity of the same type already has the same primary key value
+                uS.Description = service.Description;
+                uS.Email = service.Email;
+                uS.Logo = service.Logo;
+                uS.Name = service.Name;
+
+                try
+                {
+                    unitOfWork.Services.Update(uS);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ServiceExists(uS.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                if (service.Approved == true)
+                {
+                    MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar service.Creator.Email umesto moje mejl adrese 
+                    SmtpClient client = new SmtpClient();
+                    client.Port = 587;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("rentappms@gmail.com", "mitarsteva.12");
+                    client.Host = "smtp.gmail.com";
+                    client.EnableSsl = true;
+                    mail.Subject = "Service approved";
+                    mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
+                    client.Send(mail);
+
+                    // notification ----------------------------------------------------------------------------------------
+                    NotificationsHub.NotifyForService(--ServiceCount);
                 }
                 else
                 {
-                    throw;
+                    // notification ----------------------------------------------------------------------------------------
+                    NotificationsHub.NotifyForService(++ServiceCount);
                 }
-            }
 
-            if(service.Approved == true)
-            {               
-                MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar service.Creator.Email umesto moje mejl adrese 
-                SmtpClient client = new SmtpClient();
-                client.Port = 587;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential("rentappms@gmail.com", "mitarsteva.12");
-                client.Host = "smtp.gmail.com";
-                client.EnableSsl = true;
-                mail.Subject = "Service approved";
-                mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
-                client.Send(mail);
-
-                // notification ----------------------------------------------------------------------------------------
-                NotificationsHub.NotifyForService(--ServiceCount);
+                return StatusCode(HttpStatusCode.NoContent);
             }
-            else
-            {
-                // notification ----------------------------------------------------------------------------------------
-                NotificationsHub.NotifyForService(++ServiceCount);
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Services
@@ -113,33 +117,36 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Service))]
         public IHttpActionResult PostService(Service service)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (service.Impressions == null)
+                {
+                    service.Impressions = new List<Impression>();
+                }
+
+                if (service.Branches == null)
+                {
+                    service.Branches = new List<Branch>();
+                }
+
+                if (service.Vehicles == null)
+                {
+                    service.Vehicles = new List<Vehicle>();
+                }
+
+                unitOfWork.Services.Add(service);
+                unitOfWork.Complete();
+
+                // notification ----------------------------------------------------------------------------------------
+                NotificationsHub.NotifyForService(++ServiceCount);
+
+                return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
             }
-
-            if (service.Impressions == null)
-            {
-                service.Impressions = new List<Impression>();
-            }
-
-            if(service.Branches == null)
-            {
-                service.Branches = new List<Branch>();
-            }
-
-            if(service.Vehicles == null)
-            {
-                service.Vehicles = new List<Vehicle>();
-            }
-
-            unitOfWork.Services.Add(service);
-            unitOfWork.Complete();
-
-            // notification ----------------------------------------------------------------------------------------
-            NotificationsHub.NotifyForService(++ServiceCount);
-
-            return CreatedAtRoute("DefaultApi", new { id = service.Id }, service);
         }
 
         // DELETE: api/Services/5

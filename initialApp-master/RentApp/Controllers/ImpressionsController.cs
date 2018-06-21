@@ -18,6 +18,7 @@ namespace RentApp.Controllers
     public class ImpressionsController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private object syncLock = new object();
 
         public ImpressionsController(IUnitOfWork unitOfWork)
         {
@@ -54,42 +55,45 @@ namespace RentApp.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutImpression(Impression impression)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            Impression i = null;
-            if (impression.Grade == 0)
-                i = unitOfWork.Impressions.GetFirst(impression.AppUser.Id);
-            else
-                i = unitOfWork.Impressions.GetFirstWithoutGrade(impression.AppUser.Id);
+                Impression i = null;
+                if (impression.Grade == 0)
+                    i = unitOfWork.Impressions.GetFirst(impression.AppUser.Id);
+                else
+                    i = unitOfWork.Impressions.GetFirstWithoutGrade(impression.AppUser.Id);
 
-            if(i == null)
-            {
+                if (i == null)
+                {
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+
+                i.Grade = impression.Grade;
+
+                try
+                {
+                    unitOfWork.Impressions.Update(i);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ImpressionExists(i.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
                 return StatusCode(HttpStatusCode.NoContent);
             }
-
-            i.Grade = impression.Grade;
-
-            try
-            {
-                unitOfWork.Impressions.Update(i);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ImpressionExists(i.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Impressions/Post
@@ -97,60 +101,63 @@ namespace RentApp.Controllers
         [ResponseType(typeof(Impression))]
         public IHttpActionResult PostImpression(Impression impression)
         {
-            impression.Time = DateTime.Now;
-
-            AppUser currentUser = null;
-
-            foreach (var item in unitOfWork.AppUsers.GetAll())
+            lock (syncLock)
             {
-                if (item.Email == impression.AppUser.Email)
+                impression.Time = DateTime.Now;
+
+                AppUser currentUser = null;
+
+                foreach (var item in unitOfWork.AppUsers.GetAll())
                 {
-                    currentUser = item;
-                    break;
+                    if (item.Email == impression.AppUser.Email)
+                    {
+                        currentUser = item;
+                        break;
+                    }
                 }
+
+                impression.AppUser = currentUser;
+
+                if (!ModelState.IsValid || currentUser == null)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string[] fullComment = impression.Comment.Split('#');
+
+                int serId = int.Parse(fullComment[0]);
+
+                try
+                {
+                    impression.Comment = fullComment[1];
+                }
+                catch
+                {
+                    impression.Comment = "";
+                }
+
+                Impression i = unitOfWork.Impressions.GetFirst(impression.AppUser.Id);
+                if (i != null)
+                {
+                    i.Grade = impression.Grade;
+                    unitOfWork.Impressions.Update(i);
+                    impression.Grade = 0;
+                }
+
+                Service ser = unitOfWork.Services.Get(serId);
+
+                if (impression.Comment != "__empty__")
+                {
+                    ser.Impressions.Add(impression);
+
+                    unitOfWork.Impressions.Add(impression);
+                }
+
+                unitOfWork.Complete();
+
+                return Ok();
+                //    return CreatedAtRoute("DefaultApi", new { id = impression.Id }, impression);
             }
-
-            impression.AppUser = currentUser;
-
-            if (!ModelState.IsValid || currentUser == null)
-            {
-                return BadRequest(ModelState);
-            }
-
-            string[] fullComment = impression.Comment.Split('#');
-
-            int serId = int.Parse(fullComment[0]);
-
-            try
-            {
-                impression.Comment = fullComment[1];
-            }
-            catch
-            {
-                impression.Comment = "";
-            }
-
-            Impression i = unitOfWork.Impressions.GetFirst(impression.AppUser.Id);
-            if(i != null)
-            {
-                i.Grade = impression.Grade;
-                unitOfWork.Impressions.Update(i);
-                impression.Grade = 0;
-            }
-
-            Service ser = unitOfWork.Services.Get(serId);
-
-            if (impression.Comment != "__empty__")
-            {
-                ser.Impressions.Add(impression);
-
-                unitOfWork.Impressions.Add(impression);               
-            }
-
-            unitOfWork.Complete();
-
-            return Ok();
-        //    return CreatedAtRoute("DefaultApi", new { id = impression.Id }, impression);
         }
 
         // DELETE: api/Impressions/5

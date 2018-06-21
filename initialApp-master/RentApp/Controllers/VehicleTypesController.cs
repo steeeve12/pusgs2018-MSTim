@@ -17,6 +17,7 @@ namespace RentApp.Controllers
     public class VehicleTypesController : ApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private object syncLock = new object();
 
         public VehicleTypesController(IUnitOfWork unitOfWork)
         {
@@ -47,34 +48,37 @@ namespace RentApp.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutVehicleType(int id, VehicleType vehicleType)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
-            }
-
-            if (id != vehicleType.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                unitOfWork.VehicleTypes.Update(vehicleType);
-                unitOfWork.Complete();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!VehicleTypeExists(id))
+                if (!ModelState.IsValid)
                 {
-                    return NotFound();
+                    return BadRequest(ModelState);
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                if (id != vehicleType.Id)
+                {
+                    return BadRequest();
+                }
+
+                try
+                {
+                    unitOfWork.VehicleTypes.Update(vehicleType);
+                    unitOfWork.Complete();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VehicleTypeExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
         }
 
         // POST: api/VehicleTypes
@@ -82,20 +86,23 @@ namespace RentApp.Controllers
         [ResponseType(typeof(VehicleType))]
         public IHttpActionResult PostVehicleType(VehicleType vehicleType)
         {
-            if (!ModelState.IsValid)
+            lock (syncLock)
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (unitOfWork.VehicleTypes.Exists(vehicleType.Name))
+                {
+                    return BadRequest(ModelState);
+                }
+
+                unitOfWork.VehicleTypes.Add(vehicleType);
+                unitOfWork.Complete();
+
+                return CreatedAtRoute("DefaultApi", new { id = vehicleType.Id }, vehicleType);
             }
-
-            if (unitOfWork.VehicleTypes.Exists(vehicleType.Name))
-            {
-                return BadRequest(ModelState);
-            }
-
-            unitOfWork.VehicleTypes.Add(vehicleType);
-            unitOfWork.Complete();
-
-            return CreatedAtRoute("DefaultApi", new { id = vehicleType.Id }, vehicleType);
         }
 
         // DELETE: api/VehicleTypes/5
