@@ -127,6 +127,7 @@ export class HomeComponent implements OnInit {
     fservice.Impressions = [];
     fservice.Approved = false;
     fservice.Logo = this.resp;
+    fservice.Creator = this.user;
 
     if(fservice.Email == "" || fservice.Name == "" || fservice.Description == "" || fservice.Logo == ""){
       alert("You must fill all the fields provided!");
@@ -196,6 +197,7 @@ export class HomeComponent implements OnInit {
     this.mService.Name = this.mService.Name.trim();
     this.added2 = false;
     this.mService.Approved = false;
+    this.mService.Creator = this.user;
 
     if(this.mService.Email == "" || this.mService.Name == "" || this.mService.Description == ""){
       alert("You must fill all the fields provided!");

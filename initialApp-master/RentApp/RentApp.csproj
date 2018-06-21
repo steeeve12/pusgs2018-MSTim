@@ -363,6 +363,10 @@
     <Compile Include="Migrations\201806180822063_list rents AppUser.Designer.cs">
       <DependentUpon>201806180822063_list rents AppUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806211251203_Creator u servisu.cs" />
+    <Compile Include="Migrations\201806211251203_Creator u servisu.Designer.cs">
+      <DependentUpon>201806211251203_Creator u servisu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -529,6 +533,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806180822063_list rents AppUser.resx">
       <DependentUpon>201806180822063_list rents AppUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806211251203_Creator u servisu.resx">
+      <DependentUpon>201806211251203_Creator u servisu.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

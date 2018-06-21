@@ -68,11 +68,13 @@ namespace RentApp.Migrations
 
             SaveChanges(context);
 
+            AppUser Amanager = new AppUser() { FullName = "Menadzer Menadzerovic", Email = "menadzer@yahoo.com", Activated = true, Rents = new System.Collections.Generic.List<Rent>() };
+
             context.AppUsers.AddOrUpdate(
 
                   u => u.FullName,
 
-                  new AppUser() { FullName = "Menadzer Menadzerovic", Email = "menadzer@yahoo.com", Activated = true, Rents = new System.Collections.Generic.List<Rent>() }
+                  Amanager
 
             );
 
@@ -157,6 +159,7 @@ namespace RentApp.Migrations
             ser.Vehicles = new System.Collections.Generic.List<Vehicle>();
             ser.Vehicles.Add(v);
             ser.Logo = "";
+            ser.Creator = Amanager;
             // -------------------------------------
 
             // -------------------------------------
@@ -190,6 +193,7 @@ namespace RentApp.Migrations
             ser1.Vehicles = new System.Collections.Generic.List<Vehicle>();
             ser1.Vehicles.Add(v1);
             ser1.Logo = "";
+            ser1.Creator = Amanager;
             // -------------------------------------
 
             // -------------------------------------

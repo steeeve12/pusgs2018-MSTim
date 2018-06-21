@@ -15,7 +15,7 @@
             </div>
             <div class="col-md-4 col-sm-4 text-center">
               <img *ngIf="!this.user.PersonalDocument" src="http://placehold.it/300x200" alt="" style="border-radius:30%;">
-              <img *ngIf="this.user.PersonalDocument" src="http://localhost:51680{{this.user.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
+              <img *ngIf="this.user.PersonalDocument" src="https://localhost:44386{{this.user.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
             </div> 
             <div class="col-md-6 col-sm-6">       
             <button class="btn btn-lg btn-primary" (click)="showChange()">Change password</button>  
@@ -70,7 +70,7 @@
                     <br>
                 </div>
                 <div class="col-md-4 col-sm-4 text-center">
-                    <img src="http://localhost:51680{{this.vehicles[i].Images.split(';')[0]}}" width="300" height="200" alt="" style="border-radius:30%;">
+                    <img src="https://localhost:44386{{this.vehicles[i].Images.split(';')[0]}}" width="300" height="200" alt="" style="border-radius:30%;">
                 </div> 
                 <div class="col-md-6 col-sm-6">       
                     <button class="btn btn-md btn-danger" (click)="removeRent(rent)">Remove</button>    
@@ -179,7 +179,7 @@
                     </div>
                     <div class="col-md-4 col-sm-4 text-center">
                         <img *ngIf="!userAcc.PersonalDocument" src="http://placehold.it/300x200" alt="" style="border-radius:30%;">
-                        <img *ngIf="userAcc.PersonalDocument" src="http://localhost:51680{{userAcc.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
+                        <img *ngIf="userAcc.PersonalDocument" src="https://localhost:44386{{userAcc.PersonalDocument}}" width="300" height="200" alt="" style="border-radius:30%;">
                     </div> 
                     <div class="col-md-6 col-sm-6">       
                         <button class="btn btn-lg btn-success" [disabled]="!userAcc.PersonalDocument" (click)="acceptUserAccount(userAcc.Email)">Accept</button>
@@ -209,7 +209,7 @@
                     </div>
                     <div class="col-md-4 col-sm-4 text-center">
                         <img *ngIf="!service.Logo" src="http://placehold.it/300x200" alt="" style="border-radius:30%;">
-                        <img *ngIf="service.Logo" src="http://localhost:51680{{service.Logo}}" width="300" height="200" alt="" style="border-radius:30%;">
+                        <img *ngIf="service.Logo" src="https://localhost:44386{{service.Logo}}" width="300" height="200" alt="" style="border-radius:30%;">
                     </div> 
                     <div class="col-md-6 col-sm-6">       
                         <button class="btn btn-lg btn-success" (click)="acceptService(service)">Accept</button>

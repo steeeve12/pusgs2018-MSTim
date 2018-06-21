@@ -1,4 +1,5 @@
 import { Impression } from "./impression.model";
+import { RegisterUser } from "./user.model";
 
 export class Service {
     Id: number;
@@ -9,8 +10,9 @@ export class Service {
     Approved: boolean;
     Impressions: Impression[];
     Grade: number;
+    Creator: RegisterUser;
 
-    constructor(id: number, name: string, logo: string, email: string, description: string, approved: boolean, impressions: Impression[]) {
+    constructor(id: number, name: string, logo: string, email: string, description: string, approved: boolean, impressions: Impression[], creator: RegisterUser) {
         this.Id = id;
         this.Name = name;
         this.Logo = logo;
@@ -18,5 +20,6 @@ export class Service {
         this.Description = description;
         this.Approved = approved;
         this.Impressions = impressions;
+        this.Creator = creator;
     }
 }

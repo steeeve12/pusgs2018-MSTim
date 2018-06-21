@@ -83,8 +83,8 @@ namespace RentApp.Controllers
             }
 
             if(service.Approved == true)
-            {
-                MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar (menadzer koji je kreirao servis....)
+            {               
+                MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar service.Creator.Email umesto moje mejl adrese 
                 SmtpClient client = new SmtpClient();
                 client.Port = 587;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -94,7 +94,7 @@ namespace RentApp.Controllers
                 client.EnableSsl = true;
                 mail.Subject = "Service approved";
                 mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
-                //client.Send(mail);
+                client.Send(mail);
 
                 // notification ----------------------------------------------------------------------------------------
                 NotificationsHub.NotifyForService(--ServiceCount);
