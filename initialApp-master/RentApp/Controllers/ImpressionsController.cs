@@ -140,9 +140,13 @@ namespace RentApp.Controllers
 
             Service ser = unitOfWork.Services.Get(serId);
 
-            ser.Impressions.Add(impression);
+            if (impression.Comment != "__empty__")
+            {
+                ser.Impressions.Add(impression);
 
-            unitOfWork.Impressions.Add(impression);
+                unitOfWork.Impressions.Add(impression);               
+            }
+
             unitOfWork.Complete();
 
             return Ok();

@@ -247,8 +247,19 @@ export class VehicleComponent implements OnInit {
           return false;
         }
         else{
-          this.reserveVehicle();
-          //this.hasAlreadyReserved();         
+          this.usersService.getIsActivated(localStorage.getItem("currentUserEmail"))
+          .subscribe(
+            data => {
+              if(data == true){
+                this.reserveVehicle();
+              }
+              else{
+                alert("Your document has not yet been approved.");
+              }
+            },
+            error => {
+              console.log(error); 
+            })
         }
       },
       error => {

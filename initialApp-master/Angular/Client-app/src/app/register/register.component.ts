@@ -45,7 +45,10 @@ export class RegisterComponent implements OnInit {
         },
         error => {
           console.log(error);
-          alert(error.error.ModelState["model.Email"] + "\n" + error.error.ModelState["model.Password"]);
+          if(error.error.ModelState["model.Email"])
+            alert(error.error.ModelState["model.Email"]);
+          else if(error.error.ModelState[""])
+          alert(error.error.ModelState[""]);
         })
        
     }else{

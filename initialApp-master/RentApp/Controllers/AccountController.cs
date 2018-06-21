@@ -618,6 +618,27 @@ namespace RentApp.Controllers
             return currentUser;
         }
 
+
+        [Authorize(Roles = "Admin, Manager, AppUser")]
+        [Route("GetIsActivated")]
+        public bool GetIsActivated(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return false;
+            }
+
+            AppUser currentUser = unitOfWork.AppUsers.Get(email);
+
+            if (currentUser == null)
+            {
+                return false;
+            }
+
+            return currentUser.Activated;
+        }
+
+
         [Authorize(Roles = "Admin, Manager, AppUser")]
         [Route("GetPersonalDocument")]
         public string GetPersonalDocument(string email)

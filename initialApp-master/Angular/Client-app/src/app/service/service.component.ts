@@ -542,7 +542,7 @@ export class ServiceComponent implements OnInit {
       },
       error => {
         console.log(error);
-        alert(error.error.Message);        
+        //alert(error.error.Message);        
       })
   }
 

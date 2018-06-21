@@ -42,6 +42,10 @@ export class UserService {
     return this.httpClient.get<string>(`http://localhost:51680/api/Account/GetPersonalDocument?email=${email}`)
   }
 
+  getIsActivated(email: string): Observable<boolean>{
+    return this.httpClient.get<boolean>(`http://localhost:51680/api/Account/GetIsActivated?email=${email}`)
+  }
+  
   // getRentAccountId(email: string): Observable<any>{
   //   return this.httpClient.get(`http://localhost:51680/api/Account/GetRentAccountId?email=${email}`)
   // }
