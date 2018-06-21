@@ -556,7 +556,7 @@
 
         <!-- Single Comment -->
         <div class="media mb-4" *ngFor="let impression of impressions">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <img class="d-flex mr-3 rounded-circle" src="http://localhost:51680{{impression.AppUser.PersonalDocument}}" width="50px" height="50px" alt="">
           <div class="media-body">
             <h5 class="mt-0">{{impression.AppUser.FullName}}</h5>
             {{impression.Comment}}   

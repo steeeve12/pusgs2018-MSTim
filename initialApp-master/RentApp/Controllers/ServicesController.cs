@@ -84,20 +84,25 @@ namespace RentApp.Controllers
 
             if(service.Approved == true)
             {
-                MailMessage mail = new MailMessage("rentAVehicle@gmail.com", "steeeveize@gmail.com");   // ovo izgleda ne vredi, tj. vredi drugi parametar
+                MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar (menadzer koji je kreirao servis....)
                 SmtpClient client = new SmtpClient();
                 client.Port = 587;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
-                //client.Credentials = new NetworkCredential("steeeveize@gmail.com", "sifra");     // ovo treba iskoristiti i onda posalje s tog mejla na onaj gore drugi parametar
+                client.Credentials = new NetworkCredential("rentappms@gmail.com", "mitarsteva.12");
                 client.Host = "smtp.gmail.com";
                 client.EnableSsl = true;
                 mail.Subject = "Service approved";
                 mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
-                client.Send(mail);
+                //client.Send(mail);
 
                 // notification ----------------------------------------------------------------------------------------
                 NotificationsHub.NotifyForService(--ServiceCount);
+            }
+            else
+            {
+                // notification ----------------------------------------------------------------------------------------
+                NotificationsHub.NotifyForService(++ServiceCount);
             }
 
             return StatusCode(HttpStatusCode.NoContent);

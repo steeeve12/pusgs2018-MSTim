@@ -462,7 +462,7 @@ export class ServiceComponent implements OnInit {
   }
 
   addBranch(){
-    if(this.address == "" || this.resp2 == "" || this.lat < 0 || this.lat == undefined || this.lgt < 0 || this.lgt == undefined){
+    if(this.address == "" || this.address == undefined || this.resp2 == "" || this.lat < 0 || this.lat == undefined || this.lgt < 0 || this.lgt == undefined){
       alert("You must fill in the address and select a place on the map!")
       return;
     }
@@ -535,7 +535,7 @@ export class ServiceComponent implements OnInit {
   }
 
   getUserRents(){
-    this.rentsService.getIsFirstRentEnded(localStorage.getItem('currentUserEmail'), localStorage.getItem('role'))
+    this.rentsService.getIsFirstRentEnded(localStorage.getItem('currentUserEmail'), localStorage.getItem('role'), this.Id)
     .subscribe(
       data => {
         this.firstRentEnded = data;

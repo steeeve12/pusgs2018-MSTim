@@ -29,24 +29,31 @@ namespace RentApp.Persistance.Repository
             return appU.Rents.Where(r => r.Start > DateTime.Now.Date);
         }
 
-        public bool IsFirstRentEnded(string email, string role)
+        public bool IsFirstRentEnded(string email, string role, int idService)
         {
             AppUser appUser = RADBContext.AppUsers.First(a => a.Email == email);
+            Service s = RADBContext.Services.First(ser => ser.Id == idService);
+            List<Vehicle> vehicles = s.Vehicles;
             List<Rent> listOfRents = appUser.Rents.OrderBy(r => r.Start).ToList();
 
             if (role == "AppUser")
             {
                 if (listOfRents.Count > 0)
                 {
-                    if (listOfRents[0].End <= DateTime.Now.Date)     // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
-                        return true;
-                    else if (appUser.Forbidden)
-                        return true;
+                    foreach (Rent r in listOfRents)
+                    {
+                        if (vehicles.Contains(r.Vehicle))
+                        {
+                            if (r.End <= DateTime.Now.Date)    // Date vrati 12:00:00 AM, a tako se pamte i datumi za rent
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 }
-                else
+                else if (appUser.Forbidden)
                 {
-                    if (appUser.Forbidden)
-                        return true;
+                    return true;
                 }
             }
             else
@@ -78,8 +85,8 @@ namespace RentApp.Persistance.Repository
             }
             else
             {
-                
-                if(start > listOfRents.Last().End)
+
+                if (start > listOfRents.Last().End)
                 {
                     return true;
                 }
@@ -95,7 +102,7 @@ namespace RentApp.Persistance.Repository
                         {
                             return true;
                         }
-                        else if(start > tempItem.End)
+                        else if (start > tempItem.End)
                         {
                             return true;
                         }

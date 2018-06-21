@@ -499,12 +499,12 @@ namespace RentApp.Controllers
                 }
             }
 
-            MailMessage mail = new MailMessage("rentAVehicle@gmail.com", "steeeveize@gmail.com");   // ovo izgleda ne vredi, tj. vredi drugi parametar
+            MailMessage mail = new MailMessage("rentappms@gmail.com", "steeeveize@gmail.com"); // drugi parametar model.Email umesto moje adrese
             SmtpClient client = new SmtpClient();
             client.Port = 587;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            //client.Credentials = new NetworkCredential("steeeveize@gmail.com", "sifra");     // ovo treba iskoristiti i onda posalje s tog mejla na onaj gore drugi parametar
+            client.Credentials = new NetworkCredential("rentappms@gmail.com", "mitarsteva.12");
             client.Host = "smtp.gmail.com";
             client.EnableSsl = true;
             mail.Subject = "Document accepted";
