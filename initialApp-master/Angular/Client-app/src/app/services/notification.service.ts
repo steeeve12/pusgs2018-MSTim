@@ -27,7 +27,7 @@ export class NotificationService {
         this.allNotificationReceived = new EventEmitter<string>();
         this.connectionExists = false;  
         // create hub connection  
-        this.connection = $.hubConnection("https://localhost:44386/");
+        this.connection = $.hubConnection("http://localhost:51680/");
         let jwt = localStorage.jwt;
         this.connection.qs = { "token" : `Bearer ${jwt}` };
         // create new proxy as name already given in top  

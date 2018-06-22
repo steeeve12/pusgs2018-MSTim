@@ -19,7 +19,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
         request = request.clone(
             {
-                url: request.url.replace('http://localhost:51680', 'https://localhost:44386'),
+                //url: request.url.replace('http://localhost:51680', 'https://localhost:44386'),
                 setHeaders: 
                 { 
                     Authorization: `Bearer ${jwt}`

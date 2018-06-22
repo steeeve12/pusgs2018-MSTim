@@ -206,7 +206,7 @@
               <div *ngFor="let service of services | paginate: { itemsPerPage: 6, currentPage: p1 }">
               <div class="card col-md-10" *ngIf="service.Approved">
                   <div>
-                    <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="https://localhost:44386{{service.Logo}}" alt=""></a>
+                    <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{service.Logo}}" alt=""></a>
                     <div class="card-body">
                         <h4 class="card-title">
                         <a [routerLink]="['/service', service.Id]" href="#">{{service.Name}}</a>

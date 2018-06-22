@@ -12,7 +12,7 @@
 
     <div>
         <!-- Preview Image -->
-        <img class="img-fluid rounded center" src="https://localhost:44386{{this.service.Logo}}" alt=""/>
+        <img class="img-fluid rounded center" src="http://localhost:51680{{this.service.Logo}}" alt=""/>
     </div>
     
     <hr>
@@ -247,7 +247,7 @@
                     <div class="card-deck row">
                         <div class="portfolio-item col-md-4" *ngFor="let branch of branches1 | paginate: { id:'branchP', itemsPerPage: 3, currentPage: p2 };">
                           <div class="card">
-                          <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="https://localhost:44386{{branch.Picture}}" alt=""></a>                                  
+                          <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{branch.Picture}}" alt=""></a>                                  
                             <div class="card-body">
                               <p class="card-text">{{branch.Address}}<p>
                               <button *ngIf="!isInRole('AppUser') && logged()" (click)="toggleModifyBranch(branch)" class="btn btn-warning btn-sm">Modify</button>
@@ -500,9 +500,9 @@
         <div class="app flex-row align-items-center">   
           <div class="container"> 
               <div class="card-deck row">
-                  <div class="portfolio-item col-md-4" *ngFor="let vehicle of allVehicles | vehicleSearch: modelSearch:manufactorSearch:yearSearch:pricePerHourSearch:vehicleTypeSearch | paginate: { id:'vehicleP', itemsPerPage: 9, currentPage: p1 }; let i = index;">
+                  <div class="portfolio-item col-md-4" *ngFor="let vehicle of allVehicles | vehicleSearch: modelSearch:manufactorSearch:yearSearch:pricePerHourSearch:vehicleTypeSearch | paginate: { id:'vehicleP', itemsPerPage: 2, currentPage: p1 }; let i = index;">
                     <div class="card">
-                    <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="https://localhost:44386{{vehicle.Images.split(';')[0]}}" alt=""></a>                                  
+                    <a href="#" [routerLink]=""><img class="card-img-top" width="100px" height="230px" src="http://localhost:51680{{vehicle.Images.split(';')[0]}}" alt=""></a>                                  
                       <div class="card-body">
                         <h4 class="card-title">
                           <a [routerLink]="['/vehicle', vehicle.Id, Id]" href="#">{{vehicle.Manufactor}} {{vehicle.Model}}, {{vehicle.Year}}</a>
@@ -556,7 +556,7 @@
 
         <!-- Single Comment -->
         <div class="media mb-4" *ngFor="let impression of impressions">
-          <img class="d-flex mr-3 rounded-circle" src="https://localhost:44386{{impression.AppUser.PersonalDocument}}" width="50px" height="50px" alt="">
+          <img class="d-flex mr-3 rounded-circle" src="http://localhost:51680{{impression.AppUser.PersonalDocument}}" width="50px" height="50px" alt="">
           <div class="media-body">
             <h5 class="mt-0">{{impression.AppUser.FullName}}</h5>
             {{impression.Comment}}   

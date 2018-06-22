@@ -518,7 +518,7 @@ namespace RentApp.Controllers
                 client.EnableSsl = true;
                 mail.Subject = "Document accepted";
                 mail.Body = "The document that you have uploaded has been accepted by our administrators! \n You are now able to rent a vehicle that you like!";
-                client.Send(mail);
+                //client.Send(mail);
 
                 // notification --------------------------------------------------------------
                 NotificationsHub.NotifyForUser(--AccountCount);

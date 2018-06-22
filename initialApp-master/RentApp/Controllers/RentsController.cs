@@ -66,8 +66,11 @@ namespace RentApp.Controllers
 
         [Authorize(Roles = "Admin, Manager, AppUser")]
         public bool GetReserve(DateTime start, DateTime end, int idVehicle)
-        {           
-            return unitOfWork.Rents.TryReserve(start, end, idVehicle);
+        {
+            lock (syncLock)
+            {
+                return unitOfWork.Rents.TryReserve(start, end, idVehicle);
+            }
         }
 
 

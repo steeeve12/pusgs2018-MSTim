@@ -97,7 +97,7 @@ namespace RentApp.Controllers
                     client.EnableSsl = true;
                     mail.Subject = "Service approved";
                     mail.Body = "The service that you have made has been approved by our administrators! \n You are now able to add vehicles and branches!";
-                    client.Send(mail);
+                    //client.Send(mail);
 
                     // notification ----------------------------------------------------------------------------------------
                     NotificationsHub.NotifyForService(--ServiceCount);
